@@ -11,11 +11,12 @@ import { Router } from '@angular/router';
   `
 })
 export class HomeComponent {
-  constructor(private authService: AuthService, private router: Router) {
+  user: any = null;
+  constructor(private authService: AuthService, private router: Router) {    
     this.authService.user$.subscribe(authState => {
       console.log("User Details")
       if (authState !== null) {
-
+        this.user =authState.displayName;
       }
       else {
         this.router.navigate(['/login']);
