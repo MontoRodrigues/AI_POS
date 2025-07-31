@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../firebase.service';
@@ -16,7 +16,7 @@ import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
     <h2>Top 10 Products (Price > 50)</h2>
     <ul>
       <li *ngFor="let product of products">
-        {{ product.name }} - \${{ product.price }}
+        {{ product.Name }}
       </li>
     </ul>
   `
@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   user: any = null;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     private authService: AuthService,
     private router: Router,
     private firebaseService: FirebaseService
@@ -44,18 +45,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    //  this.firebaseService.getCollection('products', 10).then(querySnapshot => {
+    //   querySnapshot.forEach(doc => {
+    //     this.products.push(doc.data());
+    //   });
+    // });
+
     const constraints = [
-      where('price', '>', 50),
-      orderBy('price', 'desc'),
-      orderBy('name'),
+      // where('price', '>', 50),
+      // orderBy('price', 'desc'),
+      // orderBy('name'),
       limit(10)
     ];
 
     this.unsubscribe = this.firebaseService.subscribeToCollection('products', (snapshot) => {
       this.products = [];
+      let p:any =[]
       snapshot.forEach(doc => {
-        this.products.push(doc.data());
+        p.push(doc.data());
       });
+      this.products =p;
+      console.log(this.products);
+      this.cdRef.detectChanges()
     }, constraints);
   }
 
