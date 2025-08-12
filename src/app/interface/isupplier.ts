@@ -1,9 +1,11 @@
 export interface ISupplier {
-    id?: string;
-    name: string;
-    contactPerson: string;
-    email: string;
-    phone: string;
-    address: string;
-    businessDescription:string;
+    id?: string | null;
+    name: string | null;
+    productCategory:string[];
+    contactPerson: string | null;    
+    email: string | null;
+    phone: number | null;
+    address: string | null;
+    location:string | null;
+    businessDescription:string | null;
 }

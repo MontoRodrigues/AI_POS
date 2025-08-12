@@ -1,1 +1,73 @@
-<p>supplier-list works!</p>
+<h2> Suppliers</h2>
+
+@for(supplier of supplier_list; track supplier.id) {
+<p>{{supplier.id}}</p>
+}
+
+
+
+
+
+<div style="padding: 20px;">
+
+    <div [class]="new_supplier_validate.name">
+        <label class="form-label">Supplier Name</label>
+        <input type="text" class="form-control" placeholder="Supplier Name" [(ngModel)]="new_supplier.name">
+    </div>
+
+
+    <div [class]="new_supplier_validate.productCategory">
+        <label class="form-label">Product Category</label>
+        <select class="form-select" [(ngModel)]="productCategory" (change)="add_ProductCategory()">           
+            @for(pc of getProductList(); track pc) {
+            <option>{{pc}}</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        @for(category of new_supplier.productCategory; track $index; let i=$index) {
+        <div><span>{{category}}</span><span (click)="deleteProductCategory(i)">X</span> </div>
+        }
+    </div>
+    <!-- <div [class]="new_supplier_validate.productCategory">
+        <label class="form-label">Product Category</label>
+        <input type="text" class="form-control" placeholder="Supplier Category"
+            [(ngModel)]="new_supplier.productCategory">
+    </div> -->
+
+    <div [class]="new_supplier_validate.contactPerson">
+        <label class="form-label">Contact Person Name</label>
+        <input type="text" class="form-control" placeholder="Contact Person Name"
+            [(ngModel)]="new_supplier.contactPerson">
+    </div>
+
+    <div [class]="new_supplier_validate.email">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" placeholder="name@example.com" [(ngModel)]="new_supplier.email">
+    </div>
+
+    <div [class]="new_supplier_validate.phone">
+        <label class="form-label">phone</label>
+        <input type="number" class="form-control" placeholder="10 digit phone number" [(ngModel)]="new_supplier.phone">
+    </div>
+
+    <div [class]="new_supplier_validate.address">
+        <label class="form-label">Address</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="new_supplier.address"></textarea>
+    </div>
+
+    <div [class]="new_supplier_validate.location">
+        <label class="form-label">Google Location Link</label>
+        <input type="text" class="form-control" placeholder="google Location link" [(ngModel)]="new_supplier.location">
+    </div>
+
+    <div [class]="new_supplier_validate.businessDescription">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="new_supplier.businessDescription"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary mb-3" (click)="addSupplier()">Add Supplier</button>
+    </div>
+
+</div>
