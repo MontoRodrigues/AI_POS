@@ -1,8 +1,9 @@
 
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -15,7 +16,20 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor(public authService: AuthService) { }
+
+  constructor(public authService: AuthService, private router: Router,) { 
+    this.authService.user$.subscribe(authState => {     
+      if (authState !== null) {
+        console.log("Redirecting after login successful");
+       this.router.navigate(['/']);
+      }
+     
+    });
+  }
+
+  
+
+
 
   loginWithGoogle() {
     this.authService.signInWithGoogle();

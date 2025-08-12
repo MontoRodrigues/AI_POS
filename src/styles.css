@@ -4,15 +4,6 @@ html, body{
     height: 100%;
     padding: 0px;
     margin: 0px;
+    font-family: "Golos Text", sans-serif;
 }
 
-body {
-    height: 100%;
-    margin: 0 auto;
-    max-width: 600px;
-    overflow: auto !important;
-}
-
-*, :after, :before {
-    box-sizing: border-box;
-}

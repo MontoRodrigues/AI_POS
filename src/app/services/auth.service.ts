@@ -15,16 +15,14 @@ export class AuthService {
   constructor(private router: Router) {
     onAuthStateChanged(auth, user => {
       this.userSubject.next(user);
-      if(user !=null)
-        this.router.navigate(['/']);
-
-
     });
   }
 
   signInWithGoogle() {
     const provider = new GoogleAuthProvider();
+    
     return signInWithPopup(auth, provider);
+    
   }
 
   signInWithEmail(email: string, password: string) {

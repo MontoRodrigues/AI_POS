@@ -1,8 +1,8 @@
 
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { FirebaseService } from '../firebase.service';
+import { FirebaseService } from '../../services/firebase.service';
 import { CommonModule } from '@angular/common';
 import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
 
@@ -11,7 +11,7 @@ import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <h1>Welcome!</h1>
+    <h1>Welcome! {{user.displayName}}</h1>
     <button (click)="logout()">Logout</button>
     <h2>Top 10 Products (Price > 50)</h2>
     <ul>
@@ -19,6 +19,7 @@ import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
         {{ product.Name }}
       </li>
     </ul>
+    <button type="button" (click)="navigateTo('purchase')">Purchase</button>
   `
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -35,13 +36,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authService.user$.subscribe(authState => {
       console.log("User Details")
       if (authState !== null) {
-        this.user = authState.displayName;
-      }
-      else {
-        this.router.navigate(['/login']);
+        this.user = authState;
+        console.log(authState);
       }
     });
 
+  }
+
+  navigateTo(path: string){
+    this.router.navigate(['/'+path]);
   }
 
   ngOnInit() {
