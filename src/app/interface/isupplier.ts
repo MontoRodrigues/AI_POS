@@ -4,7 +4,7 @@ export interface ISupplier {
     productCategory:string[];
     contactPerson: string | null;    
     email: string | null;
-    phone: number | null;
+    phone: string | null;
     address: string | null;
     location:string | null;
     businessDescription:string | null;

@@ -9,3 +9,13 @@
     box-shadow: 0 24px 12px -20px #12151c29;
 
 } */
+
+.app-container{
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+}
+
+.left-slider{
+    left:-100%;
+}

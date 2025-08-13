@@ -25,6 +25,18 @@ export class SupplierList {
     businessDescription: null
   }
 
+  // new_supplier: ISupplier = {
+  //   id: null,
+  //   name: "Beauty India",
+  //   productCategory: ['Cosmetics','Jeweller'],
+  //   contactPerson: "John Dow",
+  //   email: "name@email.com",
+  //   phone: 1234567890,
+  //   address: "Bairaghar Bhopal ",
+  //   location: "maps.google.com",
+  //   businessDescription: "Cosmetics Seller"
+  // }
+
   new_supplier_validate = {
     id: "mb-3",
     name: "mb-3",
@@ -101,6 +113,50 @@ export class SupplierList {
     else {
       this.new_supplier_validate.contactPerson = "mb-3";
     }
+
+
+   // email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.new_supplier.email || !emailRegex.test(this.new_supplier.email)) {
+        validate = false;
+        this.new_supplier_validate.email = "mb-3 error";
+    } else {
+        this.new_supplier_validate.email = "mb-3";
+    }
+
+    
+    // phone
+    if (!this.new_supplier.phone) {
+        validate = false;
+        this.new_supplier_validate.phone = "mb-3 error";
+    } else {
+        this.new_supplier_validate.phone = "mb-3";
+    }
+
+    // address
+    if (!this.new_supplier.address) {
+        validate = false;
+        this.new_supplier_validate.address = "mb-3 error";
+    } else {
+        this.new_supplier_validate.address = "mb-3";
+    }
+
+    // location
+    if (!this.new_supplier.location) {
+        validate = false;
+        this.new_supplier_validate.location = "mb-3 error";
+    } else {
+        this.new_supplier_validate.location = "mb-3";
+    }
+
+    // businessDescription
+    if (!this.new_supplier.businessDescription) {
+        validate = false;
+        this.new_supplier_validate.businessDescription = "mb-3 error";
+    } else {
+        this.new_supplier_validate.businessDescription = "mb-3";
+    }
+  
   
 
     return validate;

@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference,addDoc, SetOptions, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc } from 'firebase/firestore';
 import { firestore } from './firebase';
 import { ISupplier } from '../interface/isupplier';
 
@@ -17,7 +17,7 @@ export class FirebaseService {
     return await getDocs(q);
   }
 
-   addDocument(path: string, data: any): Promise<DocumentReference> {
+  addDocument(path: string, data: any): Promise<DocumentReference> {
     const collectionRef = collection(firestore, path);
     return addDoc(collectionRef, data);
   }
@@ -27,7 +27,7 @@ export class FirebaseService {
     return setDoc(docRef, data, options || {});
   }
 
-    updateDocument(path: string, data: any): Promise<void> {
+  updateDocument(path: string, data: any): Promise<void> {
     const docRef = doc(firestore, path);
     return updateDoc(docRef, data);
   }
