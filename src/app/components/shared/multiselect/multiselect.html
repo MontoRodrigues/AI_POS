@@ -1,0 +1,37 @@
+ <div [class]="!errorClass()? 'multi-select': 'multi-select error'" #multiselect>
+    <div class="select-btn" (click)="multiselect.classList.toggle('open')">
+        <span> {{outputData.length>0? outputData.length +' Objects Selected' : 'Select Multiple Objects' }}</span>
+        <i class='bx bx-chevron-down bx-lg'></i>
+    </div>
+    <div class="error-message"> {{errorMessage()}}</div>
+    <div class="selected-options">
+         @for(selOpt of outputData; track $index) {
+            <div class="selected-options-items" (click)="removeSelectOption($index)">{{selOpt}} <i class='bx  bx-minus-circle bx-sm'></i> </div>
+         }
+    </div>
+    <ul class="select-options">
+        <li>
+            <div class="search-box">
+                <input type="text" class="form-control form-control-sm" #filter (keyup)="searchData(filter.value)">
+                <i class='bx  bx-search'></i>
+            </div>
+            <button class="btn btn-outline-secondary">
+                <i class='bx  bx-x-circle'></i>
+            </button>
+        </li>
+        @for(selOpt of outputData; track $index) {
+        <li class="selected-values" (click)="removeSelectOption($index)">
+            {{selOpt}}
+            <i class='bx  bx-minus-circle'></i>
+        </li>
+        }
+        <li class="divider"></li>
+
+        @for(opt of filteredData; track $index) {
+        <li (click)="selectOption(opt)">{{opt.text}}</li>
+        }
+
+    </ul>
+
+    <div class="multi-select-bg" (click)="multiselect.classList.toggle('open')"></div>
+</div>

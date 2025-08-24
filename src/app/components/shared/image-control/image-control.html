@@ -1,0 +1,5 @@
+<div [style.width]="imageWidth() +'px'" class="image-upload">
+    <img [src]="imageSource()" [style.width]="imageWidth() +'px'" [style.height]="imageHeight() +'px'" (click)="image_upload.click()">
+    <input type="file" accept="image/png,image/jpeg,image/webp" #image_upload hidden (change)="fileSelected($event)" (click)="image_upload.value = ''">
+    <!-- <button type="button" class="btn btn-primary" (click)="image_upload.click()">Add Image</button> -->
+</div>

@@ -1,0 +1,26 @@
+.attr-container {
+    width: 100%;
+}
+
+.attr-container .attr-list {
+    display: flex;
+    padding-top: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.attr-container .attr-list div {
+    display: flex;
+    background-color: #eaeaea;
+    padding: 2px 5px;
+    font-size: 12px;
+    gap: 5px;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.attr-container .attr-list div span:first-child{
+    font-weight: 600;
+}

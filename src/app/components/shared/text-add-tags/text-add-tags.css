@@ -1,0 +1,22 @@
+.tag-container {
+    width: 100%;
+}
+
+.tag-container .tags-list {
+    display: flex;
+    padding-top: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-container .tags-list span {
+    display: flex;
+    background-color: #eaeaea;
+    padding: 2px 5px;
+    font-size: 12px;
+    gap: 5px;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+}

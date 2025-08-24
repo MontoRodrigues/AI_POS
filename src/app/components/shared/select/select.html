@@ -1,0 +1,27 @@
+<div [class]="!errorClass()? 'multi-select': 'multi-select error'" #multiselect>
+    <div class="select-btn" (click)="multiselect.classList.toggle('open')">
+        <span> {{outputData? outputData?.text : 'Select one Option' }}</span>
+        <i class='bx bx-chevron-down bx-lg'></i>
+    </div>
+    <div class="error-message"> {{errorMessage()}}</div>
+
+    <ul class="select-options">
+        <li>
+            <div class="search-box">
+                <input type="text" class="form-control form-control-sm" #filter (keyup)="searchData(filter.value)">
+                <i class='bx  bx-search'></i>
+            </div>
+            <button class="btn btn-outline-secondary">
+                <i class='bx  bx-x-circle'></i>
+            </button>
+        </li>
+
+
+        @for(opt of filteredData; track $index) {
+        <li (click)="selectOption(opt)">{{opt.text}}</li>
+        }
+
+    </ul>
+
+    <div class="multi-select-bg" (click)="multiselect.classList.toggle('open')"></div>
+</div>

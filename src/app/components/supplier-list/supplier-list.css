@@ -1,17 +1,6 @@
-.error {
-    border: 1px solid red;
+
+.banner {
+    background-image: url(/images/Supplier.png);
+    background-size: cover;
 }
-
-
-
-.product-category-list ul li{
-    font-size: 12px;
-}
-
-.banner{
-    background-color: #12a5bc;
-    width: 100%;
-    height: 80px;
-}
-
 

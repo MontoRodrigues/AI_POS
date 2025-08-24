@@ -1,0 +1,11 @@
+<div class="text-select" #textDDL>
+    <input class="form-control" [(ngModel)]="text" #text_box (keyup)="textOnKeyUp()"  (click)="textDDL.classList.add('open')" placeholder="{{placeholder()}}">
+
+    <ul class="type-ahead-container">
+        @for(opt of filteredData; track $index) {
+        <li (click)="selectOption(opt)">{{opt}}</li>
+        }
+    </ul>
+
+    <div class="multi-select-bg" (click)="textDDL.classList.remove('open')"></div>
+</div>

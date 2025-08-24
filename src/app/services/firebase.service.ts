@@ -1,8 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc } from 'firebase/firestore';
-import { firestore } from './firebase';
+import { firestore, storage } from './firebase';
 import { ISupplier } from '../interface/isupplier';
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,12 @@ export class FirebaseService {
     const collectionRef = collection(firestore, collectionName);
     const q = query(collectionRef, ...constraints);
     return onSnapshot(q, callback);
+  }
+
+  async uploadImage(imageBlob: Blob, path: string) {
+    // 
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, imageBlob);
+    return await getDownloadURL(storageRef);
   }
 }

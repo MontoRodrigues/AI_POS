@@ -1,0 +1,13 @@
+<div class="attr-container">
+    <div class="input-group">
+        <app-text-dropdown [(text_value)]="text_attr" [InputData]="attr_master()" [placeholder]="'Add Attribute type'"></app-text-dropdown>
+        <input type="text" class="form-control" placeholder="Value" [(ngModel)]="text_value">
+        <button class="btn btn-outline-secondary" type="button" (click)="add_attr()">Add</button>
+    </div>
+    <div class="attr-list">
+
+        @for(atr of attributes_list; track $index) {
+        <div (click)="remove_attr($index)"> <span>{{atr.type}}</span>:<span>{{atr.value}}</span> <i class='bx  bx-x'></i> </div>
+        }
+    </div>
+</div>

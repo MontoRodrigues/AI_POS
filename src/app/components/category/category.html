@@ -1,0 +1,96 @@
+<div class="breadcrumb-header">
+    <div class="breadcrumb-header-name" (click)="navigateTo('/')">
+        <button type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
+                <path
+                    d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" />
+            </svg>
+        </button>
+        <span>category</span>
+    </div>
+    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggle_left_slide_model()"> Add
+        Category</button>
+</div>
+
+<div class="banner">
+
+</div>
+
+<div class="card-list">
+    @for(category of category_list; track $index) {
+    <div class="card">
+        <div class="card-body">
+            <div class="list-container">
+                <img [src]="category.data.catImage.downloadURL" />
+               
+            <p class="card-title">{{category.data.path.join('/')}}</p>
+            </div>
+        </div>
+    </div>
+    }
+
+</div>
+
+
+<div class="left-slide-model">
+
+    <div class="breadcrumb-header">
+        <div class="breadcrumb-header-name">
+            <button type="button" onclick="toggle_left_slide_model()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
+                    <path
+                        d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" />
+                </svg>
+            </button>
+            <span>Add Category</span>
+        </div>
+    </div>
+
+    <div class="model-body">
+
+        <div [class]="new_category_validate.name">
+            <label class="form-label">Category Name</label>
+            <input type="text" class="form-control app-form-component" placeholder="Category Name" [(ngModel)]="new_category.name" >
+            <span class="error-message">Please enter Category name</span>
+        </div>
+
+
+        <div class="mb-3">
+            
+            <label class="form-label">Parent Product Category</label>
+            <app-select 
+            [selectInputData]="categoryDDLList"
+            [errorMessage]="'Please Select a Parent Category. If This is the root category then don not select any category'"
+            [errorClass]="this.new_category_validate.parentId"
+            [selected]="parent_doc_id"
+            (onSelectChange)="getParentProductCategory($event)">
+
+            </app-select>
+        </div>
+
+        <!-- <div [class]="new_category_validate.parentId">
+            <label class="form-label">Product Category</label>
+            <select class="form-select" [(ngModel)]="parent_id">
+                <option value="none">None</option>
+                @for(cl of category_list; track cl.docId) {
+                <option value="{{cl.docId}}">{{cl.docId}}</option>
+                }
+            </select>
+            <span class="error-message">You have not Selected a Parent. This will make this category as Level 1</span>
+        </div> -->
+
+        <div [class]="new_category_validate.imageUrl">
+            <label class="form-label">Category Image</label>
+            <app-image-control imageWidth="150" imageHeight="150"
+                (imageReady)="onImageUpload($event)"></app-image-control>
+            <span class="error-message">You have not Selected an Image. We will use a default image instead</span>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary mb-3" (click)="addCategory()">Add Category</button>
+        </div>
+
+    </div>
+
+</div>
+

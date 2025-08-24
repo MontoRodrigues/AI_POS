@@ -1,0 +1,6 @@
+.image-upload {
+    width: 150px;
+    border: 1px dashed;
+    overflow: hidden;
+    cursor: pointer;    
+}
