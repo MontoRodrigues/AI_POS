@@ -6,15 +6,18 @@ import { AuthGuard } from './services/auth.guard';
 import { SupplierList } from './components/supplier-list/supplier-list';
 import { Category } from './components/category/category';
 import { Product } from './components/product/product';
+import { ProductAdd } from './components/product-add/product-add';
 
 
 
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: '', title: 'Home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'purchase', component: PurchaseListComponent, canActivate: [AuthGuard] },
     { path: 'supplier', component: SupplierList, canActivate: [AuthGuard] },
     { path: 'category', component: Category, canActivate: [AuthGuard] },
-    { path: 'products', component: Product, canActivate: [AuthGuard] }
+    { path: 'products', component: Product, canActivate: [AuthGuard] },
+    { path: 'products/add_product', component: ProductAdd, canActivate: [AuthGuard] }
 ];
+

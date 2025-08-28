@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { defaultConfig } from '../../../config/config';
+
+declare var toggle_side_menu: Function;
 
 @Component({
   selector: 'app-menu',
@@ -10,34 +15,94 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class Menu {
   show_menu = false;
-   user: any = null;
+  user: any = null;
+  current_path: any[] | null = null;
+  user_initial: string | undefined = "";
+  navMenu: any[] = [];
 
-  constructor(private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
+
+    this.getPath(router.url);
+    this.get_nav(router.url);
     this.authService.user$.subscribe(authState => {
-      console.log("User Details")
       if (authState !== null) {
         this.user = authState;
-        console.log(authState);
+        console.log(authState.displayName)
+        this.user_initial = authState.displayName?.split(" ").map(word => word.charAt(0)).join('');
       }
+      else {
+        this.user = null;
+      }
+
     });
   }
 
-  navigateTo(path:string){
-    console.log(path)
+  private getPath(url: string) {
+    let p: any[] = url.split("/").filter(item => item != '');
+    let path = "";
+    let path_array: any[] = [];
+    // path_array.push({text:"home", path:"/"});
+    p.forEach((e) => {
+      path = "/" + e;
+      path_array.push({ text: e.replaceAll("_"," "), path: path });
+    })
+    this.current_path = path_array;
+    console.log('URL changed to:');
+    console.log(this.current_path);
   }
 
-  cssClass(e: string) {
-    if (this.show_menu)
-      return "show " + e;
-    else
-      return e;
+  get_nav(url: string) {
+    console.log("Current URL");
+    console.log(url);
+    
+
+    let n: any = [];
+    defaultConfig.nav.forEach((d: any) => {
+      d["active"] = false;
+      if (d.hasOwnProperty("path") && d.path == url)
+        d["active"] = true;
+
+      if (d.hasOwnProperty("subMenu")) {
+       
+        d.subMenu.forEach((s: any) => {
+          if (s.path == url) {
+            d["active"] = true;
+            s["active"] = true;
+          }
+          else{
+             s["active"] = false;
+          }
+        });
+      }
+
+      n.push(d);
+    });
+
+    this.navMenu = n;
+    console.log(n);
   }
 
-  menu_toggle() {
-    if (this.show_menu)
-      this.show_menu = false;
-    else
-      this.show_menu = true;
-    console.log("Show Mnu=", this.show_menu);
+  ngOnInit() {
+    this.getPath(this.router.url);
+    this.get_nav(this.router.url);
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.getPath(event.url);
+      this.get_nav(event.url);
+    });
+  }
+
+
+
+  navigateTo(path: string, con: boolean) {
+    if (con == true)
+      toggle_side_menu();
+    this.router.navigate([path]);
+  }
+
+  logout() {
+    this.authService.signOut();
+
   }
 }

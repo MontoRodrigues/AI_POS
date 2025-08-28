@@ -33,7 +33,8 @@ export class AuthService {
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
-  signOut() {
-    return signOut(auth);
+  async signOut() {
+    await signOut(auth);
+    this.router.navigate(["/login"]);
   }
 }

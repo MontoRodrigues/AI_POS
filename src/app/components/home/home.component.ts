@@ -5,82 +5,84 @@ import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { CommonModule } from '@angular/common';
 import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
+import { defaultConfig } from '../../config/config';
+import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
+
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <h1>Welcome! {{user.displayName}}</h1>
-    <button (click)="logout()">Logout</button>
-    <h2>Top 10 Products (Price > 50)</h2>
-    <ul>
-      <li *ngFor="let product of products">
-        {{ product.Name }}
-      </li>
-    </ul>
-    <button type="button" (click)="navigateTo('purchase')">Purchase</button>
-  `
+  imports: [CommonModule, Breadcrumb],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  products: any[] = [];
-  private unsubscribe: Unsubscribe | undefined;
-  user: any = null;
-
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private authService: AuthService,
-    private router: Router,
-    private firebaseService: FirebaseService
-  ) {
-    this.authService.user$.subscribe(authState => {
-      console.log("User Details")
-      if (authState !== null) {
-        this.user = authState;
-        console.log(authState);
-      }
-    });
-
+  ngOnDestroy(): void {
+    //throw new Error('Method not implemented.');
   }
-
-  navigateTo(path: string){
-    this.router.navigate(['/'+path]);
+  ngOnInit(): void {
+    //throw new Error('Method not implemented.');
   }
+  // products: any[] = [];
+  // private unsubscribe: Unsubscribe | undefined;
+  // user: any = null;
 
-  ngOnInit() {
+  // constructor(
+  //   private cdRef: ChangeDetectorRef,
+  //   private authService: AuthService,
+  //   private router: Router,
+  //   private firebaseService: FirebaseService
+  // ) {
 
-    //  this.firebaseService.getCollection('products', 10).then(querySnapshot => {
-    //   querySnapshot.forEach(doc => {
-    //     this.products.push(doc.data());
-    //   });
-    // });
+  // }
 
-    const constraints = [
-      // where('price', '>', 50),
-      // orderBy('price', 'desc'),
-      // orderBy('name'),
-      limit(10)
-    ];
+  // async add_UOm_collection() {
+  //   let data=[]
 
-    this.unsubscribe = this.firebaseService.subscribeToCollection('products', (snapshot) => {
-      this.products = [];
-      let p:any =[]
-      snapshot.forEach(doc => {
-        p.push(doc.data());
-      });
-      this.products =p;
-      console.log(this.products);
-      this.cdRef.detectChanges()
-    }, constraints);
-  }
+  //   data.forEach(async d => {
+  //     console.log(d);
+  //     await this.firebaseService.addDocument(defaultConfig.collections.attribute.name, d).then();
+  //   });
 
-  ngOnDestroy() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  }
+  // }
 
-  logout() {
-    this.authService.signOut();
-  }
+  // navigateTo(path: string) {
+  //   this.router.navigate(['/' + path]);
+  // }
+
+  // ngOnInit() {
+
+  //   //  this.firebaseService.getCollection('products', 10).then(querySnapshot => {
+  //   //   querySnapshot.forEach(doc => {
+  //   //     this.products.push(doc.data());
+  //   //   });
+  //   // });
+
+  //   const constraints = [
+  //     // where('price', '>', 50),
+  //     // orderBy('price', 'desc'),
+  //     // orderBy('name'),
+  //     limit(10)
+  //   ];
+
+  //   this.unsubscribe = this.firebaseService.subscribeToCollection('products', (snapshot) => {
+  //     this.products = [];
+  //     let p: any = []
+  //     snapshot.forEach(doc => {
+  //       p.push(doc.data());
+  //     });
+  //     this.products = p;
+  //     console.log(this.products);
+  //     this.cdRef.detectChanges()
+  //   }, constraints);
+  // }
+
+  // ngOnDestroy() {
+  //   if (this.unsubscribe) {
+  //     this.unsubscribe();
+  //   }
+  // }
+
+  // logout() {
+  //   this.authService.signOut();
+  // }
 }

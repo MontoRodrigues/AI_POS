@@ -8,7 +8,7 @@ import { Menu } from './components/shared/menu/menu';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule,Menu],
+  imports: [RouterOutlet, CommonModule, Menu],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -22,12 +22,14 @@ export class App {
     private router: Router,
   ) {
     this.authService.user$.subscribe(authState => {
-      console.log("User Details")
       if (authState !== null) {
         this.user = authState;
-        console.log(authState);
       }
     });
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
   }
 
 }

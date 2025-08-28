@@ -25,7 +25,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+  <!-- <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+<link href='https://demos.pixinvent.com/vuexy-html-admin-template/assets/vendor/fonts/iconify-icons.css' rel='stylesheet'> -->
+
+  <script src="https://kit.fontawesome.com/d6a3eca373.js" crossorigin="anonymous"></script>
+
 
 </head>
 
@@ -42,6 +46,34 @@
         document.querySelector("#loader_text").innerHTML = custom_text;
       document.querySelector("body").classList.toggle("show-loader");
     }
+
+    //--------- new functions delete above one once done
+    let toggle_side_menu = () => {
+      document.querySelector("body").classList.toggle("open-side-menu");
+    };
+
+    let open_sub_menu = (e) => {
+      e.parentNode.classList.toggle("open-menu");
+    };
+
+    let open_user_menu = (e) => {
+      e.parentNode.classList.toggle("open-user-menu");
+    };
+
+    let hideMenu=()=>{
+      document.querySelector(".menu-controller").style.display="none";
+    };
+
+    let showMenu=()=>{
+      document.querySelector(".menu-controller").style.display="inherit";
+    };
+
+    let toggle_form_card =(e) =>{
+       e.parentNode.classList.toggle("open");
+    };
+
+
+
   </script>
 
   <div class="loader">

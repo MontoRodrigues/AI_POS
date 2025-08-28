@@ -19,12 +19,10 @@
 <div class="card-list">
     @for(category of category_list; track $index) {
     <div class="card">
+        <img src="{{category.data.catImage.downloadURL}}" class="card-img-top" alt="...">
         <div class="card-body">
-            <div class="list-container">
-                <img [src]="category.data.catImage.downloadURL" />
-               
-            <p class="card-title">{{category.data.path.join('/')}}</p>
-            </div>
+            <p class="card-title">{{category.data.name}}</p>
+            <p class="card-subtitle">{{category.data.path.join('/')}}</p>
         </div>
     </div>
     }

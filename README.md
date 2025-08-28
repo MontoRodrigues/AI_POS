@@ -63,3 +63,16 @@ For more information on using the Angular CLI, including detailed command refere
 - Icons: https://boxicons.com/
 - FavIcon Genera:tor: https://favicon.io/favicon-converter/
 - Banner Designs: https://www.canva.com/
+
+
+# Z-index
+menu nav (top - bottom -mobile top) - 2000
+side nav - 2010
+sid nave bg - 2005
+
+# app components 
+- Products -> component/products
+
+# Shared components
+- Menu -> component/shared/menu
+- breadcrumb -> components/shared/breadcrumb

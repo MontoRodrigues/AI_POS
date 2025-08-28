@@ -14,6 +14,7 @@ import { where, orderBy, limit } from 'firebase/firestore';
 import { TextDropdown } from '../shared/text-dropdown/text-dropdown';
 import { TextAddTags } from '../shared/text-add-tags/text-add-tags';
 import { TextAddAttr } from '../shared/text-add-attr/text-add-attr';
+import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
 
 
 declare var toggle_left_slide_model: Function;
@@ -21,7 +22,8 @@ declare var toggle_loader: Function;
 
 @Component({
   selector: 'app-product',
-  imports: [ImageCapture, MatDialogModule, FormsModule, CommonModule, Select, TextDropdown, TextAddTags, TextAddAttr],
+  imports: [MatDialogModule, FormsModule, CommonModule, Breadcrumb],
+    //imports: [ImageCapture, MatDialogModule, FormsModule, CommonModule, Select, TextDropdown, TextAddTags, TextAddAttr, Breadcrumb],
   templateUrl: './product.html',
   styleUrl: './product.css'
 })
@@ -100,8 +102,6 @@ export class Product {
     attributes: "mb-3",
   }
 
-
-
   constructor(private cdRef: ChangeDetectorRef, private router: Router, private firebaseService: FirebaseService) { }
 
   ngOnInit() {
@@ -109,49 +109,49 @@ export class Product {
       orderBy('path')
     ];
 
-    this.subscribe_category = this.firebaseService.subscribeToCollection(this.conf.collections.category.name, (snapshot) => {
-      this.category_list = [];
-      let p: any = []
+    // this.subscribe_category = this.firebaseService.subscribeToCollection(this.conf.collections.category.name, (snapshot) => {
+    //   this.category_list = [];
+    //   let p: any = []
 
-      snapshot.forEach(doc => {
-        p.push({ docId: doc.id, data: doc.data() });
-      });
+    //   snapshot.forEach(doc => {
+    //     p.push({ docId: doc.id, data: doc.data() });
+    //   });
 
-      this.category_list = p;
-      let cddl = this.category_list.map((item: any) => { return { "value": item.docId, "text": item.data.path.join('/') } });
-      this.categoryDDLList = cddl;
+    //   this.category_list = p;
+    //   let cddl = this.category_list.map((item: any) => { return { "value": item.docId, "text": item.data.path.join('/') } });
+    //   this.categoryDDLList = cddl;
 
-      this.cdRef.detectChanges();
-      console.log(this.category_list);
-    }, constrain);
+    //   this.cdRef.detectChanges();
+    //   console.log(this.category_list);
+    // }, constrain);
 
-    this.subscribe_brand = this.firebaseService.subscribeToCollection(this.conf.collections.brand.name, (snapshot) => {
-      this.brandList = [];
-      let p: any = []
+    // this.subscribe_brand = this.firebaseService.subscribeToCollection(this.conf.collections.brand.name, (snapshot) => {
+    //   this.brandList = [];
+    //   let p: any = []
 
-      snapshot.forEach(doc => {
-        p.push(doc.data()["name"]);
-      });
-      this.brandList = p;
-      this.cdRef.detectChanges();
-      console.log(this.brandList);
-    }, [
-      orderBy('name')
-    ]);
+    //   snapshot.forEach(doc => {
+    //     p.push(doc.data()["name"]);
+    //   });
+    //   this.brandList = p;
+    //   this.cdRef.detectChanges();
+    //   console.log(this.brandList);
+    // }, [
+    //   orderBy('name')
+    // ]);
 
-    this.subscribe_attr_master = this.firebaseService.subscribeToCollection(this.conf.collections.attribute.name, (snapshot) => {
-      this.attr_master_list = [];
-      let p: any = []
+    // this.subscribe_attr_master = this.firebaseService.subscribeToCollection(this.conf.collections.attribute.name, (snapshot) => {
+    //   this.attr_master_list = [];
+    //   let p: any = []
 
-      snapshot.forEach(doc => {
-        p.push(doc.data()["name"]);
-      });
-      this.attr_master_list = p;
-      this.cdRef.detectChanges();
-      console.log(this.attr_master_list);
-    }, [
-      orderBy('name')
-    ]);
+    //   snapshot.forEach(doc => {
+    //     p.push(doc.data()["name"]);
+    //   });
+    //   this.attr_master_list = p;
+    //   this.cdRef.detectChanges();
+    //   console.log(this.attr_master_list);
+    // }, [
+    //   orderBy('name')
+    // ]);
 
     this.subscribe_product = this.firebaseService.subscribeToCollection(this.conf.collections.products.name, (snapshot) => {
       this.product_list = [];

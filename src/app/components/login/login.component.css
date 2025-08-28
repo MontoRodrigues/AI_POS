@@ -1,2 +1,86 @@
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .426rem .9375rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.625;
+    color: #444050;
+    appearance: none;
+    background-color: rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border: 1px solid color-mix(in sRGB, #2f2b3d 22%, #fff);
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    margin: 0;
+    font-family: inherit;
+}
+
+.form-control:focus {
+    color: #444050;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: #7367f0;
+    outline: 0;
+    box-shadow: 0 .125rem .375rem 0 rgba(115, 103, 240, 0.3)
+}
+
+.form-label {
+    font-size: 0.8125rem;
+    color: #444050;
+    margin-bottom: .25rem;
+    font-size: 0.8125rem;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    width: 50%;
+
+}
+
+
+
+.login-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f8f7fa;
+    opacity: 0.8;
+    background-size: 10px 10px;
+    background-image: repeating-linear-gradient(45deg, #d8d8d8 0, #d8d8d8 1px, #f8f7fa 0, #f8f7fa 50%);
+}
+
+.login-card {
+    padding: 1.5rem 1.5rem 2rem;
+    background-color: white;
+    border-radius: 10px;
+    width: 400px;
+}
+
+
+
+.login-card .branding {
+    font-size: 24px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+
+.login-card .branding .svg-inline--fa,
+.login-card .branding i {
+    color: rgba(115, 103, 240, 1);
+    font: 30px;
+}
 
 /* Add your styles here */
