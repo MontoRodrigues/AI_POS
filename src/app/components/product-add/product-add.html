@@ -18,7 +18,7 @@
       sku: null,
       barcode: null,   
       brand: null,
-      
+
       categoryIds: [],
       path: null,
       uom: null,
@@ -60,6 +60,18 @@
                         </div>
 
 
+                        <div [class]="validateNewProduct.categoryIds">
+                            <label class="form-label">Select Product Category</label>
+                            <app-select [selectInputData]="categoryDDLList" [errorMessage]="'Please Select a Category.'"
+                                [errorClass]="this.validateNewProduct.categoryIds" [selected]="category_doc_id"
+                                (onSelectChange)="getParentCategory($event)">
+                            </app-select>
+                            <div class="form-text">
+                                Select the one Lowest level of category
+                            </div>
+                            <span class="error-message">Please Select a Category</span>
+                        </div>
+
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -76,8 +88,11 @@
                         <!-- Brand -->
                         <div [class]="validateNewProduct.brand">
                             <label class="form-label">Brand Name</label>
-                            <app-text-dropdown [placeholder]="'Add a Brand'" [(text_value)]="newProduct.brand"
-                                [InputData]="brandList"></app-text-dropdown>
+                            <app-text-dropdown [placeholder]="'Add a Brand'" [(value)]="newProduct.brand"
+                                [use_col]="'name'" [InputData]="brandList"></app-text-dropdown>
+                            <div class="form-text">
+                                Please select a brand from the list or add a new
+                            </div>
                             <span class="error-message">Please enter or select Brand Name </span>
                         </div>
                     </div>

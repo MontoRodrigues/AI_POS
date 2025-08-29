@@ -7,17 +7,33 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './text-dropdown.css'
 })
 export class TextDropdown {
-  text_value = model<string | null>();
   @ViewChild('textDDL') textDDL_elm!: ElementRef;
-  text: any = null;
+
+  value = model<string | null>();
+  use_col = input<any>("name");
   placeholder = input<string>("");
+  text: any = null;
+
+
 
   // Input data for the select DDL
   InputData = input<any[]>([]);
   filteredData: any[] = [];
+
+
+  // getFilterData() {
+  //   let opt:any[] =[];
+  //   this.InputData().forEach((d)=>{
+  //     opt.push(d[this.use_col()]);
+  //   });
+  // }
+
   ngOnInit() {
+    if (this.value() != null)
+      this.text = this.value();
+   
     this.filteredData = this.InputData();
-    console.log(this.filteredData);
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -25,7 +41,7 @@ export class TextDropdown {
       this.textOnKeyUp();
 
     if (changes['text_value'])
-      this.text = this.text_value();
+      this.text = this.value();
   }
 
 
@@ -47,21 +63,22 @@ export class TextDropdown {
 
   textOnKeyUp() {
 
+     console.log("Input Data");
+    console.log(this.InputData());
+
     if (this.text == "" || this.text == null) {
       this.filteredData = this.InputData();
       return;
     }
 
     this.filteredData = this.InputData().filter((item: any) => {
-      return item?.toLowerCase().includes(this.text?.toLowerCase());
+      return item[this.use_col()].toLowerCase().includes(this.text?.toLowerCase());
     });
 
-
-    this.text_value.update(() => this.text);
+    this.value.update(() => this.text);
 
     this.openDDL();
 
-    console.log(this.filteredData);
 
   }
 

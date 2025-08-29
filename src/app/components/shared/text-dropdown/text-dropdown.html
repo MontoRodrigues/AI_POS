@@ -3,7 +3,7 @@
 
     <ul class="type-ahead-container">
         @for(opt of filteredData; track $index) {
-        <li (click)="selectOption(opt)">{{opt}}</li>
+        <li (click)="selectOption(opt)">{{opt[use_col()]}}</li>
         }
     </ul>
 

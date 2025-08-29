@@ -26,83 +26,71 @@ export class ProductAdd {
   attrList: any[] = [];
 
   newProduct: Iproduct = {
-      id: null,
-      sku: null,
-      barcode: null,
-      name: null,
-      slug: null,
-      brand: null,
-      categoryIds: [],
-      path: null,
-      uom: null,
-      taxRate: 0,
-      sale: null,
-      image: null,
-      searchTokens: [],
-      attributes: []
-    };
-  
-    validateNewProduct = {
-      name: "form-div",
-      sku: "form-div",
-      barcode: "form-div",
-      brand: "form-div",
-      uom: "form-div",
-      categoryIds: "form-div",
-      image: "form-div",
-      searchTokens: "form-div",
-      attributes: "form-div",
-    }
-  
+    id: null,
+    sku: null,
+    barcode: null,
+    name: null,
+    slug: null,
+    brand: null,
+    categoryIds: [],
+    path: null,
+    uom: null,
+    taxRate: 0,
+    sale: null,
+    image: null,
+    searchTokens: [],
+    attributes: []
+  };
+
+  validateNewProduct = {
+    name: "form-div",
+    sku: "form-div",
+    barcode: "form-div",
+    brand: "form-div",
+    uom: "form-div",
+    categoryIds: "form-div",
+    image: "form-div",
+    searchTokens: "form-div",
+    attributes: "form-div",
+  }
 
 
+  getDataFromCollection(snapshot: any): any[] {
+    let p: any = []
+    snapshot.forEach((doc: any) => {
+      let d = doc.data();
+      d["docId"] = doc.id;
+      p.push(d);
+    });
+    return p;
+  }
 
   constructor(private cdRef: ChangeDetectorRef, private router: Router, private firebaseService: FirebaseService) { }
+
   ngOnInit() {
-  
-    // subscribe Category collection 
+
+    //subscribe Category collection 
     this.subscribe_category = this.firebaseService.subscribeToCollection(defaultConfig.collections.category.name, (snapshot) => {
-      this.category_list = [];
-      let p: any = []
-
-      snapshot.forEach(doc => {
-        p.push({ docId: doc.id, data: doc.data() });
-      });
-
-      this.category_list = p;
+      this.category_list = this.getDataFromCollection(snapshot);
       this.cdRef.detectChanges();
       console.log(this.category_list);
     }, [orderBy('path')]);
 
+
     // subscribe Brand collection 
     this.subscribe_brand = this.firebaseService.subscribeToCollection(defaultConfig.collections.brand.name, (snapshot) => {
-      this.brandList = [];
-      let p: any = []
-
-      snapshot.forEach(doc => {
-        p.push(doc.data()["name"]);
-      });
-      this.brandList = p;
+      this.brandList = this.getDataFromCollection(snapshot);
       this.cdRef.detectChanges();
-      console.log(this.brandList);
-    }, [
-      orderBy('name')
-    ]);
+      console.log("brand:",this.brandList);
+    }, [orderBy('name')]);
 
-    // subscribe Brand collection 
-    this.subscribe_attr = this.firebaseService.subscribeToCollection(defaultConfig.collections.attribute.name, (snapshot) => {
-      this.attrList = [];
-      let p: any = []
-
-      snapshot.forEach(doc => {
-        p.push(doc.data()["name"]);
-      });
-      this.attrList = p;
+    // subscribe Attribute collection 
+    this.subscribe_attr = this.firebaseService.subscribeToCollection("attributes", (snapshot) => {
+      console.log(snapshot)
+      this.attrList = this.getDataFromCollection(snapshot);
       this.cdRef.detectChanges();
-      console.log(this.attrList);
-    }, [
-      orderBy('name')
-    ]);
+      console.log("attirbute:", this.attrList);
+     }, [orderBy('attribute')]);
 
   }
 
@@ -122,7 +110,7 @@ export class ProductAdd {
 
 
   // start scanning 
-  startScanner(){
+  startScanner() {
 
   }
 }
