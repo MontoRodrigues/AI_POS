@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc, collectionGroup } from 'firebase/firestore';
 import { firestore, storage } from './firebase';
 import { ISupplier } from '../interface/isupplier';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -18,9 +18,9 @@ export class FirebaseService {
     return await getDocs(q);
   }
 
-  addDocument(path: string, data: any): Promise<DocumentReference> {
+  async addDocument(path: string, data: any): Promise<DocumentReference> {
     const collectionRef = collection(firestore, path);
-    return addDoc(collectionRef, data);
+    return await addDoc(collectionRef, data);
   }
 
   setDocument(path: string, data: any, options?: SetOptions): Promise<void> {
@@ -36,6 +36,12 @@ export class FirebaseService {
   deleteDocument(path: string): Promise<void> {
     const docRef = doc(firestore, path);
     return deleteDoc(docRef);
+  }
+
+  subscribeToCollectionGroup(collectionName: string, callback: (snapshot: QuerySnapshot) => void, constraints: QueryConstraint[] = []): Unsubscribe {
+    const collectionRef = collectionGroup(firestore, collectionName);
+    const q = query(collectionRef, ...constraints);
+    return onSnapshot(q, callback);
   }
 
   subscribeToCollection(collectionName: string, callback: (snapshot: QuerySnapshot) => void, constraints: QueryConstraint[] = []): Unsubscribe {

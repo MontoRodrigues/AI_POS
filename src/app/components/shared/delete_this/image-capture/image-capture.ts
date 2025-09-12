@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, ElementRef, inject, input, output, signal, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { filter } from 'rxjs';
-import { ImageCaptureDialogue, ImageCapturerDialogResult } from '../image-capture-dialogue/image-capture-dialogue';
-import { CropperDialogue, CropperDialogResult } from '../cropper-dialogue/cropper-dialogue';
+import { ImageCaptureDialogue, ImageCapturerDialogResult } from '../../image-capture-dialogue/image-capture-dialogue';
+import { CropperDialogue, CropperDialogResult } from '../../cropper-dialogue/cropper-dialogue';
 
 @Component({
   selector: 'app-image-capture',

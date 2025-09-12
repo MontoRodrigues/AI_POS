@@ -50,8 +50,7 @@ export class ImageCaptureDialogue implements OnInit, OnDestroy {
   ngOnInit(): void {
     //throw new Error('Method not implemented.');
     // get the media stream 
-    console.log("ID")
-    console.log(document.getElementById(this.video_id));
+    
     this.init();
   }
 

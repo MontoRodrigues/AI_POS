@@ -25,8 +25,7 @@ export class Breadcrumb {
       path_array.push({ text: e.replaceAll("_"," "), path: path });
     })
     this.current_path = path_array;
-    console.log('URL changed to:');
-    console.log(this.current_path);
+    
   }
 
   ngOnInit() {

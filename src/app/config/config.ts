@@ -15,12 +15,23 @@ export const defaultConfig = {
             "folder": "local"
         }
     },
+    image_path: {
+        category: "category",
+        Product: "products",
+        Purchase: "purchase"
+    },
     nav: [
         { text: "Home", path: "/" },
         {
             text: "Products", subMenu: [
                 { text: "Products", path: "/products" },
                 { text: "Add Product", path: "/products/add_product" },
+            ]
+        },
+        {
+            text: "Purchase", subMenu: [
+                { text: "Purchase", path: "/purchase" },
+                { text: "New Purchase", path: "/purchase/add_purchase" },
             ]
         },
     ],
@@ -30,7 +41,9 @@ export const defaultConfig = {
         "products": { name: "products" },
         "suppliers": { name: "suppliers" },
         "attribute": { name: "attributes" },
-        "uom": { name: "uom" }
+        "uom": { name: "uom" },
+        "purchase": { name: "purchase" },
+        "inventory": { name: "inventory" },
     }
 }
 
@@ -218,7 +231,8 @@ export class AppDefaultConfig {
         "products": { name: "products" },
         "suppliers": { name: "suppliers" },
         "attribute": { name: "attribute_master" },
-
+        "uom": { name: "uom" },
+        "purchase": { name: "purchase" },
 
     };
 

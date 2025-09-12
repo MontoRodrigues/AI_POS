@@ -1,0 +1,12 @@
+<div class="image-upload-bth" #image_upload_btn>
+    <div class="img-bth"  (click)="image_upload_btn.classList.toggle('open')">
+    <i class="fa-solid fa-circle-plus"></i>
+    <span>Add Image</span>
+    </div>
+
+    <input type="file" accept="image/png,image/jpeg,image/webp" #image_upload hidden (change)="fileSelected($event)" (click)="image_upload.value = ''">
+    <ul class="upload-menu">
+        <li (click)="getFile()">Upload from Device</li>
+        <li (click)="openCamera()"> Capture using Camera</li>
+    </ul>
+</div>

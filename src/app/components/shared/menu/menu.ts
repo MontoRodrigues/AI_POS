@@ -27,7 +27,7 @@ export class Menu {
     this.authService.user$.subscribe(authState => {
       if (authState !== null) {
         this.user = authState;
-        console.log(authState.displayName)
+       
         this.user_initial = authState.displayName?.split(" ").map(word => word.charAt(0)).join('');
       }
       else {
@@ -47,13 +47,11 @@ export class Menu {
       path_array.push({ text: e.replaceAll("_"," "), path: path });
     })
     this.current_path = path_array;
-    console.log('URL changed to:');
-    console.log(this.current_path);
+
   }
 
   get_nav(url: string) {
-    console.log("Current URL");
-    console.log(url);
+
     
 
     let n: any = [];
@@ -79,7 +77,7 @@ export class Menu {
     });
 
     this.navMenu = n;
-    console.log(n);
+  
   }
 
   ngOnInit() {

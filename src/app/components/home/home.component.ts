@@ -8,6 +8,7 @@ import { Unsubscribe, where, orderBy, limit } from 'firebase/firestore';
 import { defaultConfig } from '../../config/config';
 import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
 
+declare var showLoader: Function;
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     //throw new Error('Method not implemented.');
   }
   ngOnInit(): void {
+    showLoader(false);
     //throw new Error('Method not implemented.');
   }
   // products: any[] = [];
@@ -39,7 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   //   let data=[]
 
   //   data.forEach(async d => {
-  //     console.log(d);
+  //     //console.log(d);
   //     await this.firebaseService.addDocument(defaultConfig.collections.attribute.name, d).then();
   //   });
 
@@ -71,7 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   //       p.push(doc.data());
   //     });
   //     this.products = p;
-  //     console.log(this.products);
+  //     //console.log(this.products);
   //     this.cdRef.detectChanges()
   //   }, constraints);
   // }

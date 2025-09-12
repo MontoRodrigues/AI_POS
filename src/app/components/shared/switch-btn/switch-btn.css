@@ -1,0 +1,119 @@
+/* toggle btn */
+.toggle-button {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 18px;
+    cursor: pointer;
+    /* width: 53px; */
+    height: 24px;
+    background: #d1d3d4;
+    padding: 0px 5px;
+
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    cursor: pointer;
+}
+
+.true {
+    background: #28c76f;
+}
+
+.toggle-button .label-off {
+    /* display: flex; */
+    height: 100%;
+    font-size: 12px;
+    line-height: 12px;
+    align-items: center;
+    padding-left: 19px;
+    color: white;
+    display: none;
+    padding-right: 5px;
+}
+
+.toggle-button .label-onn {
+    /* display: flex; */
+    height: 100%;
+    font-size: 12px;
+    line-height: 12px;
+    align-items: center;
+    padding-left: 0px;
+    padding-right: 19px;
+    color: white;
+    display: none;
+    padding-left: 5px;
+}
+
+
+
+.toggle-button .toggle-handle {
+    position: absolute !important;
+    top: 4px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
+}
+
+.toggle-button .toggle-handle:before {
+    content: "";
+    top: 50%;
+    left: 50%;
+    position: absolute !important;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+
+}
+
+.toggle-button .toggle-handle:active {
+  width: 30px;
+}
+
+.toggle-button.false .label-off {
+    display: flex;
+}
+
+.toggle-button.false .toggle-handle {
+    right: unset;
+    left: 5px;
+}
+
+.toggle-button.true .label-onn {
+    display: flex;
+}
+
+.toggle-button.true .toggle-handle {
+    right: 5px;
+    left: unset;
+}
+
+/* 
+.toggle-button .toggle-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    background: #d1d3d4;
+    border-radius: inherit;
+}
+
+.toggle-button .toggle-label:before {
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+    line-height: 1.1;
+    content: attr(data-off);
+    right: 11px;
+    color: white;
+}
+
+.toggle-button .toggle-label:after {
+    content: attr(data-on);
+    left: 11px;
+    color: white;
+    opacity: 0;
+} */

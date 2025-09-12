@@ -4,131 +4,19 @@
 
     <h4 class="page-header">Product List</h4>
     <p class="page-sub-header">
-       Manage Products
+        Manage Products
     </p>
 
     <div class="card-list">
-        @for(category of product_list; track $index) {
+        @for(p of product_list; track $index) {
         <div class="card">
-            <img src="{{category.data.image.downloadURL}}" class="card-img-top" alt="...">
+            
             <div class="card-body">
-                <p class="card-title">{{category.data.name}}</p>
-                <p class="card-subtitle">{{category.data.path.join('/')}}</p>
+                <p class="card-title">{{p.name}}</p>
+
             </div>
         </div>
         }
 
     </div>
 </div>
-
-
-
-<!-- <div class="left-slide-model">
-
-    <div class="breadcrumb-header">
-        <div class="breadcrumb-header-name">
-            <button type="button" onclick="toggle_left_slide_model()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
-                    <path
-                        d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" />
-                </svg>
-            </button>
-            <span>Add Product</span>
-        </div>
-    </div>
-
-    <div class="model-body">
-
-        <div [class]="validateNewProduct.name">
-            <label class="form-label">Product Name</label>
-            <input type="text" class="form-control app-form-component" placeholder="Product Name"
-                [(ngModel)]="newProduct.name">
-            <span class="error-message">Please enter Category name</span>
-        </div>
-
-        <div [class]="validateNewProduct.sku">
-            <label class="form-label">Product SKU</label>
-            <input type="text" class="form-control app-form-component" placeholder="Product SKU"
-                [(ngModel)]="newProduct.sku">
-            <span class="error-message">Please enter Category name</span>
-        </div>
-
-        <div [class]="validateNewProduct.barcode">
-            <label class="form-label">Scan or Type Barcode</label>
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Barcode" [(ngModel)]="newProduct.barcode">
-                <button class="btn btn-outline-secondary" type="button" (click)="openScanner()">
-                    <i class='bx  bx-scan-barcode'></i>
-                </button>
-            </div>
-            <span class="error-message">Please enter or scan Bar code</span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Tax Rate</label>
-
-            <div class="input-group">
-                <span class="input-group-text">%</span>
-                <input type="text" class="form-control app-form-component" [(ngModel)]="newProduct.taxRate"
-                    placeholder="Tax Rate %">
-            </div>
-            <span class="error-message">Please enter Tax Rate</span>
-        </div>
-
-        <div [class]="validateNewProduct.sku">
-            <label class="form-label">Unit of Measure</label>
-            <select class="form-select" [(ngModel)]="newProduct.uom">
-                @for(u of conf.units; track $index) {
-                <option value="{{u.value}}">{{u.text}}</option>
-                }
-            </select>
-            <span class="error-message">Please enter Unit of Measure </span>
-        </div>
-
-        <div [class]="validateNewProduct.brand">
-            <label class="form-label">Brand Name</label>
-            <app-text-dropdown [placeholder]="'Add a Brand'" [(text_value)]="newProduct.brand"
-                [InputData]="brandList"></app-text-dropdown>
-                <span class="error-message">Please enter or select Brand Name </span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Add Search Tags</label>
-            <app-text-add-tags [(tags)]="newProduct.searchTokens"></app-text-add-tags>
-
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Add Product Attribute</label>
-            <app-text-add-attr [(attributes)]="newProduct.attributes"
-                [attr_master]="attr_master_list"></app-text-add-attr>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label class="form-label">Select Product Category</label>
-            <app-select [selectInputData]="categoryDDLList" [errorMessage]="'Please Select a Category.'"
-                [errorClass]="this.validateNewProduct.categoryIds" [selected]="category_doc_id"
-                (onSelectChange)="getParentCategory($event)">
-
-            </app-select>
-        </div>
-
-
-        <div [class]="validateNewProduct.image">
-            <app-image-capture imageWidth="400" imageHeight="400"
-                (imageReady)="onImageUpload($event)"></app-image-capture>
-                 <span class="error-message">No Image Select. default image will be added. </span>
-        </div>
-
-
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary mb-3" (click)="addProduct()">Add Product</button>
-        </div>
-
-
-    </div>
-
-</div> -->

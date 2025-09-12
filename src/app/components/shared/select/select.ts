@@ -1,4 +1,5 @@
-import { Component, ElementRef, input, output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, input, model, output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 export type inputData = {
   value: any;
@@ -7,31 +8,31 @@ export type inputData = {
 
 @Component({
   selector: 'app-select',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './select.html',
   styleUrl: './select.css'
 })
 export class Select {
-  @ViewChild('filter') ddlFilter!: ElementRef;
+  @ViewChild('filter') filter_txt!: ElementRef;
   @ViewChild('multiselect') multiselect_div!: ElementRef;
 
-  // Event Emitter on selection
-  onSelectChange = output<string>();
-
-  // Error Message
-  errorMessage = input<string>();
+  value = model<string | null>();
+  use_col_text = input<string>("");
+  use_col_value = input<string>("");
 
   // Input data for the select DDL
-  selectInputData = input<any>();
+  inputData = input<any>([]);
+
   // Copy of Input data used to filter the DDL
   filteredData: any[] = [];
-  // Input for already selected values
-  selected = input<string | null>();
-  //return variable for the selection values
-  outputData: any = undefined;
 
-  // class for error
-  errorClass = input<boolean>();
+
+  // Input for already selected values
+  select_value: string | null | undefined = null;
+
+  // filter model
+  filter_value: string = "";
+
 
   constructor() {
 
@@ -39,55 +40,59 @@ export class Select {
   }
 
   ngOnInit() {
-    this.filteredData = this.selectInputData();
-    if (this.selected() != undefined && this.selected != null) {
-      let opt = this.selectInputData().filter((item: any) => {
-        return item?.value == this.selected();
-      });
-      if (opt.length > 0)
-        this.outputData = opt[0];
-
-      console.log(this.outputData)
-    }
-    console.log(this.selected());
+    this.filteredData = this.inputData();
+    this.updateSelectValue();
   }
+
+  updateSelectValue() {
+    if (this.value() != null && this.value() != "" && this.inputData().length > 0) {
+      let d = this.inputData().filter((item: any) => {  return item[this.use_col_value()] == this.value() });
+      if (d.length > 0)
+        this.select_value = d[0][this.use_col_text()];
+      else
+        this.select_value = null;
+    }
+    else {
+      this.select_value = null;
+    }
+  }
+
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectInputData'])
-      this.filteredData = this.selectInputData();
-
-    if (changes['selected']) {
-      if (this.selected() == null)
-        this.outputData = undefined;
-      else {
-        let opt = this.selectInputData().filter((item: any) => {
-          return item?.value == this.selected();
-        });
-        if (opt.length > 0)
-          this.outputData = opt[0];
-      }
+    if (changes['inputData']) {
+      if (this.inputData() && this.inputData().length)
+        this.filteredData = this.inputData();
+      this.updateSelectValue();
     }
 
-
-
+    if (changes['value'])
+      this.updateSelectValue();
   }
 
-  searchData(searchText: string) {
-    console.log(searchText);
-    if (!searchText || searchText == "" || searchText == null) {
-      this.filteredData = this.selectInputData();
+  filterList() {
+    if (this.filter_value == "" || this.filter_value == null) {
+      this.filteredData = this.inputData();
       return;
     }
 
-
-    this.filteredData = this.selectInputData().filter((item: any) => {
-      return item?.text.toLowerCase().includes(searchText.toLowerCase());
+    this.filteredData = this.inputData().filter((item: any) => {
+      return item[this.use_col_text()]?.toLowerCase().includes(this.filter_value.toLowerCase());
     });
   }
 
   selectOption(opt: any) {
-    this.multiselect_div.nativeElement.classList.toggle('open')
-    this.outputData = opt;
-    this.onSelectChange.emit(this.outputData);
+    // set selected value 
+    this.select_value = opt[this.use_col_text()]
+
+    console.log(opt[this.use_col_value()]);
+    // update Value Model
+    this.value.update(() => opt[this.use_col_value()]);
+
+    // close multi select 
+    this.multiselect_div.nativeElement.classList.remove('open');
+    // clear search value
+    this.filter_value ="";
+    // filter the list to default 
+    this.filterList();
   }
 }

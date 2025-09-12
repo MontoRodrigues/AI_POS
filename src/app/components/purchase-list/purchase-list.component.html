@@ -1,1 +1,151 @@
-<p>purchase-list.component works!</p>
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+    <div class="header-container">
+        <div>
+            <h4 class="page-header">Purchase</h4>
+            <p class="page-sub-header">
+                Manage Purchase List
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Add New Purchase List -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-cart-shopping"></i>
+                Add Purchase </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                <!-- Supplier -->
+                                <div [class]="validateNewPurchase.supplier">
+                                    <label class="form-label">Add Supplier</label>
+                                    <app-select [inputData]="supplierList" [(value)]="newPurchase.supplier.docId"
+                                        [use_col_value]="'docId'" [use_col_text]="'name'">
+                                    </app-select>
+
+                                    <div class="form-text">
+                                        Please select a supplier from the list
+                                    </div>
+                                    <span class="error-message">Please select Supplier</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-div" style="height: 100%; display: flex; align-items: center;">
+                                    <button type="button" class="btn btn-primary" (click)="addPurchase()">Add New
+                                        Purchase List for Supplier</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase List -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-cart-shopping"></i>
+                Purchase List</span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12" style="padding-top: 20px;">
+
+                                <table class="table table-striped" style="width: 100%; font-size:13px; line-height: 13px;">
+
+                                    <colgroup>
+                                        <col class="chk">
+                                        <col class="date">
+                                        <col>
+                                        <!-- <col> -->
+                                        <col>
+                                        <col class="action">
+
+                                    </colgroup>
+
+                                    <thead class="border-top">
+                                        <tr>
+                                            <th>
+                                                <input class="form-check-input" type="checkbox">
+                                            </th>
+                                            <th>
+                                                <span class="dt-column-title" role="button">Date</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+                                            <th>
+                                                <span>Supplier</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+                                            <!-- <th>
+                                                <span>Created By</span>
+                                                <span class="dt-column-order"></span>
+                                            </th> -->
+                                            <th>
+                                                <span>Status</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+
+                                            <th>
+                                                <span class="dt-column-title">Actions</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for(pur of purchaseList; track $index) {
+                                        <tr>
+                                            <td>
+                                                <input class="form-check-input" type="checkbox"
+                                                    [(ngModel)]="pur.selected">
+                                            </td>
+                                            <td>
+                                                {{pur.purchaseDate | date:'dd MMM yy'}}
+                                            </td>
+                                            <td>
+                                                <span class="sub-value">{{pur.supplier.name}}</span>
+                                                <span class="small">{{pur.createdBy}}</span>
+                                            </td>
+                                            <!-- <td>
+                                                {{pur.createdBy}}
+                                            </td> -->
+                                            <td>
+                                                {{pur.status}}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn"
+                                                    style="padding: 2px; margin-right: 5px;">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                                
+                                                <a class="btn" style="padding: 2px;"
+                                                    routerLink="/purchase/add_purchase/{{pur.docId}}">
+                                                    <i class="fa-solid fa-square-plus"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        }
+
+
+                                    </tbody>
+                                    <tfoot></tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

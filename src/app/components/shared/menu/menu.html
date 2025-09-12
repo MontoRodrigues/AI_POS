@@ -104,7 +104,7 @@
 
     <ul class="menu">
         @for(nv of navMenu; track $index) {
-        <li class="menu-item">
+        <li class="menu-item show-{{nv.active}}">
             @if(nv.path) {
             <div class="menu_anchor active-{{nv.active}}" (click)="navigateTo(nv.path, true)">
                 <i class="fa-solid fa-house"></i>

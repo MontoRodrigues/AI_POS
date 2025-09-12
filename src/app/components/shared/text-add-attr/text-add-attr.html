@@ -1,13 +1,30 @@
-<!-- <div class="attr-container">
-    <div class="input-group">
-        <app-text-dropdown [(text_value)]="text_attr" [InputData]="attr_master()" [placeholder]="'Add Attribute type'"></app-text-dropdown>
-        <input type="text" class="form-control" placeholder="Value" [(ngModel)]="text_value">
-        <button class="btn btn-outline-secondary" type="button" (click)="add_attr()">Add</button>
+<div class="attr-container">
+    <div class="attr-input-group">
+        <div class="form-div">
+            <app-text-dropdown [placeholder]="'Add Attribute type'" [(value)]="text_attr" [use_col]="'attribute'"
+                style="width: 100%;" [InputData]="attr_master()"></app-text-dropdown>
+            <div class="form-text">
+                Please Add Product Attribute
+            </div>
+        </div>
+        <div class="form-div">
+            <input type="text" class="form-control" placeholder="Value" [(ngModel)]="text_value">
+            <div class="form-text">
+                {{getSampleValues()}}
+            </div>
+        </div>
+        <div class="form-div" style="width: auto;">
+            <button class="btn btn-outline-secondary" type="button" (click)="add_attr()">Add</button>
+        </div>
+
     </div>
+
     <div class="attr-list">
 
         @for(atr of attributes_list; track $index) {
-        <div (click)="remove_attr($index)"> <span>{{atr.type}}</span>:<span>{{atr.value}}</span> <i class='bx  bx-x'></i> </div>
+        <div (click)="remove_attr($index)"> <span>{{atr.attribute}}</span>:<span>{{atr.value}}</span>
+            <i class="fa-regular fa-circle-xmark"></i>
+        </div>
         }
     </div>
-</div> -->
+</div>

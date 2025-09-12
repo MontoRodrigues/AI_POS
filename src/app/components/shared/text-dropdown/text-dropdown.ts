@@ -10,6 +10,7 @@ export class TextDropdown {
   @ViewChild('textDDL') textDDL_elm!: ElementRef;
 
   value = model<string | null>();
+
   use_col = input<any>("name");
   placeholder = input<string>("");
   text: any = null;
@@ -28,20 +29,29 @@ export class TextDropdown {
   //   });
   // }
 
+
+
   ngOnInit() {
-    if (this.value() != null)
-      this.text = this.value();
-   
+
+
+    // if (this.value() != null)
+    this.text = this.value();
+
     this.filteredData = this.InputData();
 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['InputData'])
-      this.textOnKeyUp();
+      this.updateFilter();
 
-    if (changes['text_value'])
+    if (changes['value']) {
       this.text = this.value();
+      this.updateFilter();
+    }
+
+
+
   }
 
 
@@ -55,31 +65,31 @@ export class TextDropdown {
 
 
   selectOption(opt: string) {
-    this.text = opt;
-    console.log(opt)
+    this.text = opt[this.use_col()];
+
     this.textOnKeyUp();
     this.textDDL_elm.nativeElement.classList.remove('open');
   }
 
-  textOnKeyUp() {
-
-     console.log("Input Data");
-    console.log(this.InputData());
-
+  updateFilter() {
     if (this.text == "" || this.text == null) {
       this.filteredData = this.InputData();
-      return;
+      return false;
     }
+    else {
+      this.filteredData = this.InputData().filter((item: any) => {
+        return item[this.use_col()].toLowerCase().includes(this.text?.toLowerCase());
+      });
+      return true;
+    }
+  }
 
-    this.filteredData = this.InputData().filter((item: any) => {
-      return item[this.use_col()].toLowerCase().includes(this.text?.toLowerCase());
-    });
+  textOnKeyUp() {
+    if (this.updateFilter())
+      this.openDDL();
+
 
     this.value.update(() => this.text);
-
-    this.openDDL();
-
-
   }
 
 

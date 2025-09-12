@@ -1,23 +1,26 @@
-<h1 mat-dialog-title>Please crop your image</h1>
+<h1 mat-dialog-title><i class="fa-solid fa-camera"></i> Capture The image</h1>
 <div mat-dialog-content>
-    <span [id]="video_id">MOno</span>
-      <video #videoEl class="cc-video"  autoplay playsinline muted></video>
 
-      <select class="form-select" [(ngModel)]="activeDevice" (change)="ChangeCamera()">
-         @for(opt of devices; track $index) {
-        <option value="{{opt.deviceId}}">{{opt.label}}</option>
-        }
-      </select>
+    <video #videoEl class="cc-video" autoplay playsinline muted></video>
+
+
+    <div class="input-group mb-3">
+        <span class="input-group-text"><i class="fa-solid fa-camera-rotate"></i></span>
+        <select class="form-select" [(ngModel)]="activeDevice" (change)="ChangeCamera()">
+            @for(opt of devices; track $index) {
+            <option value="{{opt.deviceId}}">{{opt.label}}</option>
+            }
+        </select>
+    </div>
+
+
     <canvas #cropCanvas class="cc-hidden"></canvas>
-
-    <!-- <image-cropper [maintainAspectRatio]="true" [aspectRatio]="data.width / data.height" [resizeToHeight]="data.height"
-        [resizeToWidth]="data.width" [onlyScaleDown]="true" [imageFile]="data.image"
-        (imageCropped)="imageCropped($event)"></image-cropper> -->
 </div>
 
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="false">Cancel</button>
     <button type="button" class="btn btn-primary" (click)="capture()">
         Capture
     </button>
+    <button type="button" class="btn" [mat-dialog-close]="false">Cancel</button>
+
 </div>

@@ -1,38 +1,27 @@
 <div class="container-fluid">
     <app-breadcrumb></app-breadcrumb>
+    <div class="header-container">
+        <div>
+            <h4 class="page-header">Product List</h4>
+            <p class="page-sub-header">
+                Manage Products
+            </p>
+        </div>
 
-    <h4 class="page-header">Product List</h4>
-    <p class="page-sub-header">
-        Manage Products
-    </p>
+        <button class="btn btn-primary" (click)="addNewProduct()">Save Product</button>
+    </div>
 
-
+    <!-- Product Information -->
     <div class="form-card card open">
         <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-circle-info"></i>
                 Product Information </span>
-            <i class="fa-solid fa-angle-right"></i>
+            <i class="fa-solid fa-angle-right animate"></i>
         </div>
-
-        <!-- 
-        name: null,
-      sku: null,
-      barcode: null,   
-      brand: null,
-
-      categoryIds: [],
-      path: null,
-      uom: null,
-      taxRate: 0,
-      sale: null,
-      image: null,
-      searchTokens: [],
-      attributes: [] -->
-
         <div class="form-card-body">
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
                         <!-- product name -->
                         <div [class]="validateNewProduct.name">
                             <label class="form-label">Product Name</label>
@@ -44,13 +33,14 @@
                             <span class="error-message">Please enter Category name</span>
                         </div>
 
+                        <!-- product bar code -->
                         <div [class]="validateNewProduct.barcode">
                             <label class="form-label">Scan or Type Barcode</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Barcode"
                                     [(ngModel)]="newProduct.barcode">
                                 <button class="btn btn-outline-secondary" type="button" (click)="startScanner()">
-                                    <i class="fa-solid fa-barcode"></i>
+                                    <i class="fa-solid fa-qrcode"></i>
                                 </button>
                             </div>
                             <div class="form-text">
@@ -59,22 +49,25 @@
                             <span class="error-message">Please enter or scan Bar code</span>
                         </div>
 
-
-                        <div [class]="validateNewProduct.categoryIds">
+                        <!-- product Category -->
+                        <div [class]="validateNewProduct.categories">
                             <label class="form-label">Select Product Category</label>
-                            <app-select [selectInputData]="categoryDDLList" [errorMessage]="'Please Select a Category.'"
-                                [errorClass]="this.validateNewProduct.categoryIds" [selected]="category_doc_id"
-                                (onSelectChange)="getParentCategory($event)">
+
+                            <app-select [inputData]="category_list" [(value)]="category_doc_id"
+                                [use_col_value]="'docId'" [use_col_text]="'pathString'">
                             </app-select>
+
                             <div class="form-text">
                                 Select the one Lowest level of category
                             </div>
                             <span class="error-message">Please Select a Category</span>
                         </div>
-
                     </div>
 
+
+
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
                         <!-- SKU -->
                         <div [class]="validateNewProduct.sku">
                             <label class="form-label">Product SKU</label>
@@ -85,6 +78,7 @@
                             </div>
                             <span class="error-message">Please enter Category name</span>
                         </div>
+
                         <!-- Brand -->
                         <div [class]="validateNewProduct.brand">
                             <label class="form-label">Brand Name</label>
@@ -95,6 +89,21 @@
                             </div>
                             <span class="error-message">Please enter or select Brand Name </span>
                         </div>
+
+                        <!-- UOM -->
+                        <div [class]="validateNewProduct.uom">
+                            <label class="form-label">Select Product UOM</label>
+
+                            <app-select [inputData]="uomList" [(value)]="newProduct.uom" [use_col_value]="'abbr'"
+                                [use_col_text]="'showText'">
+                            </app-select>
+
+                            <div class="form-text">
+                                Select one Unit of Measure for the Product
+                            </div>
+                            <span class="error-message">Please Select a UOM</span>
+                        </div>
+
                     </div>
                 </div>
 
@@ -103,9 +112,308 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-
+    <!-- Inventory -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-warehouse"></i>
+                Inventory </span>
+            <i class="fa-solid fa-angle-right animate"></i>
         </div>
+
+        <div class="form-card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <!-- Supplier -->
+                        <div [class]="validateNewInventory.supplier">
+                            <label class="form-label">Add Supplier</label>
+                            <app-select [inputData]="supplierList" [(value)]="newInventory.supplier.docId"
+                                [use_col_value]="'docId'" [use_col_text]="'name'">
+                            </app-select>
+
+                            <div class="form-text">
+                                Please select a supplier from the list
+                            </div>
+                            <span class="error-message">Please select Supplier</span>
+                        </div>
+
+
+                        <!-- Inventory Quantity -->
+                        <div [class]="validateNewInventory.quantity">
+                            <label class="form-label">Inventory Quantity</label>
+
+                            <div class="input-group flex-nowrap">
+                                <input type="number" class="form-control app-form-component" placeholder="Quantity"
+                                    [(ngModel)]="newInventory.quantity">
+                                <span class="input-group-text">{{newProduct.uom}}</span>
+                            </div>
+                            <div class="form-text">
+                                Add Quantity for the product in {{newProduct.uom}}
+                            </div>
+                            <span class="error-message">Please add Quantity</span>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+
+                        <!-- Inventory Purchase Price -->
+                        <div [class]="validateNewInventory.purchasePrice">
+                            <label class="form-label">Purchase Price</label>
+
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <input type="number" class="form-control app-form-component"
+                                    placeholder="Purchase Price" [(ngModel)]="newInventory.purchasePrice">
+                            </div>
+
+
+                            <div class="form-text">
+                                Please add the purchase price for the product for one unit
+                            </div>
+                            <span class="error-message">Please add purchase price</span>
+                        </div>
+
+
+                        <!-- Inventory Selling Price -->
+                        <div [class]="validateNewInventory.sellingPrice">
+                            <label class="form-label">Selling Price</label>
+
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <input type="number" class="form-control app-form-component" placeholder="Selling Price"
+                                    [(ngModel)]="newInventory.sellingPrice">
+                            </div>
+                            <div class="form-text">
+                                Please add the Selling price for the product for one unit
+                            </div>
+                            <span class="error-message">Please add Selling price</span>
+                        </div>
+
+                        <!-- Inventory MRP -->
+                        <div [class]="validateNewInventory.MRP">
+                            <label class="form-label">MRP</label>
+
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                                <input type="number" class="form-control app-form-component" placeholder="MRP"
+                                    [(ngModel)]="newInventory.MRP">
+                            </div>
+                            <div class="form-text">
+                                Please add the MRP for the product for one unit
+                            </div>
+                            <span class="error-message">Please add MRP</span>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Image -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-images"></i>
+                Image </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Image -->
+                                <div class="form-div">
+                                    <label class="form-label">Add Product Image</label>
+
+                                    <div class="image-container">
+                                        <app-image-upload imageWidth="400" imageHeight="400"
+                                            (imageReady)="onImageSelected($event)"></app-image-upload>
+
+                                        @if(imageList.length==0) {
+                                        <div class="image">
+                                            <img src="{{conf.default_images.product.downloadURL}}">
+                                        </div>
+                                        }
+
+                                        @for(img of imageList; track $index) {
+                                        <div class="image">
+                                            <div class="close" (click)="deleteImage($index)">X</div>
+                                            <img src="{{img.imageUrl}}">
+                                        </div>
+                                        }
+
+                                    </div>
+                                    @if(imageList.length==0) {
+                                    <div class="form-text" style="color: #dc3545;"> If No Image is Selected default
+                                        image will be added </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- properties -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-hexagon-nodes"></i>
+                Product Properties </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+
+                                <!-- Attributes -->
+                                <div [class]="validateNewProduct.attributes">
+                                    <label class="form-label">Product Attributes</label>
+
+                                    <app-text-add-attr [(attributes)]="newProduct.attributes"
+                                        [attr_master]="attrList"></app-text-add-attr>
+
+
+                                    <span class="error-message">Please add atlest one attribute</span>
+                                </div>
+
+                                <!-- search Tags -->
+                                <div [class]="validateNewProduct.searchTokens">
+                                    <label class="form-label">Product Attributes</label>
+                                    <app-text-add-tags [(tags)]="newProduct.searchTokens"></app-text-add-tags>
+                                    <span class="error-message">Please add atlest one Search Tag</span>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Sale -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-percent"></i>
+                Sale Discount </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+
+        <div class="form-card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <!-- Discount -->
+                        <div [class]="validate_newProduct_Sale.discount">
+                            <label class="form-label">Discount %</label>
+                            <div class="form-text">
+                                Please Select Discount %
+                            </div>
+                            <div class="input-group flex-nowrap">
+                                <input type="number" class="form-control app-form-component" placeholder="Discount %"
+                                    [(ngModel)]="newProduct_Sale.discount">
+                                <span class="input-group-text">%</span>
+                            </div>
+
+
+
+                            <span class="error-message">Please add discount %. for the date range or remove the date
+                                range</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+
+
+                        <div [class]="validate_newProduct_Sale.validRange">
+                            <label class="form-label">Discount Validity Date</label>
+                            <div class="form-text">
+                                Please Date Range MM/DD/YYYY – MM/DD/YYYY
+                            </div>
+                            <mat-form-field>
+                                <!-- <mat-label>Enter a date range</mat-label> -->
+                                <mat-date-range-input [rangePicker]="picker">
+                                    <input matStartDate placeholder="Start date"
+                                        [(ngModel)]="newProduct_Sale.validFrom">
+                                    <input matEndDate placeholder="End date" [(ngModel)]="newProduct_Sale.validTill">
+                                </mat-date-range-input>
+                                <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+
+
+                            <span class="error-message">Please select valid date range for the Discount % or remove the
+                                discount</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- Tax -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-dollar-sign"></i>
+                Taxation </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                <!-- product TAX -->
+                                <div class="form-div">
+                                    <label class="form-label">Product Tax Rate %</label>
+
+                                    <div class="input-group flex-nowrap">
+                                        <input type="number" class="form-control app-form-component"
+                                            placeholder="Product Tax Rate %" [(ngModel)]="newProduct.taxRate">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+
+
+
+                                    <div class="form-text">
+                                        Please enter the Tax percentage for the product.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin: 1rem; display: flex; justify-content: flex-end;">
+        <button class="btn btn-primary" (click)="addNewProduct()">Save Product</button>
     </div>
 </div>

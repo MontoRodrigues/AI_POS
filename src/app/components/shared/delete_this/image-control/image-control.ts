@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, ElementRef, inject, input, output, signal, ViewChild } from '@angular/core';
-import { CropperDialogue, CropperDialogResult } from '../cropper-dialogue/cropper-dialogue';
+import { CropperDialogue, CropperDialogResult } from '../../cropper-dialogue/cropper-dialogue';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { filter } from 'rxjs';
 

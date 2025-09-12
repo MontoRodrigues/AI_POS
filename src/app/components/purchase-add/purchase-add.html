@@ -1,0 +1,385 @@
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+    <div class="header-container">
+        <div>
+            <h4 class="page-header">{{purchase?.supplier?.name}} @if(!purchase){Invalid Purchase: <a href="/purchase">
+                    Go back</a>}</h4>
+            <p class="page-sub-header">
+                <span>Created by {{purchase?.createdBy}}</span> on {{purchase?.purchaseDate| date:'dd MMM yy h:mm a'}}
+            </p>
+        </div>
+    </div>
+
+    @if(purchase){
+    <!-- Add New Purchase List -->
+    <div class="form-card card open">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-cart-shopping"></i>
+                Add Purchased @if(product){
+                {{product.name}}
+                } </span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- New Product -->
+                                <div class="form-div">
+                                    <app-switch-btn [off_text]="'Existing'" [onn_text]="'New'"
+                                        [(value)]="purchaseProduct.new"></app-switch-btn>
+                                </div>
+
+                                @if(!purchaseProduct.new){
+                                <!-- product bar code -->
+                                <div class="form-div">
+                                    <label class="form-label">Scan or Type Barcode</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Barcode"
+                                            [(ngModel)]="purchaseProduct.barcode">
+
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            (click)="searchBarcode()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            (click)="startScanner()">
+                                            <i class="fa-solid fa-qrcode"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button" (click)="FindProduct()">
+                                            <i class="fa-solid fa-folder-tree"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">
+                                        You can enter the bar code manually or scan it by clicking the scan button.
+                                    </div>
+                                    <span class="error-message">Please enter or scan Bar code</span>
+                                </div>
+                                }
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                @if(product && !purchaseProduct.new){
+                                <div class="add-purchase-product-details">
+                                    <img src="{{product.image[0].downloadURL}}">
+                                    <div class="product-details">
+                                        <div class="product-name">{{product.name}}</div>
+                                        <div class="product-category">{{product.categories.path.join("/")}}</div>
+                                        <div class="inv-details">Current Inv.: <span>{{product.currentInventory}}</span>
+                                            <span>{{product.uom}}</span>
+                                        </div>
+                                        <div class="purchase-price">Last Purchase Price:
+                                            Rs.<span>{{product.purchasePrice}}</span></div>
+                                        <div class="purchase-price">Last MRP: Rs.<span>{{product.MRP}}</span></div>
+                                    </div>
+                                </div>
+                                }
+                                @if(!product || purchaseProduct.new){
+                                <!-- product name -->
+                                <div [class]="validatePurchaseProduct.productName">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-control app-form-component"
+                                        placeholder="Product Name" [(ngModel)]="purchaseProduct.productName">
+                                    <div class="form-text">
+                                        Name of the product as mentioned on the packing
+                                    </div>
+                                    <span class="error-message">Please enter Category name</span>
+                                </div>
+                                }
+                                <!-- Image -->
+                                <div [class]="validatePurchaseProduct.image">
+                                    <label class="form-label">Add Product Image</label>
+
+                                    <div class="image-container">
+                                        <app-image-upload imageWidth="400" imageHeight="400"
+                                            (imageReady)="onImageSelected($event)"></app-image-upload>
+
+                                        @if(image) {
+                                        <div class="image">
+
+                                            <img src="{{image.imageUrl}}">
+                                        </div>
+                                        }
+                                    </div>
+                                    <span class="error-message">Please add image</span>
+
+                                </div>
+
+
+
+
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+                                <!-- Inventory Purchase Price -->
+                                <div [class]="validatePurchaseProduct.purchasePrice">
+                                    <label class="form-label">Purchase Price</label>
+
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text"><i
+                                                class="fa-solid fa-indian-rupee-sign"></i></span>
+                                        <input type="number" class="form-control app-form-component"
+                                            placeholder="Purchase Price" [(ngModel)]="purchaseProduct.purchasePrice">
+                                    </div>
+                                    <div class="form-text">
+                                        Please add the purchase price for the product for one unit
+                                    </div>
+                                    <span class="error-message">Please add purchase price</span>
+                                </div>
+
+                                <!-- MRP -->
+                                <div [class]="validatePurchaseProduct.MRP">
+                                    <label class="form-label">MRP</label>
+
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text"><i
+                                                class="fa-solid fa-indian-rupee-sign"></i></span>
+                                        <input type="number" class="form-control app-form-component" placeholder="MRP"
+                                            [(ngModel)]="purchaseProduct.MRP">
+                                    </div>
+                                    <div class="form-text">
+                                        Please add the MRP for the product for one unit
+                                    </div>
+                                    <span class="error-message">Please add MRP</span>
+                                </div>
+
+                                <!-- Inventory Quantity -->
+                                <div [class]="validatePurchaseProduct.quantity">
+                                    <label class="form-label">Inventory Quantity</label>
+
+                                    <div class="input-group flex-nowrap">
+                                        <input type="number" class="form-control app-form-component"
+                                            placeholder="Quantity" [(ngModel)]="purchaseProduct.quantity">
+                                        <span class="input-group-text">{{product?.uom}}</span>
+                                    </div>
+                                    <div class="form-text">
+                                        Add Quantity for the product in {{product?.uom}}
+                                    </div>
+                                    <span class="error-message">Please add Quantity</span>
+                                </div>
+
+                                <div class="form-div">
+                                    <button type="button" class="btn btn-primary"
+                                        (click)="addPurchaseProduct()">Add</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if(purchase.purchase.length>0){
+    <!--  KPI -->
+    <div class="form-card card open" style="background-color: transparent; border:none;">
+
+        <div class="row" style="padding-bottom: 20px;">
+            <div class="col-sm-6 col-lg-3">
+                <div class="kpi">
+                    <span class="value">Rs.{{totalPrice}}</span>
+                    <span class="text">Total Price</span>
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="kpi">
+                    <span class="value">{{totalQuantity}}</span>
+                    <span class="text">Total Quantity</span>
+                    <i class="fa-solid fa-hashtag"></i>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <button type="button" class="btn btn-primary" (click)="validateClosePurchase()">Validate & Complete
+                    Purchase</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!--  Bill -->
+    <div class="form-card card">
+        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-table"></i>
+                Invoice View</span>
+            <i class="fa-solid fa-angle-right animate"></i>
+        </div>
+        <div class="form-card-body">
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped invoice-view" style="width: 100%;">
+                        <colgroup>
+                            <col class="chk">
+                            <col>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+
+                        <thead class="border-top">
+                            <tr>
+                                <th>
+                                    <!-- <input class="form-check-input" type="checkbox"> -->
+                                </th>
+                                <th>
+                                    Product Name
+                                </th>
+                                <th>Unit Price Rs.</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for(p of purchase.purchase; track $index) {
+                            <tr>
+                                <td>
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="p.reviewed">
+                                </td>
+                                <td>
+                                    {{p.productName}}
+                                </td>
+                                <td>
+                                    {{p.purchasePrice}}
+                                </td>
+                                <td>
+                                    {{p.quantity}}
+                                </td>
+                                <td>
+                                    {{calculateLineTotal(p.purchasePrice,p.quantity)}}
+                                </td>
+
+
+                            </tr>
+                            }
+
+                            <tr>
+                                <td colspan="3"> Grand Total</td>
+                                <th>{{totalQuantity}}</th>
+                                <th>{{totalPrice}}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--  Purchase List -->
+    <div class="form-card card open" style="background-color: transparent; border:none;">
+        <div class="row">
+            <!-- <div class="col-12"> -->
+            @for(p of purchase.purchase; track $index) {
+
+
+            <div class="col-lg-3 col-md-4 col-sm-5 col-12">
+                <div class="product-card">
+                    <img src="{{p.image?.downloadURL}}">
+
+
+
+                    <div class="checkbox-wrapper-31">
+                        <input type="checkbox" [(ngModel)]="p.reviewed" />
+                        <svg viewBox="0 0 35.6 35.6">
+                            <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                            <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                            <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                        </svg>
+                    </div>
+
+
+
+
+
+                    <div class="checkbox"></div>
+                    <div class="product-desc">
+                        <h6>{{p.productName}} </h6>
+
+                        <div style="display: flex; align-items: flex-start; gap: 10px">
+                            <div>
+                                <!-- Purchase Price -->
+                                <div class="product-desc-text">
+                                    @if(!p.edit){
+                                    <span class="main-text">Rs. {{p.purchasePrice}}
+                                        @if(p.previousPurchasePrice!=null){<b>/</b> {{p.previousPurchasePrice}}}</span>
+                                    <span class="sub-text">Purchase @if(p.previousPurchasePrice!=null){/Last}
+                                        Price</span>
+                                    }
+                                    @if(p.edit){
+                                    <input type="number" placeholder="Edit Purchase Price"
+                                        [(ngModel)]="p.purchasePrice">
+                                    <span class="sub-text">Edit Purchase Price</span>
+                                    }
+                                </div>
+
+                                <!-- MRP -->
+                                <div class="product-desc-text">
+                                    <span class="main-text">Rs. {{p.MRP}}
+                                        @if(p.PreviousMRP!=null){<b>/</b>{{p.PreviousMRP}}}</span>
+                                    <span class="sub-text">Purchase@if(p.PreviousMRP!=null){/Last} MRP</span>
+                                </div>
+                            </div>
+                            <div>
+                                <!-- Quantity -->
+                                <div class="product-desc-text">
+                                    @if(!p.edit){
+                                    <span class="main-text">{{p.quantity}}</span>
+                                    <span class="sub-text">Quantity</span>
+                                    }
+                                    @if(p.edit){
+                                    <input type="number" placeholder="Edit Quantity" [(ngModel)]="p.quantity">
+                                    <span class="sub-text">Edit Quantity</span>
+                                    }
+                                </div>
+
+                                <!-- Inventory -->
+                                <div class="product-desc-text">
+                                    @if(p.currentInventory){
+                                    <span class="main-text">{{p.currentInventory}}</span>
+                                    <span class="sub-text">Inventory</span>
+                                    }
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        @if(!p.edit){
+                        <button type="button" class="btn btn-warning" (click)="deletePurchaseProduct($index)"><i
+                                class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-warning" (click)="editPurchaseProduct(p)"><i
+                                class="fa-solid fa-pen-to-square"></i></button>
+                        }
+                        @if(p.edit){
+                        <button type="button" class="btn btn-secondary"
+                            (click)="cancelEditPurchaseProduct(p)">Cancel</button>
+                        <button type="button" class="btn btn-primary" (click)="savePurchaseProduct(p)">Save</button>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+    </div>
+
+    }
+
+
+    }
+
+
+</div>

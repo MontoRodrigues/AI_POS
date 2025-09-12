@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
 
-  <link rel="manifest" href="/site.webmanifest">
+  <!-- <link rel="manifest" href="/site.webmanifest"> -->
 
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,7 +47,14 @@
       document.querySelector("body").classList.toggle("show-loader");
     }
 
-    //--------- new functions delete above one once done
+
+    function showLoader(e) {
+      if (e == false)
+        document.querySelector("#loader").style.display = "none";
+      else
+        document.querySelector("#loader").style.display = "flex";
+    }
+
     let toggle_side_menu = () => {
       document.querySelector("body").classList.toggle("open-side-menu");
     };
@@ -56,33 +63,108 @@
       e.parentNode.classList.toggle("open-menu");
     };
 
+    let toggle_form_card = (e) => {
+      e.parentNode.classList.toggle("open");
+    };
+
     let open_user_menu = (e) => {
       e.parentNode.classList.toggle("open-user-menu");
     };
 
-    let hideMenu=()=>{
-      document.querySelector(".menu-controller").style.display="none";
-    };
+    let notify = (type, msg, t) => {
+      if (t == undefined)
+        t = 1000;
+      let timeout = null;
+      let n = document.createElement("div");
+      n.className = 'notify notify-' + type;
+      let icon = "fa-solid fa-circle-info notify-error";
 
-    let showMenu=()=>{
-      document.querySelector(".menu-controller").style.display="inherit";
-    };
+      if (type == "error")
+        icon = "fa-solid fa-triangle-exclamation notify-error";
+      else if (type == "success")
+        icon = "fa-solid fa-circle-check notify-error";
+      else if (type == "warning")
+        icon = "fa-solid fa-triangle-exclamation notify-error";
 
-    let toggle_form_card =(e) =>{
-       e.parentNode.classList.toggle("open");
+      n.innerHTML = `
+       <i class="${icon}"></i>
+      <span>
+        ${msg}
+      </span>
+      `;
+
+      n.onclick = () => {
+        document.querySelector(".notify-container").removeChild(n);
+        if (timeout != null)
+          clearTimeout(timeout);
+      }
+
+      document.querySelector(".notify-container").appendChild(n);
+
+      timeout = setTimeout(() => {
+        try {
+          document.querySelector(".notify-container").removeChild(n);
+        }
+        catch {
+
+        }
+      }, t)
     };
+    // notify examples 
+    // notify("error","test", 1000);
+    // notify("success","test", 2000);
+    // notify("info","test 3", 3000);
+    // notify("warning","test 3", 3000);
+
+    // //--------- new functions delete above one once done
+
+
+
+
+    // let open_user_menu = (e) => {
+    //   e.parentNode.classList.toggle("open-user-menu");
+    // };
+
+    // let hideMenu = () => {
+    //   document.querySelector(".menu-controller").style.display = "none";
+    // };
+
+    // let showMenu = () => {
+    //   document.querySelector(".menu-controller").style.display = "inherit";
+    // };
+
+
 
 
 
   </script>
 
-  <div class="loader">
-    <div class="loader-text">
-      <span>Pr</span><span class="loader-icon"></span><span>cessing</span>
+  <div class="loader-overlay" id="loader">
+
+    <div class="overlay-container">
+      <div class="icon">
+        <div class="loader-icon"></div>
+      </div>
+      <div class="loader-text">
+        Please wait while we are processing.
+      </div>
     </div>
-    <div id="loader_text" class="custom-text">Please wait while we are adding the data.</div>
 
   </div>
+
+
+  <div class="notify-container">
+
+  </div>
+
+  <!-- <div class="notify">
+    <i class="fa-solid fa-triangle-exclamation notify-error"></i>
+    <span>
+      An error has occurred! An error has occurred! An error has occurred! An error has occurred! An error has occurred!
+    </span>
+  </div> -->
+
+
 </body>
 
 </html>

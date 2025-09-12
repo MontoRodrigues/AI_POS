@@ -5,20 +5,20 @@ import { FirebaseService } from '../../services/firebase.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { where, orderBy, limit } from 'firebase/firestore';
-import { ImageControl } from '../shared/image-control/image-control';
+import { ImageControl } from '../shared/delete_this/image-control/image-control';
 import { Select } from '../shared/select/select';
 import { AppDefaultConfig } from '../../config/config';
 
 
 const conf = new AppDefaultConfig();
-console.log(conf.default_images);
+
 
 declare var toggle_left_slide_model: Function;
 declare var toggle_loader: Function;
 
 @Component({
   selector: 'app-category',
-  imports: [CommonModule, FormsModule, ImageControl, Select],
+  imports: [CommonModule, FormsModule, ImageControl], //, Select],
   templateUrl: './category.html',
   styleUrl: './category.css'
 })

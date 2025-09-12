@@ -2,7 +2,7 @@
     display: block;
     width: 100%;
     position: relative;
-    z-index: 5000;
+
 }
 
 .text-select .type-ahead-container {
@@ -20,6 +20,10 @@
     transition: height .5s;
     transition-timing-function: ease-out;
     z-index: 5001;
+}
+
+.text-select.open {
+    z-index: 5000;
 }
 
 .open .type-ahead-container {
