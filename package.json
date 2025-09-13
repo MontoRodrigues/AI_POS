@@ -31,6 +31,7 @@
     "@angular/router": "^20.1.0",
     "@genkit-ai/googleai": "^1.15.5",
     "firebase": "^11.10.0",
+    "firebase-tools": "^14.16.0",
     "genkit": "^1.15.5",
     "html5-qrcode": "^2.2.7",
     "ngx-image-cropper": "^9.1.5",
