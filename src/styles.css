@@ -23,11 +23,11 @@ body {
     width: 24px;
 }
 
-.table .sub-value{
+.table .sub-value {
     display: block;
 }
 
-.table .sub-value .small{
+.table .sub-value .small {
     display: block;
 }
 
@@ -109,6 +109,10 @@ body {
 .cdk-global-overlay-wrapper {
     justify-content: center !important;
     align-items: center !important;
+}
+
+.cdk-overlay-container {
+    z-index: 5000 !important;
 }
 
 /* material canlander */
@@ -265,8 +269,8 @@ body {
 }
 
 /* KPI */
-.kpi{
-   width: 100%;
+.kpi {
+    width: 100%;
     padding: 1rem;
     background: white;
     border-right: 1px solid #e6e6e8;
@@ -277,20 +281,20 @@ body {
     margin-bottom: 10px;
 }
 
-.kpi .value{
-            display: block;
+.kpi .value {
+    display: block;
     font-size: 23px;
     /* line-height: 20px; */
     font-weight: 600;
 }
 
-.kpi .text{
+.kpi .text {
     display: block;
     font-size: 12px;
 }
 
-.kpi svg{
-   position: absolute;
+.kpi svg {
+    position: absolute;
     right: 2px;
     top: 7px;
 }

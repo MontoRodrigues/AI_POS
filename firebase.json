@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist\\AI_POS",
+    "public": "dist/AI_POS/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -5,8 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-declare var hideMenu: Function;
-declare var showMenu: Function;
+declare var showLoader: Function;
 
 @Component({
   standalone: true,
@@ -31,7 +30,11 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit() {
 
+    showLoader(false);
+
+  }
 
   loginWithGoogle() {
     this.authService.signInWithGoogle();

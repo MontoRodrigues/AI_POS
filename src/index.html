@@ -49,10 +49,12 @@
 
 
     function showLoader(e) {
-      if (e == false)
-        document.querySelector("#loader").style.display = "none";
-      else
-        document.querySelector("#loader").style.display = "flex";
+      if (document.querySelector("#loader") !== null) {
+        if (e == false)
+          document.querySelector("#loader").style.display = "none";
+        else
+          document.querySelector("#loader").style.display = "flex";
+      }
     }
 
     let toggle_side_menu = () => {
@@ -132,6 +134,7 @@
     // let showMenu = () => {
     //   document.querySelector(".menu-controller").style.display = "inherit";
     // };
+
 
 
 
