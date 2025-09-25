@@ -311,6 +311,39 @@ export class DataService {
       return null;
   }
 
+    // get data methods
+  get_purchase_to_add_inventory(docId: string | null) {
+    let d = this._purchase.value.filter(item => item.docId == docId);
+    if (d.length > 0) {
+      for (let i = 0; i < d[0].purchase.length; i++) {
+        // d[0].purchase[i]["editPurchasePrice"] = null;
+        // d[0].purchase[i]["editQuantity"] = null;
+        // d[0].purchase[i]["edit"] = false;
+      }
+      return d[0]
+    }
+    else
+      return null;
+  }
+
+  // get data methods
+  get_purchase_product(docId: (string | null)[] | null) {
+    let p: any = this._product.value.filter(item => { let d = docId?.filter(i => i == item.docId); return d != undefined && d.length > 0 });
+    let _p: any = {};
+    if (p.length > 0) {
+
+      for (let i = 0; i < p.length; i++) {
+        p[i]["inventory"] = this._inventory.value.filter(item => item.productDocId == p[i].docId)
+        p[i]["inventory"] = p[i]["inventory"].sort((a: any, b: any) => b.inventoryDate - a.inventoryDate);
+        _p[p[i].docId] = p[i];
+      }
+
+      return _p;
+    }
+    else
+      return null;
+  }
+
   get_product_for_barcode(barcode: string) {
     let d = this._product.value.filter(item => item.barcode == barcode);
     let i = this._inventory.value.filter(item => item.barcode == barcode);

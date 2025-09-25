@@ -61,8 +61,10 @@ For more information on using the Angular CLI, including detailed command refere
 # Deploy 
 - npm install -g firebase-tools
 - firebase login
-- ng build --configuration production
-
+- ng build
+- firebase init
+    - Hosting
+    - Path: dist\AI_POS\browser
 
 # Reference
 - Image Cropper: https://www.youtube.com/watch?v=lCClcI3Lt2A

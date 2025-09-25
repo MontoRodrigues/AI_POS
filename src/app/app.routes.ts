@@ -8,6 +8,7 @@ import { Category } from './components/category/category';
 import { Product } from './components/product/product';
 import { ProductAdd } from './components/product-add/product-add';
 import { PurchaseAdd } from './components/purchase-add/purchase-add';
+import { PurchaseToInventory } from './components/purchase-to-inventory/purchase-to-inventory';
 
 
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
     { path: 'products/add_product', component: ProductAdd, canActivate: [AuthGuard] },
     { path: 'purchase', component: PurchaseListComponent, canActivate: [AuthGuard] },
     { path: 'purchase/add_purchase/:docId', component: PurchaseAdd, canActivate: [AuthGuard] },
+    { path: 'purchase/purchase_inventory/:docId', component: PurchaseToInventory, canActivate: [AuthGuard] },
 
 ];
 

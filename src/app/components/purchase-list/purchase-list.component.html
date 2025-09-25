@@ -62,7 +62,8 @@
                         <div class="row">
                             <div class="col-12" style="padding-top: 20px;">
 
-                                <table class="table table-striped" style="width: 100%; font-size:13px; line-height: 13px;">
+                                <table class="table table-striped"
+                                    style="width: 100%; font-size:13px; line-height: 13px;">
 
                                     <colgroup>
                                         <col class="chk">
@@ -122,15 +123,26 @@
                                                 {{pur.status}}
                                             </td>
                                             <td>
-                                                <button type="button" class="btn"
+                                                @if(pur.status=="new" || pur.status=="reviewed"){
+                                                <button type="button" class="btn" title="Delete Purchase"
                                                     style="padding: 2px; margin-right: 5px;">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>
-                                                
-                                                <a class="btn" style="padding: 2px;"
+                                                }
+
+                                                @if(pur.status=="new"){
+                                                <a class="btn" style="padding: 2px;" title="Add New Purchase" 
                                                     routerLink="/purchase/add_purchase/{{pur.docId}}">
                                                     <i class="fa-solid fa-square-plus"></i>
                                                 </a>
+                                                }
+
+                                                 @if(pur.status=="reviewed"){
+                                                <a class="btn" style="padding: 2px;" title="Add Purchase to Inventory"
+                                                    routerLink="/purchase/purchase_inventory/{{pur.docId}}">
+                                                    <i class="fa-solid fa-warehouse"></i>
+                                                </a>
+                                                }
                                             </td>
                                         </tr>
                                         }

@@ -1,0 +1,108 @@
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+    <div class="header-container">
+        <div>
+
+            @if(!purchase){Invalid Purchase: <a href="/purchase">Go back</a>}
+            @else{
+
+            <h4 class="page-header">{{purchase.supplier.name}}</h4>
+            <p class="page-sub-header">
+                <span>Created by {{purchase.createdBy}}</span> on {{purchase.purchaseDate| date:'dd MMM yy h:mm a'}}
+            </p>
+            }
+        </div>
+    </div>
+
+    <div class="form-card card open" style="background-color: transparent; border:none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12" style="padding-top: 20px;">
+
+                                <table class="table table-striped"
+                                    style="width: 100%; font-size:13px; line-height: 13px;">
+
+
+
+                                    <thead class="border-top">
+                                        <tr>
+                                            <th class="col_product">
+                                                <span class="dt-column-title" role="button">Product</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+                                            <th></th>
+                                            <th class="col-purchase">
+                                                <span class="dt-column-title" role="button">Purchase Price</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+
+
+                                            <th>
+                                                <span class="dt-column-title" role="button">Selling Price</span>
+                                            </th>
+
+                                            <th>
+                                                <span class="dt-column-title" role="button">Actions</span>
+                                                <span class="dt-column-order"></span>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for(pur of purchase?.purchase; track $index) {
+                                        <tr>
+
+                                            <td class="col-product">
+                                                <img src="{{pur.image?.downloadURL}}">
+                                                <span class="small">{{pur.productName}}</span>
+                                            </td>
+                                            <td class="vertical-text">
+                                                <span> {{pur.barcode}}</span>
+                                            </td>
+                                            <td class="col-purchase">
+
+                                                <span class="sub-value">Purchased For Rs. {{pur.purchasePrice }}</span>
+                                                <span class="small">Previously purchased For Rs.
+                                                    {{pur.previousPurchasePrice }}</span>
+                                                <hr style="margin: 5px 0px;">
+                                                <span class="sub-value">Quantity {{pur.quantity }}</span>
+                                            </td>
+                                            <td class="selling-price">
+                                                <div class="form-div">
+                                                    <input type="text"
+                                                        placeholder="Selling Price">
+                                                    <div class="form-text">
+                                                        @if(pur.docId !=null){
+                                                        Current Selling Price is
+                                                        {{products[pur.docId].inventory[0].sellingPrice}}
+                                                        }
+                                                        @else{
+                                                        add Selling Price
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                            </td>
+
+                                        </tr>
+                                        }
+
+
+                                    </tbody>
+                                    <tfoot></tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

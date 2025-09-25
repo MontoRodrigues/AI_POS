@@ -1,0 +1,41 @@
+.col-product {
+    width: 90px;
+    padding-right: 0px;
+}
+
+.col-product img {
+    width: 80px;
+    max-height: 80px;
+}
+
+.col-purchase {
+    width: 200px;
+}
+
+.vertical-text {
+    padding-left: 0px;
+    text-orientation: mixed;
+    writing-mode: vertical-lr;
+    width: 40px;
+    text-align: center;
+}
+
+.vertical-text span {
+    display: block;
+}
+
+.selling-price {
+    width: 150px;
+}
+
+
+.selling-price input {
+    padding: .2rem .55rem;
+    color: #444050;
+    border-radius: 0.275rem;
+    border: 1px solid color-mix(in sRGB, #2f2b3d 22%, #fff);
+}
+
+.form-card .form-card-body .form-div {
+    padding: 0px !important;
+}

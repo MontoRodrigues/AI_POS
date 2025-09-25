@@ -31,7 +31,6 @@ export const defaultConfig = {
         {
             text: "Purchase", subMenu: [
                 { text: "Purchase", path: "/purchase" },
-                { text: "New Purchase", path: "/purchase/add_purchase" },
             ]
         },
     ],
