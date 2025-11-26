@@ -9,7 +9,8 @@
 }
 
 .col-purchase {
-    width: 200px;
+    vertical-align: middle;
+    /* width: 200px; */
 }
 
 .vertical-text {
@@ -25,7 +26,8 @@
 }
 
 .selling-price {
-    width: 150px;
+    vertical-align: middle;
+    /* width: 150px; */
 }
 
 
@@ -38,4 +40,118 @@
 
 .form-card .form-card-body .form-div {
     padding: 0px !important;
+}
+
+.action {
+    align-items: center;
+    vertical-align: middle;
+}
+
+.action button {
+    font-size: 12px;
+}
+
+.overlay-form-bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 2000;
+    display: none;
+}
+
+.overlay-form {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2001;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: .5rem;
+    /* display: flex; */
+}
+
+.overlay-true .overlay-form-bg {
+    display: block;
+}
+
+.overlay-true .overlay-form {
+    display: flex;
+}
+
+.overlay-form-body {
+    padding: 0px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important;
+}
+
+.search-product-model {
+    padding: 1rem;
+    background-color: #ebebeb;
+    display: none;
+}
+
+.add-product-model {
+    padding: 1rem;
+    background-color: #ebebeb;
+    display: none;
+}
+
+
+
+.add-product .add-product-model {
+    display: block;
+}
+
+.search-product .search-product-model {
+    display: block;
+}
+
+.btn-close {
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    border: none;
+    border-radius: 50%;
+    background: gray;
+    padding: 0px;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Search Product  */
+.search-product-list {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.search-product-list:hover{
+    background-color: #e7e7e7;
+    border-color: #7367f0
+}
+
+.search-product-list img {
+    width: 100px;
+    border-radius: 5px;
 }

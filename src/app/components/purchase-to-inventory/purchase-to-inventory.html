@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid {{'overlay-' + show_overlay_form}}">
     <app-breadcrumb></app-breadcrumb>
     <div class="header-container">
         <div>
@@ -15,91 +15,320 @@
     </div>
 
     <div class="form-card card open" style="background-color: transparent; border:none;">
-        <div class="row">
-            <div class="col-12">
-                <div class="form-card-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12" style="padding-top: 20px;">
+        <div class="form-card-body">
+            <table class="table table-striped" style="width: 100%; font-size:13px; line-height: 13px;">
 
-                                <table class="table table-striped"
-                                    style="width: 100%; font-size:13px; line-height: 13px;">
+                <col class="col_product">
+                <col class="vertical-text">
+                <col class="col-purchase">
+                <!-- <col class="selling-price"> -->
+                <col class="action">
 
-
-
-                                    <thead class="border-top">
-                                        <tr>
-                                            <th class="col_product">
-                                                <span class="dt-column-title" role="button">Product</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
-                                            <th></th>
-                                            <th class="col-purchase">
-                                                <span class="dt-column-title" role="button">Purchase Price</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
+                <thead class="border-top">
+                    <tr>
+                        <th class="col_product">
+                            <span class="dt-column-title" role="button">Product</span>
+                            <span class="dt-column-order"></span>
+                        </th>
+                        <th></th>
+                        <th class="col-purchase">
+                            <span class="dt-column-title" role="button">Purchase Price</span>
+                            <span class="dt-column-order"></span>
+                        </th>
 
 
-                                            <th>
-                                                <span class="dt-column-title" role="button">Selling Price</span>
-                                            </th>
+                        <!-- <th class="selling-price">
+                            <span class="dt-column-title" role="button">Selling Price</span>
+                        </th> -->
 
-                                            <th>
-                                                <span class="dt-column-title" role="button">Actions</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
+                        <th class="action">
+                            <span class="dt-column-title" role="button">Actions</span>
+                            <span class="dt-column-order"></span>
+                        </th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for(pur of purchase?.purchase; track $index) {
-                                        <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(pur of purchase?.purchase; track $index) {
+                    <tr>
 
-                                            <td class="col-product">
-                                                <img src="{{pur.image?.downloadURL}}">
-                                                <span class="small">{{pur.productName}}</span>
-                                            </td>
-                                            <td class="vertical-text">
-                                                <span> {{pur.barcode}}</span>
-                                            </td>
-                                            <td class="col-purchase">
+                        <td class="col-product">
+                            <div style="display: flex; flex-direction: column;">
+                                <img src="{{pur.image?.downloadURL}}">
+                                <span class="small">{{pur.productName}}</span>
+                            </div>
+                        </td>
+                        <td class="vertical-text">
+                            <span> {{pur.barcode}}</span>
+                        </td>
+                        <td class="col-purchase">
 
-                                                <span class="sub-value">Purchased For Rs. {{pur.purchasePrice }}</span>
-                                                <span class="small">Previously purchased For Rs.
-                                                    {{pur.previousPurchasePrice }}</span>
-                                                <hr style="margin: 5px 0px;">
-                                                <span class="sub-value">Quantity {{pur.quantity }}</span>
-                                            </td>
-                                            <td class="selling-price">
-                                                <div class="form-div">
-                                                    <input type="text"
-                                                        placeholder="Selling Price">
-                                                    <div class="form-text">
-                                                        @if(pur.docId !=null){
-                                                        Current Selling Price is
-                                                        {{products[pur.docId].inventory[0].sellingPrice}}
-                                                        }
-                                                        @else{
-                                                        add Selling Price
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
+                            <span class="sub-value">Purchased For Rs. {{pur.purchasePrice }}</span>
+                            <span class="small">Previously purchased For Rs.
+                                {{pur.previousPurchasePrice }}</span>
+                            <hr style="margin: 5px 0px;">
+                            <span class="sub-value">Quantity {{pur.quantity }}</span>
+                            <hr style="margin: 5px 0px;">
+                            <input type="text" placeholder="Selling Price" [(ngModel)]="pur.sellingPrice" />
+                            <div class="form-text">
+                                @if(pur.latestInventory !=null){
+                                Current Selling Price is
+                                {{pur.latestInventory.sellingPrice}}
+                                }
+                                @else{
+                                No Records Available for Current Selling Price
+                                }
+                            </div>
 
-                                            </td>
+                        </td>
+                        <td class="action">
+                            <!-- @if(pur.new){ -->
+                            <button type="button" class="btn btn-danger" title="Add/Assign Product"
+                                (click)="assign_add_product(pur, $index)" style="padding: 2px; margin-right: 5px;">
+                                <i class="fa-solid fa-square-plus"></i>
+                            </button>
+                            <!-- } -->
+                        </td>
 
-                                        </tr>
-                                        }
+                    </tr>
+                    }
 
 
-                                    </tbody>
-                                    <tfoot></tfoot>
-                                </table>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="overlay-form-bg"></div>
+    <div class="overlay-form">
+        <div class="overlay-form-body search-product">
+            <div style="width: 100%; position: relative;">
+                <ul class="nav nav-tabs app-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:"
+                            onclick="toggle_tabs(this,'search-product')">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="javascript:"
+                            onclick="toggle_tabs(this,'add-product')">Add </a>
+                    </li>
+                </ul>
+
+                <button type="button" class="btn-close" (click)="toggle_over_form()"><i
+                        class="fa-regular fa-circle-xmark"></i></button>
+            </div>
+
+            <div class="search-product-model">
+                <div class="form-card card open" style="margin-top: 0px;">
+                    <div class="form-card-header" onclick="toggle_form_card(this)"><span><i
+                                class="fa-solid fa-circle-info"></i>
+                            Search Product </span>
+                        <i class="fa-solid fa-angle-right animate"></i>
+                    </div>
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <!-- product name -->
+                                    <div class="form-div">
+                                        <label class="form-label">Product Name</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                placeholder="Search for Product Name & Tags"
+                                                [(ngModel)]="search_product_input">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                (click)="searchProduct()">
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                (click)="startScannerSearch()">
+                                                <i class="fa-solid fa-qrcode"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                (click)="get_all_product_list()">
+                                                <i class="fa-solid fa-folder-tree"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-top: 15px; padding-bottom: 15px;">
+
+                                @for(prd of search_product_list; track $index) {
+                                <div class="col" style="max-width: 150px;" (click)="assignExistingProduct(prd)">
+                                    <div class="search-product-list">
+                                        <img src="{{prd.image[0].downloadURL}}">
+                                        <span
+                                            style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-size: 10px;">{{prd.categories.path.join("/")}}</span>
+                                        <span>{{prd.name}}</span>
+
+                                    </div>
+                                </div>
+                                }
 
                             </div>
                         </div>
                     </div>
+                </div>
+
+            </div>
+
+            <div class="add-product-model">
+                <!-- Product Information -->
+                <div class="form-card card open" style="margin-top: 0px;">
+                    <div class="form-card-header" onclick="toggle_form_card(this)"><span><i
+                                class="fa-solid fa-circle-info"></i>
+                            Product Information </span>
+                        <i class="fa-solid fa-angle-right animate"></i>
+                    </div>
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+
+                                    <!-- product name -->
+                                    <div [class]="validateNewProduct.name">
+                                        <label class="form-label">Product Name</label>
+                                        <input type="text" class="form-control app-form-component"
+                                            placeholder="Product Name" [(ngModel)]="newProduct.name">
+                                        <div class="form-text">
+                                            Name of the product as mentioned on the packing
+                                        </div>
+                                        <span class="error-message">Please enter Category name</span>
+                                    </div>
+
+                                    <!-- product bar code -->
+                                    <div [class]="validateNewProduct.barcode">
+                                        <label class="form-label">Scan or Type Barcode</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Barcode"
+                                                [(ngModel)]="newProduct.barcode">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                (click)="startScanner()">
+                                                <i class="fa-solid fa-qrcode"></i>
+                                            </button>
+                                        </div>
+                                        <div class="form-text">
+                                            You can enter the bar code manually or scan it by clicking the scan button.
+                                        </div>
+                                        <span class="error-message">Please enter or scan Bar code</span>
+                                    </div>
+
+                                    <!-- product Category -->
+                                    <div [class]="validateNewProduct.categories">
+                                        <label class="form-label">Select Product Category</label>
+
+                                        <app-select [inputData]="category_list" [(value)]="category_doc_id"
+                                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                                        </app-select>
+
+                                        <div class="form-text">
+                                            Select the one Lowest level of category
+                                        </div>
+                                        <span class="error-message">Please Select a Category</span>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+                                    <!-- SKU -->
+                                    <div [class]="validateNewProduct.sku">
+                                        <label class="form-label">Product SKU</label>
+                                        <input type="text" class="form-control app-form-component"
+                                            placeholder="Product SKU" [(ngModel)]="newProduct.sku">
+                                        <div class="form-text">
+                                            SKU is used for stock keeping and is used in the URL for the product
+                                        </div>
+                                        <span class="error-message">Please enter Category name</span>
+                                    </div>
+
+                                    <!-- Brand -->
+                                    <div [class]="validateNewProduct.brand">
+                                        <label class="form-label">Brand Name</label>
+                                        <app-text-dropdown [placeholder]="'Add a Brand'" [(value)]="newProduct.brand"
+                                            [use_col]="'name'" [InputData]="brandList"></app-text-dropdown>
+                                        <div class="form-text">
+                                            Please select a brand from the list or add a new
+                                        </div>
+                                        <span class="error-message">Please enter or select Brand Name </span>
+                                    </div>
+
+                                    <!-- UOM -->
+                                    <div [class]="validateNewProduct.uom">
+                                        <label class="form-label">Select Product UOM</label>
+
+                                        <app-select [inputData]="uomList" [(value)]="newProduct.uom"
+                                            [use_col_value]="'abbr'" [use_col_text]="'showText'">
+                                        </app-select>
+
+                                        <div class="form-text">
+                                            Select one Unit of Measure for the Product
+                                        </div>
+                                        <span class="error-message">Please Select a UOM</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- properties -->
+                <div class="form-card card open">
+                    <div class="form-card-header" onclick="toggle_form_card(this)"><span><i
+                                class="fa-solid fa-hexagon-nodes"></i>
+                            Product Properties </span>
+                        <i class="fa-solid fa-angle-right animate"></i>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-card-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <!-- Attributes -->
+                                            <div [class]="validateNewProduct.attributes">
+                                                <label class="form-label">Product Attributes</label>
+
+                                                <app-text-add-attr [(attributes)]="newProduct.attributes"
+                                                    [attr_master]="attrList"></app-text-add-attr>
+
+
+                                                <span class="error-message">Please add atlest one attribute</span>
+                                            </div>
+
+                                            <!-- search Tags -->
+                                            <div [class]="validateNewProduct.searchTokens">
+                                                <label class="form-label">Product Attributes</label>
+                                                <app-text-add-tags
+                                                    [(tags)]="newProduct.searchTokens"></app-text-add-tags>
+                                                <span class="error-message">Please add atlest one Search Tag</span>
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin: 1rem 1rem 0rem; display: flex; justify-content: flex-end; padding-bottom: 10px;">
+                    <button class="btn btn-primary" (click)="addNewProduct()">Save Product</button>
                 </div>
             </div>
         </div>

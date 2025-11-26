@@ -118,6 +118,20 @@
     // notify("info","test 3", 3000);
     // notify("warning","test 3", 3000);
 
+    //-- toggle tab 
+    let toggle_tabs = (e, tab_name) => {
+
+      let t = document.querySelectorAll(".app-tabs .nav-link");
+      console.log("tabs", t);
+      t.forEach(el => {
+        el.classList.remove('active');
+      });
+
+      e.classList.add('active');
+      e.parentElement.parentElement.parentElement.parentElement.className = 'overlay-form-body';
+      e.parentElement.parentElement.parentElement.parentElement.classList.add(tab_name);
+    };
+
     // //--------- new functions delete above one once done
 
 

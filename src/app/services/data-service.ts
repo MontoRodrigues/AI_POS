@@ -122,6 +122,11 @@ export interface dataPurchaseProduct {
   edit?: boolean;
   editPurchasePrice?: number | null;
   editQuantity?: number | null;
+
+  sellingPrice?: number | null;
+  latestInventory?: dataInventory | null;
+
+
 }
 
 
@@ -311,11 +316,13 @@ export class DataService {
       return null;
   }
 
-    // get data methods
+  // get data methods
   get_purchase_to_add_inventory(docId: string | null) {
-    let d = this._purchase.value.filter(item => item.docId == docId);
+    let d: any = this._purchase.value.filter(item => item.docId == docId);
     if (d.length > 0) {
       for (let i = 0; i < d[0].purchase.length; i++) {
+        d[0].purchase[i]["sellingPrice"] = null;
+        d[0].purchase[i]["latestInventory"] = null;
         // d[0].purchase[i]["editPurchasePrice"] = null;
         // d[0].purchase[i]["editQuantity"] = null;
         // d[0].purchase[i]["edit"] = false;
@@ -391,6 +398,34 @@ export class DataService {
   //   else
   //     return null;
   // }
+
+  // Search Product 
+
+  get_product_by_filter(f: string) {
+    let d = this._product.value.filter((item) => {
+      //---------exact search
+      if (item.name?.trim().toLowerCase() == f.trim().toLowerCase() || item.barcode?.trim().toLowerCase() == f.trim().toLowerCase() || item.brand?.trim().toLowerCase() == f)
+        return true;
+
+      if (item.searchTokens.filter(i => i == f).length > 0)
+        return true;
+
+      // partial match 
+      if (item.name!.trim().toLowerCase().includes(f.trim().toLowerCase()) || item.barcode!.trim().toLowerCase().includes(f.trim().toLowerCase()) || item.brand!.trim().toLowerCase().includes(f.trim().toLowerCase()))
+        return true;
+
+      if (item.searchTokens.filter(i => i.trim().toLowerCase().includes(f.trim().toLowerCase())).length > 0)
+        return true;
+
+      return false;
+    });
+
+    return d;
+  }
+
+  get_products_list(){
+    return this._product.value;
+  }
 
   ngOnInit() {
   }
