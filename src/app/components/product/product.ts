@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { ImageCapture } from '../shared/delete_this/image-capture/image-capture';
 import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
-import { dataProduct, DataService } from '../../services/data-service';
+import { dataInventory, dataProduct, DataService } from '../../services/data-service';
 import { Subscription } from 'rxjs';
 
 
@@ -24,6 +24,9 @@ export class Product {
   private subscribe_product: Subscription | undefined;
   product_list: dataProduct[] = [];
 
+  private subscribe_inventory: Subscription | undefined;
+  inventory_list: any = {};
+
   // delete 
 
 
@@ -41,22 +44,50 @@ export class Product {
       error: (e) => console.error(e),
       complete: () => console.info('complete')
     });
+
+    this.subscribe_inventory = this.dataService.inventory$.subscribe({
+      next: (value: dataInventory[]) => {
+        this.inventory_list = {};
+        for (let inv of value) {
+          if (inv.productDocId != null) {
+            if (!this.inventory_list.hasOwnProperty(inv.productDocId))
+              this.inventory_list[inv.productDocId] = [];
+            this.inventory_list[inv.productDocId].push(inv);
+          }
+        }
+        console.log("service Inventory", this.inventory_list);
+        this.cdRef.detectChanges();
+      },
+      error: (e) => console.error(e),
+      complete: () => console.info('complete')
+    });
   }
 
   ngOnDestroy() {
     if (this.subscribe_product) {
       this.subscribe_product.unsubscribe();
     }
-
-    // if (this.subscribe_brand) {
-    //   this.subscribe_brand();
-    // }
-
-    // if (this.subscribe_attr_master) {
-    //   this.subscribe_attr_master();
-    // }
+    if (this.subscribe_inventory) {
+      this.subscribe_inventory.unsubscribe();
+    }
   }
 
+  get_inventory_count(docId: string | null): number {
+    if (this.inventory_list.hasOwnProperty(docId) && docId != null) {
+      let total = 0;
+      for (let inv of this.inventory_list[docId]) {
+        total += inv.quantity;
+      }
+      return total;
+    }
+    return 0;
+  }
 
+  get_inventory_selling_price(docId: string | null): number {
+    if (this.inventory_list.hasOwnProperty(docId) && docId != null) {
+      return this.inventory_list[docId][0].sellingPrice;
+    }
+    return 0;
+  }
 
 }

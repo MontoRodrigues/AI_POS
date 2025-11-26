@@ -121,6 +121,7 @@ export interface dataPurchaseProduct {
 
   edit?: boolean;
   editPurchasePrice?: number | null;
+  editMRP?: number | null;
   editQuantity?: number | null;
 }
 
@@ -302,6 +303,7 @@ export class DataService {
     if (d.length > 0) {
       for (let i = 0; i < d[0].purchase.length; i++) {
         d[0].purchase[i]["editPurchasePrice"] = null;
+         d[0].purchase[i]["editMRP"] = null;
         d[0].purchase[i]["editQuantity"] = null;
         d[0].purchase[i]["edit"] = false;
       }

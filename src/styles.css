@@ -310,7 +310,8 @@ body {
     display: inline-block;
     width: 25px;
     height: 25px;
-    right: 5px;
+    left:0px;
+    /* right: 5px; */
 }
 
 .checkbox-wrapper-31 .background {
@@ -737,6 +738,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 .open-side-menu .side-nav {
     left: 0px;
+    top: 0px;
 }
 
 .open-side-menu .side-nav-bg {
@@ -790,7 +792,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 */
 .nav-top-mobile {
 
-    position: fixed;
+    /* position: fixed; */
     height: 40px;
     background-color: white;
     width: calc(100% - 1rem * 2);
@@ -1078,12 +1080,24 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     }
 }
 
-
+/*----Show in Desktop View only ----*/
+.desktop-only {
+    display: inherit;
+}
+.mobile-only {
+    display: none;
+}
 
 /* Media Query for Mobile  */
 /* ===== ≤ 767px: mobile ===== */
 @media (max-width: 767px) {
 
+    .desktop-only {
+    display: none;
+}
+.mobile-only {
+    display: inherit;
+}
 
     .nav-top {
         display: none;
@@ -1094,7 +1108,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     }
 
     .app-container {
-        padding-top: 65px;
+        padding-top: 0px;
     }
 
     .nav-top-mobile {

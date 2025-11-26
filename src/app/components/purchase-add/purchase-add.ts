@@ -87,7 +87,7 @@ export class PurchaseAdd {
         //   notify("error", "Invalid id. Please go back");
         //   // this.router.navigate(["/purchase"]);
         // }
-        console.log(p);
+        console.log("Purchase", this.purchase);
         showLoader(false);
         this.cdRef.detectChanges();
       },
@@ -205,6 +205,7 @@ export class PurchaseAdd {
     d.edit = true;
     d.editPurchasePrice = d.purchasePrice;
     d.editQuantity = d.quantity;
+    d.editMRP = d.MRP;
   }
 
   cancelEditPurchaseProduct(d: dataPurchaseProduct) {
@@ -214,9 +215,12 @@ export class PurchaseAdd {
       d.purchasePrice = d.editPurchasePrice;
     if (d.editQuantity)
       d.quantity = d.editQuantity;
+    if (d.editMRP)
+      d.MRP = d.editMRP;
 
     d.editPurchasePrice = null;
     d.editQuantity = null;
+    d.editMRP = null;
   }
 
   async savePurchaseProduct(d: dataPurchaseProduct) {
@@ -340,6 +344,9 @@ export class PurchaseAdd {
         this.purchase.purchase.push(this.purchaseProduct);
         this.calculateTotal();
         // update firebase document
+
+       
+        
         await this.firebaseService.updateDocument(defaultConfig.collections.purchase.name + "/" + this.docId, this.purchase);
 
         // set Default Values
