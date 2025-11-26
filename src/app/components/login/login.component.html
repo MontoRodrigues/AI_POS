@@ -1,4 +1,92 @@
-<div class="container login-container">
+<div class="min-h-screen flex items-center justify-center p-4">
+   <!-- Login Card Container -->
+    <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 sm:p-10 transition-all duration-300">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-indigo-700">
+                POS System Login
+            </h1>
+            <p class="mt-2 text-gray-500">Access your point-of-sale terminal</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
+            
+            <!-- Username Input -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input [(ngModel)]="email"
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out placeholder-gray-400"
+                    placeholder="e.g., store_manager"
+                >
+            </div>
+
+            <!-- Password Input -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input [(ngModel)]="password"
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out placeholder-gray-400"
+                    placeholder="••••••••"
+                >
+            </div>
+
+            <!-- Standard Login Button -->
+            <button  (click)="loginWithEmail()"
+                type="button" 
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out transform hover:scale-[1.01] active:scale-100"
+            >
+                Sign In
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative mt-8">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-3 bg-white text-gray-500">
+                    Or continue with
+                </span>
+            </div>
+        </div>
+
+        <!-- Social Login Option (Google) -->
+        <div class="mt-6">
+            <button 
+                (click)="loginWithGoogle()"
+                class="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out transform hover:scale-[1.01] active:scale-100"
+            >
+                <!-- Google Icon (Inline SVG for simplicity and consistency) -->
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.62-.05-1.22-.16-1.81H12v3.42h5.71a4.13 4.13 0 01-1.79 2.76v2.22h2.86c1.67-1.54 2.64-3.82 2.64-6.59z" fill="#4285F4"/>
+                    <path d="M12 23c3.27 0 6.01-1.08 8-2.91l-2.86-2.22c-1.03.7-2.35 1.11-3.82 1.11-2.95 0-5.46-1.99-6.35-4.71H2.86v2.29A10.99 10.99 0 0012 23z" fill="#34A853"/>
+                    <path d="M5.65 14.18c-.24-.7-.37-1.44-.37-2.18s.13-1.48.37-2.18V7.57H2.86A11.02 11.02 0 001 12c0 1.95.48 3.77 1.34 5.38l2.29-1.78z" fill="#FBBC05"/>
+                    <path d="M12 5.25c1.78 0 3.37.61 4.63 1.77l2.5-2.5C17.96 2.5 15.19 1 12 1A11.03 11.03 0 002.86 6.62l2.29 1.78C6.54 5.92 9.05 4 12 4z" fill="#EA4335"/>
+                </svg>
+                Sign in with Google
+            </button>
+        </div>
+
+        <!-- Dynamic Message Box -->
+        <div id="messageBox" class="mt-6 p-3 text-center rounded-lg hidden">
+            <!-- Messages will appear here -->
+        </div>
+
+    </div>
+</div>
+
+
+<!-- <div class="container login-container">
 
   <div class="login-card">
     <div class="branding">
@@ -19,17 +107,5 @@
       <button type="button" class="btn btn-danger" (click)="loginWithGoogle()"><i class="fa-brands fa-google"></i> Google</button>
     </div>
   </div>
-  <!-- 
-  <div *ngIf="!(authService.user$ | async)">
-    <input type="email" [(ngModel)]="email" placeholder="Email">
-    <input type="password" [(ngModel)]="password" placeholder="Password">
-    <button (click)="loginWithEmail()">Login with Email</button>
-    <button (click)="signUpWithEmail()">Sign up with Email</button>
-    <button (click)="loginWithGoogle()">Login with Google</button>
-  </div>
 
-  <div *ngIf="authService.user$ | async as user">
-    <p>Welcome, {{ user.email }}</p>
-    <button (click)="logout()">Logout</button>
-  </div> -->
-</div>
+</div> -->
