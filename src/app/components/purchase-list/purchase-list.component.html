@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <app-breadcrumb></app-breadcrumb>
-    <div class="header-container">
+    <!-- <div class="header-container">
         <div>
             <h4 class="page-header">Purchase</h4>
             <p class="page-sub-header">
@@ -8,11 +8,51 @@
             </p>
         </div>
 
-    </div>
+    </div> -->
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
+
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Purchase List
+            </h1>
+            <p class="text-gray-500 mt-1">View old Purchases or Start a new Purcchase </p>
+        </header>
+        <!-- Add New Purchase List -->
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                Add New Purchase
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: center;">
+                <div class="md:col-span-3">
+                    <!-- Supplier -->
+                    <div [class]="validateNewPurchase.supplier">
+                        <label class="form-label">Add Supplier</label>
+                        <app-select [inputData]="supplierList" [(value)]="newPurchase.supplier.docId"
+                            [use_col_value]="'docId'" [use_col_text]="'name'">
+                        </app-select>
+
+                        <div class="form-text">
+                            Please select a supplier from the list
+                        </div>
+                        <span class="error-message">Please select Supplier</span>
+                    </div>
+                </div>
+                <div class="md:col-span-3">
+                    <button type="button"
+                        class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 transform hover:scale-[1.01] active:scale-100"
+                        (click)="addPurchase()">Add New Purchase</button>
+                </div>
+
+            </div>
+
+        </section>
 
 
-    <!-- Add New Purchase List -->
-    <div class="form-card card open">
+        <!-- <div class="form-card card open">
         <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-cart-shopping"></i>
                 Add Purchase </span>
             <i class="fa-solid fa-angle-right animate"></i>
@@ -23,7 +63,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                                <!-- Supplier -->
+                               
                                 <div [class]="validateNewPurchase.supplier">
                                     <label class="form-label">Add Supplier</label>
                                     <app-select [inputData]="supplierList" [(value)]="newPurchase.supplier.docId"
@@ -47,117 +87,217 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <!-- Purchase List -->
-    <div class="form-card card open">
-        <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-cart-shopping"></i>
-                Purchase List</span>
-            <i class="fa-solid fa-angle-right animate"></i>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="form-card-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12" style="padding-top: 20px;">
+        <!-- Purchase List -->
+          <section class="mb-8 ">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Purchase List</h2>
 
-                                <table class="table table-striped"
-                                    style="width: 100%; font-size:13px; line-height: 13px;">
 
-                                    <colgroup>
-                                        <col class="chk">
-                                        <col class="date">
-                                        <col>
-                                        <!-- <col> -->
-                                        <col>
-                                        <col class="action">
+            <div class="sm:block overflow-x-auto shadow-md rounded-xl">
+   
+                   <table class="table table-striped"
+                                        style="width: 100%; font-size:13px; line-height: 13px;">
 
-                                    </colgroup>
+                                        <colgroup>
+                                            <col class="chk">
+                                            <col class="date">
+                                            <col>
+                                            <!-- <col> -->
+                                            <col>
+                                            <col class="action">
 
-                                    <thead class="border-top">
-                                        <tr>
-                                            <th>
-                                                <input class="form-check-input" type="checkbox">
-                                            </th>
-                                            <th>
-                                                <span class="dt-column-title" role="button">Date</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
-                                            <th>
-                                                <span>Supplier</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
-                                            <!-- <th>
+                                        </colgroup>
+
+                                        <thead class="border-top">
+                                            <tr>
+                                                <th>
+                                                    <input class="form-check-input" type="checkbox">
+                                                </th>
+                                                <th>
+                                                    <span class="dt-column-title" role="button">Date</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
+                                                <th>
+                                                    <span>Supplier</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
+                                                <!-- <th>
                                                 <span>Created By</span>
                                                 <span class="dt-column-order"></span>
                                             </th> -->
-                                            <th>
-                                                <span>Status</span>
-                                                <span class="dt-column-order"></span>
-                                            </th>
+                                                <th>
+                                                    <span>Status</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
 
-                                            <th>
-                                                <span class="dt-column-title">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for(pur of purchaseList; track $index) {
-                                        <tr>
-                                            <td>
-                                                <input class="form-check-input" type="checkbox"
-                                                    [(ngModel)]="pur.selected">
-                                            </td>
-                                            <td>
-                                                {{pur.purchaseDate | date:'dd MMM yy'}}
-                                            </td>
-                                            <td>
-                                                <span class="sub-value">{{pur.supplier.name}}</span>
-                                                <span class="small">{{pur.createdBy}}</span>
-                                            </td>
-                                            <!-- <td>
+                                                <th>
+                                                    <span class="dt-column-title">Actions</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for(pur of purchaseList; track $index) {
+                                            <tr>
+                                                <td>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        [(ngModel)]="pur.selected">
+                                                </td>
+                                                <td>
+                                                    {{pur.purchaseDate | date:'dd MMM yy'}}
+                                                </td>
+                                                <td>
+                                                    <span class="sub-value">{{pur.supplier.name}}</span>
+                                                    <span class="small">{{pur.createdBy}}</span>
+                                                </td>
+                                                <!-- <td>
                                                 {{pur.createdBy}}
                                             </td> -->
-                                            <td>
-                                                {{pur.status}}
-                                            </td>
-                                            <td>
-                                                @if(pur.status=="new" || pur.status=="reviewed"){
-                                                <button type="button" class="btn" title="Delete Purchase"
-                                                    style="padding: 2px; margin-right: 5px;">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                                }
+                                                <td>
+                                                    {{pur.status}}
+                                                </td>
+                                                <td>
+                                                    @if(pur.status=="new" || pur.status=="reviewed"){
+                                                    <button type="button" class=" text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" title="Delete Purchase"
+                                                        style="padding: 2px; margin-right: 5px;">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                    }
 
-                                                @if(pur.status=="new"){
-                                                <a class="btn" style="padding: 2px;" title="Add New Purchase" 
-                                                    routerLink="/purchase/add_purchase/{{pur.docId}}">
-                                                    <i class="fa-solid fa-square-plus"></i>
-                                                </a>
-                                                }
+                                                    @if(pur.status=="new"){
+                                                    <a class=" text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" style="padding: 2px;" title="Add New Purchase"
+                                                        routerLink="/purchase/add_purchase/{{pur.docId}}">
+                                                        <i class="fa-solid fa-square-plus"></i>
+                                                    </a>
+                                                    }
 
-                                                 @if(pur.status=="reviewed"){
-                                                <a class="btn" style="padding: 2px;" title="Add Purchase to Inventory"
-                                                    routerLink="/purchase/purchase_inventory/{{pur.docId}}">
-                                                    <i class="fa-solid fa-warehouse"></i>
-                                                </a>
-                                                }
-                                            </td>
-                                        </tr>
-                                        }
+                                                    @if(pur.status=="reviewed"){
+                                                    <a class="text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" style="padding: 2px;"
+                                                        title="Add Purchase to Inventory"
+                                                        routerLink="/purchase/purchase_inventory/{{pur.docId}}">
+                                                       <i class="fa-solid fa-rectangle-list"></i>
+                                                        
+                                                    </a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            }
 
 
-                                    </tbody>
-                                    <tfoot></tfoot>
-                                </table>
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+            </div>
+          </section>
 
+
+        <!-- <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i
+                        class="fa-solid fa-cart-shopping"></i>
+                    Purchase List</span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12" style="padding-top: 20px;">
+
+                                    <table class="table table-striped"
+                                        style="width: 100%; font-size:13px; line-height: 13px;">
+
+                                        <colgroup>
+                                            <col class="chk">
+                                            <col class="date">
+                                            <col>
+                                           
+                                            <col>
+                                            <col class="action">
+
+                                        </colgroup>
+
+                                        <thead class="border-top">
+                                            <tr>
+                                                <th>
+                                                    <input class="form-check-input" type="checkbox">
+                                                </th>
+                                                <th>
+                                                    <span class="dt-column-title" role="button">Date</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
+                                                <th>
+                                                    <span>Supplier</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
+                                            
+                                                <th>
+                                                    <span>Status</span>
+                                                    <span class="dt-column-order"></span>
+                                                </th>
+
+                                                <th>
+                                                    <span class="dt-column-title">Actions</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for(pur of purchaseList; track $index) {
+                                            <tr>
+                                                <td>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        [(ngModel)]="pur.selected">
+                                                </td>
+                                                <td>
+                                                    {{pur.purchaseDate | date:'dd MMM yy'}}
+                                                </td>
+                                                <td>
+                                                    <span class="sub-value">{{pur.supplier.name}}</span>
+                                                    <span class="small">{{pur.createdBy}}</span>
+                                                </td>
+                                              
+                                                <td>
+                                                    {{pur.status}}
+                                                </td>
+                                                <td>
+                                                    @if(pur.status=="new" || pur.status=="reviewed"){
+                                                    <button type="button" class="btn" title="Delete Purchase"
+                                                        style="padding: 2px; margin-right: 5px;">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                    }
+
+                                                    @if(pur.status=="new"){
+                                                    <a class="btn" style="padding: 2px;" title="Add New Purchase"
+                                                        routerLink="/purchase/add_purchase/{{pur.docId}}">
+                                                        <i class="fa-solid fa-square-plus"></i>
+                                                    </a>
+                                                    }
+
+                                                    @if(pur.status=="reviewed"){
+                                                    <a class="btn" style="padding: 2px;"
+                                                        title="Add Purchase to Inventory"
+                                                        routerLink="/purchase/purchase_inventory/{{pur.docId}}">
+                                                        <i class="fa-solid fa-warehouse"></i>
+                                                    </a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            }
+
+
+                                        </tbody>
+                                        <tfoot></tfoot>
+                                    </table>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div> -->
 
+        
+    </div>
 </div>

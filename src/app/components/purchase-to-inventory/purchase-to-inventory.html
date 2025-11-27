@@ -1,6 +1,11 @@
 <div class="container-fluid {{'overlay-' + show_overlay_form}}">
     <app-breadcrumb></app-breadcrumb>
-    <div class="header-container">
+
+    @if(!purchase){
+    <h4 class="page-header"><a href="/purchase">Go back</a></h4>
+    }
+
+    <!-- <div class="header-container">
         <div>
 
             @if(!purchase){Invalid Purchase: <a href="/purchase">Go back</a>}
@@ -12,91 +17,131 @@
             </p>
             }
         </div>
-    </div>
+    </div> -->
 
-    <div class="form-card card open" style="background-color: transparent; border:none;">
-        <div class="form-card-body">
-            <table class="table table-striped" style="width: 100%; font-size:13px; line-height: 13px;">
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
 
-                <col class="col_product">
-                <col class="vertical-text">
-                <col class="col-purchase">
-                <!-- <col class="selling-price"> -->
-                <col class="action">
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Purchase for {{purchase?.supplier?.name}}
+                <span class="text-sm text-gray" style="display: block; font-weight: normal; font-size:12px">Created by
+                    {{purchase?.createdBy}} on {{purchase?.purchaseDate| date:'dd MMM yy h:mm a'}} </span>
+            </h1>
+            <p class="text-gray-500 mt-1">Add your purchase to Inventory</p>
+        </header>
 
-                <thead class="border-top">
-                    <tr>
-                        <th class="col_product">
-                            <span class="dt-column-title" role="button">Product</span>
-                            <span class="dt-column-order"></span>
-                        </th>
-                        <th></th>
-                        <th class="col-purchase">
-                            <span class="dt-column-title" role="button">Purchase Price</span>
-                            <span class="dt-column-order"></span>
-                        </th>
+        <div class="form-card card open" style="background-color: transparent; border:none;">
+            <div class="form-card-body">
+                <table class="min-w-full divide-y divide-gray-200">
+
+                    <col class="col_product">
+                    <col class="vertical-text">
+                    <col class="col-purchase">
+                    <!-- <col class="selling-price"> -->
+                    <col class="action">
+
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col_product"
+                                style="width: 80px;">
+                                <span class="dt-column-title" role="button">Product</span>
+                                <span class="dt-column-order"></span>
+                            </th>
+                            <th></th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-purchase">
+                                <span class="dt-column-title" role="button">Purchase Price</span>
+                                <span class="dt-column-order"></span>
+                            </th>
 
 
-                        <!-- <th class="selling-price">
+                            <!-- <th class="selling-price">
                             <span class="dt-column-title" role="button">Selling Price</span>
                         </th> -->
 
-                        <th class="action">
-                            <span class="dt-column-title" role="button">Actions</span>
-                            <span class="dt-column-order"></span>
-                        </th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider action">
+                                <span class="dt-column-title" role="button">Actions</span>
+                                <span class="dt-column-order"></span>
+                            </th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @for(pur of purchase?.purchase; track $index) {
-                    <tr>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @for(pur of purchase?.purchase; track $index) {
+                        <tr class="hover:bg-gray-50">
 
-                        <td class="col-product">
-                            <div style="display: flex; flex-direction: column;">
-                                <img src="{{pur.image?.downloadURL}}">
-                                <span class="small">{{pur.productName}}</span>
-                            </div>
-                        </td>
-                        <td class="vertical-text">
-                            <span> {{pur.barcode}}</span>
-                        </td>
-                        <td class="col-purchase">
+                            <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900 col-product"
+                                style="width: 80px;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <img src="{{pur.image?.downloadURL}}">
+                                    <span class="small"
+                                        style="width: 80px; white-space: pre-wrap;">{{pur.productName}}</span>
+                                </div>
+                            </td>
+                            <td class="vertical-text">
+                                <span> {{pur.barcode}}</span>
+                            </td>
+                            <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900 col-purchase">
 
-                            <span class="sub-value">Purchased For Rs. {{pur.purchasePrice }}</span>
-                            <span class="small">Previously purchased For Rs.
-                                {{pur.previousPurchasePrice }}</span>
-                            <hr style="margin: 5px 0px;">
-                            <span class="sub-value">Quantity {{pur.quantity }}</span>
-                            <hr style="margin: 5px 0px;">
-                            <input type="text" placeholder="Selling Price" [(ngModel)]="pur.sellingPrice" />
-                            <div class="form-text">
-                                @if(pur.latestInventory !=null){
-                                Current Selling Price is
-                                {{pur.latestInventory.sellingPrice}}
-                                }
-                                @else{
-                                No Records Available for Current Selling Price
-                                }
-                            </div>
-
-                        </td>
-                        <td class="action">
-                            <!-- @if(pur.new){ -->
-                            <button type="button" class="btn btn-danger" title="Add/Assign Product"
-                                (click)="assign_add_product(pur, $index)" style="padding: 2px; margin-right: 5px;">
-                                <i class="fa-solid fa-square-plus"></i>
-                            </button>
-                            <!-- } -->
-                        </td>
-
-                    </tr>
-                    }
+                                <span class="sub-value" style="display: block;">Purchased For Rs. {{pur.purchasePrice
+                                    }}</span>
+                                <span class="small" style="display: block;">Previously purchased For Rs.
+                                    {{pur.previousPurchasePrice }}</span>
+                                <hr style="margin: 5px 0px;">
+                                <span class="sub-value">Quantity {{pur.quantity }}</span>
+                                <hr style="margin: 5px 0px;">
 
 
-                </tbody>
-                <tfoot></tfoot>
-            </table>
+
+
+                                <div style="width: 200px">
+                                    <label class="block text-sm font-medium text-gray-700">Add Selling Price</label>
+
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text"><i
+                                                class="fa-solid fa-indian-rupee-sign"></i></span>
+                                        <input type="number" class="form-control app-form-component"
+                                            placeholder="Selling Price" [(ngModel)]="pur.sellingPrice">
+                                    </div>
+
+                                    <div class="form-text">
+                                        Please add the purchase price for the product for one unit
+                                    </div>
+                                    <span class="error-message">Please add purchase price</span>
+                                </div>
+
+
+
+                                <div class="form-text">
+                                    @if(pur.latestInventory !=null){
+                                    Current Selling Price is
+                                    {{pur.latestInventory.sellingPrice}}
+                                    }
+                                    @else{
+                                    No Records Available for Current Selling Price
+                                    }
+                                </div>
+
+                            </td>
+                            <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900 action">
+                                <!-- @if(pur.new){ -->
+                                <button type="button" class="btn btn-danger" title="Add/Assign Product"
+                                    (click)="assign_add_product(pur, $index)" style="padding: 2px; margin-right: 5px;">
+                                    <i class="fa-solid fa-square-plus"></i>
+                                </button>
+                                <!-- } -->
+                            </td>
+
+                        </tr>
+                        }
+
+
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
         </div>
     </div>
 
