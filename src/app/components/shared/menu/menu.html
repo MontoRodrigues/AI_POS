@@ -42,17 +42,21 @@
 </div>
 
 <div class="nav-top-mobile">
-    <span class="path" (click)="navigateTo('/', false)"><i class="fa-solid fa-house"></i> Home</span>
-    @for(path of current_path; track $index) {
-    <span class="separator">/</span>
-    <span class="path" (click)="navigateTo(path.path, false)">{{path.text}}</span>
-
+    <div class="nav-bottom-menu-item" onclick="toggle_side_menu()">
+        <i class="fa-solid fa-bars fa-lg"></i>
+    </div>
+    <div class="truncate" style="width: calc(100% - 40px);">
+        <span class="path" (click)="navigateTo('/', false)"><i class="fa-solid fa-house"></i> Home</span>
+        @for(path of current_path; track $index) {
+        <span class="separator">/</span>
+        <span class="path" (click)="navigateTo(path.path, false)">{{path.text}}</span>
     }
+    </div>
 
 
 </div>
 
-<div class="nav-bottom">
+<!-- <div class="nav-bottom">
     <div class="nav-bottom-menu-item" onclick="toggle_side_menu()">
         <i class="fa-solid fa-bars fa-lg"></i>
         <span>Menu</span>
@@ -67,8 +71,6 @@
         <i class="fa-solid fa-barcode fa-lg"></i>
         <span>Purchase</span>
     </div>
-
-
 
     <div class="avatar-container">
         <div class="avatar" onclick="open_user_menu(this)">
@@ -93,7 +95,7 @@
 
 
 
-</div>
+</div> -->
 
 <div class="side-nav">
     <div class="branding">

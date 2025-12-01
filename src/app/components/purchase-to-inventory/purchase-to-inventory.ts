@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
-import { dataAttributes, dataBrand, dataCategory, dataPurchase, DataService, dataSupplier, dataUOM } from '../../services/data-service';
+import { dataAttributes, dataBrand, dataCategory, dataPurchase, dataPurchaseProduct, DataService, dataSupplier, dataUOM } from '../../services/data-service';
 import { filter, Subscription } from 'rxjs';
 import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Iproduct } from '../../interface/iproduct';
+import { Iproduct, Iinventory } from '../../interface/iproduct';
 import { MatDialog } from '@angular/material/dialog';
 import { defaultConfig } from '../../config/config';
 import { BarcodeScanner } from '../shared/barcode-scanner/barcode-scanner';
@@ -14,6 +14,8 @@ import { TextDropdown } from "../shared/text-dropdown/text-dropdown";
 import { Select } from "../shared/select/select";
 import { TextAddAttr } from "../shared/text-add-attr/text-add-attr";
 import { TextAddTags } from "../shared/text-add-tags/text-add-tags";
+
+
 
 declare var showLoader: Function;
 declare var notify: Function;
@@ -99,6 +101,11 @@ export class PurchaseToInventory {
 
   }
 
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+  }
+
+  // get the products assigned to the purchase
   getProducts(p: dataPurchase) {
     // get the product filter
     let productFilter: (string | null)[] | undefined = p?.purchase.filter(item => item.docId != null).map(item => item.docId);
@@ -141,6 +148,7 @@ export class PurchaseToInventory {
           console.log("purchase", p);
 
         }
+        this.calculateTotal();
         showLoader(false);
         this.cdRef.detectChanges();
 
@@ -149,6 +157,7 @@ export class PurchaseToInventory {
       complete: () => console.info('complete')
     });
 
+    // subsccribe Category collection
     this.subscribe_category = this.dataService.category$.subscribe({
       next: (value: dataCategory[]) => {
         console.log("category", value);
@@ -250,7 +259,160 @@ export class PurchaseToInventory {
       });
   }
 
-  // ----------------Search Product 
+  // edit Quantity and Purchase Price 
+
+  totalPrice: number = 0;
+  totalQuantity: number = 0;
+
+  editPurchaseProduct(d: dataPurchaseProduct) {
+    console.log(d);
+    d.edit = true;
+    d.editPurchasePrice = d.purchasePrice;
+    d.editQuantity = d.quantity;
+    d.editMRP = d.MRP;
+  }
+
+  cancelEditPurchaseProduct(d: dataPurchaseProduct) {
+    console.log(d);
+    d.edit = false;
+    if (d.editPurchasePrice)
+      d.purchasePrice = d.editPurchasePrice;
+    if (d.editQuantity)
+      d.quantity = d.editQuantity;
+    if (d.editMRP)
+      d.MRP = d.editMRP;
+
+    d.editPurchasePrice = null;
+    d.editQuantity = null;
+    d.editMRP = null;
+  }
+
+  async savePurchaseProduct(d: dataPurchaseProduct) {
+    let c = confirm(`Do you want to save the changed values; Purchase Price: from ${d.editPurchasePrice} to ${d.purchasePrice} and Quantity: from ${d.editQuantity} to ${d.quantity}`)
+    if (c) {
+      d.edit = false;
+      d.editPurchasePrice = null;
+      d.editQuantity = null;
+      await this.firebaseService.updateDocument(defaultConfig.collections.purchase.name + "/" + this.docId, this.purchase);
+      this.calculateTotal();
+      this.cdRef.detectChanges();
+      notify("success", "Updated purchase successfully");
+    }
+  }
+
+  calculateTotal() {
+    let tp = 0;
+    let tq = 0;
+    if (this.purchase) {
+      this.purchase.purchase.forEach(e => {
+
+
+        let p = 0, q = 0;
+        if (e.purchasePrice)
+          p = e.purchasePrice;
+        if (e.quantity)
+          q = e.quantity;
+        tp += p * q;
+        tq += q;
+
+      });
+    }
+    this.totalPrice = tp;
+    this.totalQuantity = tq;
+  }
+
+  // Add new product or assign an existing product for a purchase. when clicked opens a form overlay
+  assign_add_product(d: any, i: number) {
+    console.log("index", i);
+    console.log(d);
+
+
+    // set default values for new product form
+    if (d != null) {
+      this.selected_purchase = d;
+      this.selected_purchase_index = i;
+
+      this.newProduct = {
+        id: null,
+        sku: null,
+        barcode: null,
+        name: d.productName,
+        slug: null,
+        brand: null,
+        categories: {
+          categoryIds: [],
+          path: []
+        },
+        uom: null,
+        taxRate: 0,
+        sale: null,
+        image: [],
+        searchTokens: [],
+        attributes: [],
+      };
+
+
+      this.validateNewProduct = {
+        name: "form-div",
+        sku: "form-div",
+        barcode: "form-div",
+        brand: "form-div",
+        uom: "form-div",
+        categories: "form-div",
+        image: "form-div",
+        searchTokens: "form-div",
+        attributes: "form-div",
+      };
+
+      this.category_doc_id = null;
+
+
+
+      // if prouct is already assigned update the default value to the product values
+      if (d.docId != null) {
+        let prod = this.products[d.docId];
+
+        this.newProduct = {
+          id: prod.id,
+          sku: prod.sku,
+          barcode: prod.barcode,
+          name: d.productName,
+          slug: prod.slug,
+          brand: prod.brand,
+          categories: prod.categories,
+          uom: prod.uom,
+          taxRate: prod.taxRate,
+          sale: prod.sale,
+          image: prod.image,
+          searchTokens: prod.searchTokens,
+          attributes: prod.attributes,
+        };
+        if (prod.categories.categoryIds.length > 0)
+          this.category_doc_id = prod.categories.categoryIds[prod.categories.categoryIds.length - 1];
+
+      }
+
+      this.toggle_over_form();
+
+    }
+
+
+
+    console.log(this.newProduct);
+  }
+
+  toggle_over_form() {
+
+    if (!this.show_overlay_form)
+      this.show_overlay_form = true;
+    else
+      this.show_overlay_form = false;
+
+    console.log("show overlay", this.show_overlay_form);
+  }
+
+  // ----------------Methods for Search existing Product 
+
   startScannerSearch() {
     const dialogRef = this.dialog.open(BarcodeScanner, {
       data: null,
@@ -282,98 +444,12 @@ export class PurchaseToInventory {
     console.log(this.search_product_list);
   }
 
-  toggle_over_form() {
-
-    if (!this.show_overlay_form)
-      this.show_overlay_form = true;
-    else
-      this.show_overlay_form = false;
-
-    console.log("show overlay", this.show_overlay_form);
-  }
-
-  // Add new product or assign an existing product for a purchase 
-  assign_add_product(d: any, i: number) {
-    console.log("index", i);
-    console.log(d);
-
-
-
-    if (d != null) {
-      this.selected_purchase = d;
-      this.selected_purchase_index = i;
-
-      this.newProduct = {
-        id: null,
-        sku: null,
-        barcode: null,
-        name: d.productName,
-        slug: null,
-        brand: null,
-        categories: {
-          categoryIds: [],
-          path: []
-        },
-        uom: null,
-        taxRate: 5,
-        sale: null,
-        image: [],
-        searchTokens: [],
-        attributes: [],
-      };
-
-
-      this.validateNewProduct = {
-        name: "form-div",
-        sku: "form-div",
-        barcode: "form-div",
-        brand: "form-div",
-        uom: "form-div",
-        categories: "form-div",
-        image: "form-div",
-        searchTokens: "form-div",
-        attributes: "form-div",
-      };
-
-      this.category_doc_id = null;
-
-      this.toggle_over_form();
-
-    }
-
-    if (d != null && d.docId != null) {
-      let prod = this.products[d.docId];
-
-      this.newProduct = {
-        id: prod.id,
-        sku: prod.sku,
-        barcode: prod.barcode,
-        name: d.productName,
-        slug: prod.slug,
-        brand: prod.brand,
-        categories: prod.categories,
-        uom: prod.uom,
-        taxRate: prod.taxRate,
-        sale: prod.sale,
-        image: prod.image,
-        searchTokens: prod.searchTokens,
-        attributes: prod.attributes,
-      };
-      if (prod.categories.categoryIds.length > 0)
-        this.category_doc_id = prod.categories.categoryIds[prod.categories.categoryIds.length - 1];
-
-
-    }
-
-    console.log(this.newProduct);
-  }
-
   // asign an existing product to a purchase
   assignExistingProduct(d: any) {
-    console.log(d);
+    console.log("existing product", d);
     this.toggle_over_form();
 
-    console.log(this.purchase?.purchase[this.selected_purchase_index]);
+    console.log("purcase product list", this.purchase?.purchase[this.selected_purchase_index]);
 
     //PreviousMRP, barcode, currentInventory, docId, latestInventory, previousPurchasePrice, productName, sellingPrice
     if (this.purchase != null) {
@@ -390,10 +466,10 @@ export class PurchaseToInventory {
         this.purchase.purchase[this.selected_purchase_index].new = false;
       }
     }
-
-
-
+    this.getProducts(this.purchase!);
+    this.cdRef.detectChanges();
   }
+
 
   validateForm() {
     let v: boolean = true;
@@ -492,10 +568,7 @@ export class PurchaseToInventory {
 
     this.validateForm();
     if (this.validateForm()) {
-      showLoader();
-
-
-
+      this.toggle_over_form();
       // create Id for the product
       this.newProduct.id = self.crypto.randomUUID();
 
@@ -503,6 +576,7 @@ export class PurchaseToInventory {
       if (this.newProduct.name != undefined)
         this.newProduct.slug = this.newProduct.name?.toLocaleLowerCase().replaceAll(" ", "_");
 
+      // add category details
       let c = this.category_list.filter(item => item.docId == this.category_doc_id)
       console.log(c);
       if (c.length > 0) {
@@ -522,17 +596,164 @@ export class PurchaseToInventory {
 
       // add images
       // if()
-      console.log(this.newProduct);
-      
+      this.newProduct.image = [];
+      this.newProduct.image.push(this.selected_purchase.image);
 
 
-      // this.cdRef.detectChanges();
-      notify("success", "Product added Successfully.", 5000);
-      showLoader(false);
 
       console.log(this.newProduct);
+
+
+      if (this.purchase != null) {
+        this.purchase.purchase[this.selected_purchase_index].barcode = this.newProduct.barcode;
+        this.purchase.purchase[this.selected_purchase_index].productName = this.newProduct.name;
+        this.purchase.purchase[this.selected_purchase_index].new_prod_value = this.newProduct;
+      }
+
+
+
+
+
+      notify("success", "Product added but not saved. It will be saved when you submit the main form", 5000);
+
+      this.cdRef.detectChanges();
+
+
+
+
 
     }
   }
+
+  // inventory variable
+  newInventory: Iinventory = {
+    quantity: null,
+    purchasePrice: null,
+    sellingPrice: null,
+    inventoryDate: new Date(),
+    supplier: {
+      name: null,
+      docId: null
+    },
+    productName: null,
+    barcode: null,
+    productDocId: null,
+    sale: 0,
+    returns: 0,
+    currentInventory: 0,
+    MRP: null
+  };
+
+  async add_purchase_to_inventory() {
+
+    // validate that all purchase items have a product assigned and Selling price is updated
+    console.log("purchase before submit", this.purchase);
+    console.log("Product at submit", this.products);
+
+    // validate purchase items
+    let v: boolean = true;
+    if (this.purchase) {
+      for (let i = 0; i < this.purchase.purchase.length; i++) {
+        let p = this.purchase.purchase[i];
+        if (p.sellingPrice == null || p.sellingPrice == 0) {
+          v = false;
+          notify("error", `Please update the Selling Price for the product ${p.productName}`, 5000);
+          break;
+        }
+        if (p.new == false && (p.docId == null || p.docId == undefined)) {
+          v = false;
+          notify("error", `Please assign a product for the purchase item ${p.productName}`, 5000);
+          break;
+        }
+        if (p.new == true && (p.new_prod_value == null || p.new_prod_value == undefined)) {
+          v = false;
+          notify("error", `Please add product details for the new product ${p.productName}`, 5000);
+          break;
+        }
+
+        p.edit = false;
+        p.editPurchasePrice = null;
+        p.editQuantity = null;
+        p.editMRP = null;
+      }
+
+
+      if (v) {
+        let c = confirm(`Do you want to push the purchase to inventory;`)
+        if (c) {
+          showLoader();
+          // Loop through the purchase items and add to inventory and also add new products to product collection
+          for (let i = 0; i < this.purchase.purchase.length; i++) {
+            let p = this.purchase.purchase[i];
+
+            // add the new product to the product collection
+            if (p.new == true && p.new_prod_value != null) {
+
+              // add product to product collection
+              let doc = await this.firebaseService.addDocument(this.conf.collections.products.name, p.new_prod_value);
+
+              // add brand to brand collection if not exists
+              if (!this.brandList.some(item => p.new_prod_value?.brand?.toLocaleLowerCase() == item.name.toLocaleLowerCase())) {
+                this.firebaseService.addDocument(this.conf.collections.brand.name, { "name": p.new_prod_value.brand }).then();
+              }
+
+              // update the inventory details in the purchase item
+              this.newInventory = {
+                quantity: p.quantity,
+                purchasePrice: p.purchasePrice,
+                sellingPrice: p.sellingPrice ?? 0,
+                inventoryDate: new Date(),
+                supplier: this.purchase.supplier,
+                productName: p.new_prod_value.name,
+                barcode: p.new_prod_value.barcode,
+                productDocId: doc.id,
+                sale: 0,
+                returns: 0,
+                currentInventory: p.quantity,
+                MRP: p.MRP
+              }
+            }
+
+            // updte inventory for existing product
+            if (p.new == false && p.docId != null) {
+              this.newInventory = {
+                quantity: p.quantity,
+                purchasePrice: p.purchasePrice,
+                sellingPrice: p.sellingPrice ?? 0,
+                inventoryDate: new Date(),
+                supplier: this.purchase.supplier,
+                productName: this.products[p.docId].name,
+                barcode: p.barcode,
+                productDocId: p.docId,
+                sale: 0,
+                returns: 0,
+                currentInventory: p.quantity,
+                MRP: p.MRP
+              }
+            }
+
+            // push inventory to document collection
+            let doc1 = await this.firebaseService.addDocument(this.conf.collections.products.name + "/" + this.newInventory.productDocId + "/inventory", this.newInventory);
+          }
+
+          // update the purchase document
+          this.purchase.status = "processed";
+          await this.firebaseService.updateDocument(defaultConfig.collections.purchase.name + "/" + this.purchase.docId, this.purchase);
+
+          this.cdRef.detectChanges();
+          notify("success", "Purchase Scucessfully moved to Inventory", 5000);
+
+          showLoader(false);
+
+        }
+      }
+      else {
+        console.log("purchase validation failed");
+      }
+    }
+
+  }
+
+  
 
 }

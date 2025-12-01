@@ -3,6 +3,8 @@ import { FirebaseService } from './firebase.service';
 import { BehaviorSubject, flatMap, Observable } from 'rxjs';
 import { orderBy } from 'firebase/firestore';
 import { defaultConfig } from '../config/config';
+import { Iproduct } from '../interface/iproduct';
+
 
 // ----------------data interface
 
@@ -51,6 +53,7 @@ export interface dataProduct {
   currentInventory?: number | null;
   purchasePrice?: number | null;
   MRP?: number | null;
+  inventory?: dataInventory[];
 }
 
 export interface dataCategory {
@@ -126,7 +129,7 @@ export interface dataPurchaseProduct {
 
   sellingPrice?: number | null;
   latestInventory?: dataInventory | null;
-
+  new_prod_value?: Iproduct | null;
 
 }
 
@@ -325,9 +328,11 @@ export class DataService {
       for (let i = 0; i < d[0].purchase.length; i++) {
         d[0].purchase[i]["sellingPrice"] = null;
         d[0].purchase[i]["latestInventory"] = null;
-        // d[0].purchase[i]["editPurchasePrice"] = null;
-        // d[0].purchase[i]["editQuantity"] = null;
-        // d[0].purchase[i]["edit"] = false;
+        d[0].purchase[i]["editPurchasePrice"] = null;
+         d[0].purchase[i]["editMRP"] = null;
+        d[0].purchase[i]["editQuantity"] = null;
+        d[0].purchase[i]["edit"] = false;
+        d[0].purchase[i]["new_prod_value"] = null;
       }
       return d[0]
     }
@@ -340,13 +345,11 @@ export class DataService {
     let p: any = this._product.value.filter(item => { let d = docId?.filter(i => i == item.docId); return d != undefined && d.length > 0 });
     let _p: any = {};
     if (p.length > 0) {
-
       for (let i = 0; i < p.length; i++) {
         p[i]["inventory"] = this._inventory.value.filter(item => item.productDocId == p[i].docId)
         p[i]["inventory"] = p[i]["inventory"].sort((a: any, b: any) => b.inventoryDate - a.inventoryDate);
         _p[p[i].docId] = p[i];
       }
-
       return _p;
     }
     else
@@ -404,7 +407,7 @@ export class DataService {
   // Search Product 
 
   get_product_by_filter(f: string) {
-    let d = this._product.value.filter((item) => {
+    let p = this._product.value.filter((item) => {
       //---------exact search
       if (item.name?.trim().toLowerCase() == f.trim().toLowerCase() || item.barcode?.trim().toLowerCase() == f.trim().toLowerCase() || item.brand?.trim().toLowerCase() == f)
         return true;
@@ -422,11 +425,30 @@ export class DataService {
       return false;
     });
 
-    return d;
+   console.log("filtered Products", p);
+    if (p.length > 0) {
+
+      for (let i = 0; i < p.length; i++) {
+        p[i]["inventory"] = this._inventory.value.filter(item => item.productDocId == p[i].docId)
+        p[i]["inventory"] = p[i]["inventory"]?.sort((a: any, b: any) => b.inventoryDate - a.inventoryDate);
+
+      }
+    }
+
+    return p;
   }
 
   get_products_list(){
-    return this._product.value;
+    let p = this._product.value;
+    if (p.length > 0) {
+
+      for (let i = 0; i < p.length; i++) {
+        p[i]["inventory"] = this._inventory.value.filter(item => item.productDocId == p[i].docId)
+        p[i]["inventory"] = p[i]["inventory"]?.sort((a: any, b: any) => b.inventoryDate - a.inventoryDate);
+
+      }
+    }
+    return p;
   }
 
   ngOnInit() {
