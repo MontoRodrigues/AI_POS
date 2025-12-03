@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Scan Barcode</h1>
+<div mat-dialog-content>
+    <div class="w-full h-full" style="position: relative; height: 320px; 
+    
+      background: #121621;
+      border-radius: 8px;
+    
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);">
+        <video #videoElement autoplay autoplay playsinline muted class="absolute w-full h-full object-cover" ></video>
+        <canvas #overlay class="absolute inset-0 w-full h-full  object-cover" style="top: 0px; left: 0px;" ></canvas>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+
+      <!-- <button (click)="startScanning()">Start Scanning</button> -->
+        <!-- @if(barcodeResult) { <p>Detected Barcode: {{ barcodeResult }}</p>}
+         @if(errorMessage) { <p>{{ errorMessage }}</p>} -->
+
+     <!-- <span class="px-3 py-1 text-xs font-mono rounded-full text-emerald-300 bg-emerald-900/50 border border-emerald-500/30">
+          {{ status() }}
+        </span> -->
+    <button class="btn btn-info" (click)="flipCamera()">Flip camera</button>    
+    <!-- <span id="status" class="pill">Detector: initializing…</span> -->
+    <button class="btn btn-danger" (click)="closeScanner()">Cancel</button>
+</div>
+
+
+<!-- <video #videoElement autoplay style="width: 100%; max-width: 600px;">
+        </video> -->
+      

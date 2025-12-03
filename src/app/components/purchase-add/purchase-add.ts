@@ -13,6 +13,8 @@ import { defaultConfig } from '../../config/config';
 import { NoopTreeKeyManager } from '@angular/cdk/a11y';
 import { image_upload_result, ImageUpload } from "../shared/image-upload/image-upload";
 import { SwitchBtn } from "../shared/switch-btn/switch-btn";
+import { BarcodeScannerNative } from '../shared/barcode-scanner-native/barcode-scanner-native';
+import { BarcodeMultipleSelect } from '../shared/barcode-multiple-select/barcode-multiple-select';
 
 declare var showLoader: Function;
 declare var notify: Function;
@@ -104,22 +106,50 @@ export class PurchaseAdd {
 
   // start scanning for barcode 
   startScanner() {
-    const dialogRef = this.dialog.open(BarcodeScanner, {
+    const dialogRef = this.dialog.open(BarcodeScannerNative, {
       data: null,
       width: '100%',
       panelClass: 'custom-dialogue'
     });
 
     dialogRef
-      .afterClosed()
-      .pipe(filter((result) => !!result))
-      .subscribe((result: string) => {
-        console.log("Barcode result");
-        console.log(result);
-        this.purchaseProduct.barcode = result;
+      // .afterClosed()
+      // .pipe(filter((result) => !!result))
+      // .subscribe((result: string) => {
+      //   console.log("Barcode result");
+      //   console.log(result);
+      //   this.purchaseProduct.barcode = result;
 
-        this.searchBarcode();
-      });
+      //   this.searchBarcode();
+      // });
+
+      .afterClosed()
+            .pipe(filter((result) => !!result))
+            .subscribe((result: any) => {
+              console.log("Barcode result");
+              console.log(result);
+              // result can be a string, an array of scan results, or an object with rawValue
+              if (Array.isArray(result) && result.length === 1) {
+                this.purchaseProduct.barcode = result[0]?.rawValue ?? result[0];
+                 this.searchBarcode();
+                this.cdRef.detectChanges();
+              } else if (result.length > 1) {
+                // Open Model to select from multiple barcodes
+                const multiSelectDialogRef = this.dialog.open(BarcodeMultipleSelect, {
+                  data: result,
+                  width: '100%',
+                  panelClass: 'custom-dialogue'
+                });
+                multiSelectDialogRef.afterClosed() .pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
+                  
+                  this.purchaseProduct.barcode = selectedBarcode.rawValue;
+                  this.searchBarcode();
+                  this.cdRef.detectChanges();
+                });
+              }
+              
+            });
+
   }
 
   searchBarcode() {

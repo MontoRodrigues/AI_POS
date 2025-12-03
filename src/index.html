@@ -47,6 +47,17 @@
 <body>
   <app-root></app-root>
 
+<!-- 
+  <script type="module">
+    import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@0.9.23/dist/main.js";
+    try {
+      window['BarcodeDetector'].getSupportedFormats();
+    } catch {
+      window['BarcodeDetector'] = BarcodeDetectorPolyfill;
+    }
+  </script> -->
+
+
   <script>
     function toggle_left_slide_model() {
       document.querySelector("body").classList.toggle("show-left-slide-model");

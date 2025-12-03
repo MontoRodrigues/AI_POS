@@ -1,0 +1,13 @@
+.options{
+        padding: 5px 10px;
+    background: #4e46a3;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.options:hover{
+    background: #3730a3; 
+    /* #7975a8 */
+}

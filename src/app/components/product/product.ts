@@ -5,6 +5,7 @@ import { ImageCapture } from '../shared/delete_this/image-capture/image-capture'
 import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
 import { dataInventory, dataProduct, DataService } from '../../services/data-service';
 import { Subscription } from 'rxjs';
+import { defaultConfig } from '../../config/config';
 
 
 
@@ -90,4 +91,16 @@ export class Product {
     return 0;
   }
 
+  navigateTo(path: string) {
+    this.router.navigate([path]);
+  }
+
+  async delete_product(p:dataProduct){
+    console.log(p);
+     let c = confirm(`Do you want to Delete the product;`)
+        if (c) {
+           await this.firebaseService.deleteDocument(defaultConfig.collections.products.name + "/" + p.docId);
+           
+        }
+  }
 }

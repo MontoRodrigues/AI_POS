@@ -14,6 +14,8 @@ import { TextDropdown } from "../shared/text-dropdown/text-dropdown";
 import { Select } from "../shared/select/select";
 import { TextAddAttr } from "../shared/text-add-attr/text-add-attr";
 import { TextAddTags } from "../shared/text-add-tags/text-add-tags";
+import { BarcodeScannerNative } from '../shared/barcode-scanner-native/barcode-scanner-native';
+import { BarcodeMultipleSelect } from '../shared/barcode-multiple-select/barcode-multiple-select';
 
 
 
@@ -242,21 +244,46 @@ export class PurchaseToInventory {
   }
 
   startScanner() {
-    const dialogRef = this.dialog.open(BarcodeScanner, {
+    const dialogRef = this.dialog.open(BarcodeScannerNative, {
       data: null,
       width: '100%',
       panelClass: 'custom-dialogue'
     });
 
     dialogRef
+      // .afterClosed()
+      // .pipe(filter((result) => !!result))
+      // .subscribe((result: string) => {
+      //   console.log("Barcode result");
+      //   console.log(result);
+      //   this.newProduct.barcode = result;
+      //   this.cdRef.detectChanges();
+      // });
+
       .afterClosed()
-      .pipe(filter((result) => !!result))
-      .subscribe((result: string) => {
-        console.log("Barcode result");
-        console.log(result);
-        this.newProduct.barcode = result;
-        this.cdRef.detectChanges();
-      });
+            .pipe(filter((result) => !!result))
+            .subscribe((result: any) => {
+              console.log("Barcode result");
+              console.log(result);
+              // result can be a string, an array of scan results, or an object with rawValue
+              if (Array.isArray(result) && result.length === 1) {
+                this.newProduct.barcode = result[0]?.rawValue ?? result[0];
+                this.cdRef.detectChanges();
+              } else if (result.length > 1) {
+                // Open Model to select from multiple barcodes
+                const multiSelectDialogRef = this.dialog.open(BarcodeMultipleSelect, {
+                  data: result,
+                  width: '100%',
+                  panelClass: 'custom-dialogue'
+                });
+                multiSelectDialogRef.afterClosed() .pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
+                  console.log("Selected Barcode from multiple select:", selectedBarcode);
+                  this.newProduct.barcode = selectedBarcode.rawValue;
+                  this.cdRef.detectChanges();
+                });
+              }
+              
+            });
   }
 
   // edit Quantity and Purchase Price 
@@ -414,7 +441,7 @@ export class PurchaseToInventory {
   // ----------------Methods for Search existing Product 
 
   startScannerSearch() {
-    const dialogRef = this.dialog.open(BarcodeScanner, {
+    const dialogRef = this.dialog.open(BarcodeScannerNative, {
       data: null,
       width: '100%',
       panelClass: 'custom-dialogue'
@@ -422,14 +449,40 @@ export class PurchaseToInventory {
 
     dialogRef
       .afterClosed()
+      //.pipe(filter((result) => !!result))
+      // .subscribe((result: string) => {
+      //   console.log("Barcode result");
+      //   console.log(result);
+      //   this.search_product_input = result;
+      //   this.searchProduct();
+      //   this.cdRef.detectChanges();
+      // });
+
       .pipe(filter((result) => !!result))
-      .subscribe((result: string) => {
-        console.log("Barcode result");
-        console.log(result);
-        this.search_product_input = result;
-        this.searchProduct();
-        this.cdRef.detectChanges();
-      });
+            .subscribe((result: any) => {
+              console.log("Barcode result");
+              console.log(result);
+              // result can be a string, an array of scan results, or an object with rawValue
+              if (Array.isArray(result) && result.length === 1) {
+                this.search_product_input = result[0]?.rawValue ?? result[0];
+                this.searchProduct();
+                this.cdRef.detectChanges();
+              } else if (result.length > 1) {
+                // Open Model to select from multiple barcodes
+                const multiSelectDialogRef = this.dialog.open(BarcodeMultipleSelect, {
+                  data: result,
+                  width: '100%',
+                  panelClass: 'custom-dialogue'
+                });
+                multiSelectDialogRef.afterClosed() .pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
+                  console.log("Selected Barcode from multiple select:", selectedBarcode);
+                  this.search_product_input = selectedBarcode.rawValue;
+                  this.searchProduct();
+                  this.cdRef.detectChanges();
+                });
+              }
+              
+            });
   }
 
   searchProduct() {

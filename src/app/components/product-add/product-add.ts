@@ -23,6 +23,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { dataAttributes, dataBrand, dataCategory, DataService, dataSupplier, dataUOM } from '../../services/data-service';
+import { BarcodeScannerNative } from '../shared/barcode-scanner-native/barcode-scanner-native';
+import { BarcodeMultipleSelect } from '../shared/barcode-multiple-select/barcode-multiple-select';
 
 declare var showLoader: Function;
 declare var notify: Function;
@@ -309,7 +311,9 @@ export class ProductAdd {
   }
   // start scanning for barcode 
   startScanner() {
-    const dialogRef = this.dialog.open(BarcodeScanner, {
+
+    const dialogRef = this.dialog.open(BarcodeScannerNative, {
+      //const dialogRef = this.dialog.open(BarcodeScanner, {
       data: null,
       width: '100%',
       panelClass: 'custom-dialogue'
@@ -318,11 +322,27 @@ export class ProductAdd {
     dialogRef
       .afterClosed()
       .pipe(filter((result) => !!result))
-      .subscribe((result: string) => {
+      .subscribe((result: any) => {
         console.log("Barcode result");
         console.log(result);
-        this.newProduct.barcode = result;
-        this.cdRef.detectChanges();
+        // result can be a string, an array of scan results, or an object with rawValue
+        if (Array.isArray(result) && result.length === 1) {
+          this.newProduct.barcode = result[0]?.rawValue ?? result[0];
+          this.cdRef.detectChanges();
+        } else if (result.length > 1) {
+          // Open Model to select from multiple barcodes
+          const multiSelectDialogRef = this.dialog.open(BarcodeMultipleSelect, {
+            data: result,
+            width: '100%',
+            panelClass: 'custom-dialogue'
+          });
+          multiSelectDialogRef.afterClosed() .pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
+            console.log("Selected Barcode from multiple select:", selectedBarcode);
+            this.newProduct.barcode = selectedBarcode.rawValue;
+            this.cdRef.detectChanges();
+          });
+        }
+        
       });
   }
 
@@ -442,7 +462,7 @@ export class ProductAdd {
     else
       this.validateNewInventory.purchasePrice = "form-div";
 
-    
+
 
     // validate selling price
     if (this.newInventory.sellingPrice == null) {
@@ -452,7 +472,7 @@ export class ProductAdd {
     else
       this.validateNewInventory.sellingPrice = "form-div";
 
-      // validate MRP
+    // validate MRP
     if (this.newInventory.MRP == null) {
       v = false;
       this.validateNewInventory.MRP = "form-div error";

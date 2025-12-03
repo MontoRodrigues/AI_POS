@@ -22,7 +22,7 @@
     </header>
 
     <!-- Product List Container (Highly responsive grid) -->
-    <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @for(p of product_list; track $index) {
         <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-md hover:shadow-lg transition duration-300">
             <img src="{{p.image[0].downloadURL}}" alt="product image"
@@ -46,14 +46,18 @@
 
             <!-- Admin Actions -->
             <div class="flex space-x-3">
-                <button
+                <button (click)="navigateTo('/products/edit')"
                     class="w-1/2 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
                     Edit
                 </button>
-                <button
+                <button (click)="navigateTo('products/inventory')"
+                    class="w-1/2 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
+                    Inventory
+                </button>
+                <button (click)="delete_product(p)"
                     class="w-1/2 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
                     Delete
-                </button>
+                </button>    
             </div>
         </div>
         }

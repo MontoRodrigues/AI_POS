@@ -30,6 +30,7 @@
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
     "@genkit-ai/googleai": "^1.15.5",
+    "barcode-detector": "^3.0.8",
     "firebase": "^11.10.0",
     "firebase-tools": "^14.16.0",
     "genkit": "^1.15.5",
