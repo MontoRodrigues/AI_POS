@@ -10,7 +10,7 @@ import { TextDropdown } from "../shared/text-dropdown/text-dropdown";
 import { Select } from '../shared/select/select';
 
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { BarcodeScanner } from '../shared/barcode-scanner/barcode-scanner';
+// import { BarcodeScanner } from '../shared/barcode-scanner/barcode-scanner';
 import { filter, Subscription } from 'rxjs';
 import { TextAddAttr } from "../shared/text-add-attr/text-add-attr";
 import { TextAddTags } from "../shared/text-add-tags/text-add-tags";

@@ -32,30 +32,7 @@
                     <img src="{{product.image[0].downloadURL}}" style="max-width: 35px;">
                     <h4 class="text-base font-bold text-gray-900 truncate" style="max-width: 30vw;">{{product.name}}
                         ({{product.currentInventory}} )</h4>
-                </div>
-                <!-- <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                    <div class="flex justify-between items-center mb-2 border-b pb-2">
-
-                        <img src="{{product.image[0].downloadURL}}" style="max-width: 35px;">
-                        <h4 class="text-base font-bold text-gray-900 truncate">{{product.name}}</h4>
-
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 text-sm">
-                        <div class="col-span-1">
-                            <span class="text-gray-500 block">Price:</span>
-                            <span class="font-medium">{{product.purchasePrice}}</span>
-                        </div>
-                        <div class="col-span-1">
-                            <span class="text-gray-500 block">MRP:</span>
-                            <span class="font-medium">{{product.MRP}}</span>
-                        </div>
-                        <div class="col-span-1">
-                            <span class="text-gray-500 block">Inv:</span>
-                            <span class="font-medium">{{product.currentInventory}}</span>
-                        </div>
-
-                    </div>
-                </div> -->
+                </div>                
                 }
                 @else{
                 <span>Add New Items</span>
@@ -161,7 +138,7 @@
                         <div class="input-group flex-nowrap">
                             <input type="number" class="form-control app-form-component" placeholder="Quantity"
                                 [(ngModel)]="purchaseProduct.quantity">
-                            <span class="input-group-text">@if(product && !purchaseProduct.new ){ {{product?.uom}} }
+                            <span class="input-group-text">@if(product && !purchaseProduct.new ){ {{product.uom}} }
                                 @else { # }</span>
                         </div>
                         <div class="form-text">
@@ -514,7 +491,7 @@
 
             @if(purchase.purchase.length==0){
             <!-- Single empty message for both views -->
-            <div id="emptyOrderMessage" class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border">
+            <div  class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border">
                 No items added to the purchase order yet.
             </div>
             }
@@ -558,14 +535,6 @@
         </div>
 
     </div>
-
-
-
-
-
-
-
-
 
     }
 

@@ -1,5 +1,5 @@
 <div class="breadcrumb-header">
-    <div class="breadcrumb-header-name" (click)="navigateTo('/')">
+    <!-- <div class="breadcrumb-header-name" (click)="navigateTo('/')">
         <button type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
                 <path
@@ -7,15 +7,15 @@
             </svg>
         </button>
         <span>Suppliers</span>
-    </div>
-    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggle_left_slide_model()"> Add
-        Supplier</button>
+    </div> -->
+    <!-- <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggle_left_slide_model()"> Add
+        Supplier</button> -->
 </div>
 
 <div class="banner"></div>
 
 <div class="card-list">
-    @for(supplier of supplier_list; track $index) {
+    <!-- @for(supplier of supplier_list; track $index) {
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">{{supplier.data.name}}</h5>
@@ -28,7 +28,7 @@
             <p class="card-text">{{supplier.data.address}}</p>
         </div>
     </div>
-    }
+    } -->
 
 </div>
 
@@ -58,9 +58,9 @@
 
         <div class="mb-3">
             <label class="form-label">Product Category</label>
-            <app-multiselect [errorClass]="new_supplier_validate.productCategory"
-                [selectInputData]="getProductCategoryList()" [selected]="new_supplier.productCategory"
-                (onSelectChange)="updateProductCategory($event)" [errorMessage]="'Please Select Category'">
+            <app-multiselect
+                [inputData]="category_list" [(value)]="new_supplier.productCategory" 
+                [use_col_value]="'docId'" [use_col_text]="'pathString'">
 
             </app-multiselect>
         </div>

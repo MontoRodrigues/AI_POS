@@ -5,8 +5,11 @@ import { ISupplier } from '../../interface/isupplier';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Multiselect, inputData } from '../shared/multiselect/multiselect';
+import { dataCategory, DataService, dataSupplier } from '../../services/data-service';
+import { Subscription } from 'rxjs';
 
-declare var toggle_left_slide_model: Function;
+declare var showLoader: Function;
+declare var notify: Function;
 
 @Component({
   selector: 'app-supplier-list',
@@ -16,6 +19,48 @@ declare var toggle_left_slide_model: Function;
 })
 export class SupplierList {
 
+
+  private subscribe_supplier: Subscription | undefined;
+  supplierList: dataSupplier[] = [];
+
+  private subscribe_category: Subscription | undefined;
+  category_list: dataCategory[] = [];
+
+  constructor(private cdRef: ChangeDetectorRef, private router: Router, private firebaseService: FirebaseService, private dataService: DataService) {
+
+  }
+
+
+  ngOnInit() {
+    this.subscribe_supplier = this.dataService.supplier$.subscribe({
+      next: (value: dataSupplier[]) => {
+        console.log("supplier", value);
+        this.supplierList = value;
+        this.cdRef.detectChanges();
+      },
+      error: (e) => console.error(e),
+      complete: () => console.info('complete')
+    });
+
+    this.subscribe_category = this.dataService.category$.subscribe({
+      next: (value: dataCategory[]) => {
+        console.log("category", value);
+        this.category_list = value;
+        this.cdRef.detectChanges();
+      },
+      error: (e) => console.error(e),
+      complete: () => console.info('complete')
+    });
+
+    showLoader(false);
+  }
+
+
+  ngOnDestroy() {
+    if (this.subscribe_supplier) {
+      this.subscribe_supplier.unsubscribe();
+    }
+  }
 
   // new_supplier: ISupplier = {
   //   id: null,
@@ -32,7 +77,7 @@ export class SupplierList {
   new_supplier: ISupplier = {
     id: null,
     name: "Beauty India",
-    productCategory: ['Cosmetics', 'Jeweller'],
+    productCategory: ["SjiBshoi8O2AEhFnNmEu"],
     contactPerson: "John Dow",
     email: "name@email.com",
     phone: "1234567890",
@@ -64,151 +109,133 @@ export class SupplierList {
 
 
 
-  getProductCategoryList = computed(() => this.productCategoryList.map((item: any) => { return { "value": item, "text": item } }));
+  // getProductCategoryList = computed(() => this.productCategoryList.map((item: any) => { return { "value": item, "text": item } }));
   updateProductCategory(e: any[]) {
     this.new_supplier.productCategory = e;
     console.log(e);
   }
 
-  private CollectionName: string = "/suppliers";
-  private subscribe_supplier: any;
-  supplier_list: any[] = [];
-  constructor(private cdRef: ChangeDetectorRef, private router: Router, private firebaseService: FirebaseService) {
-    console.log("This Is Product Category");
-    console.log(this.getProductCategoryList())
-
-  }
-
-  private validateSupplier(): boolean {
-
-    let validate: boolean = true;
-
-    // Supplier Name
-    if (this.new_supplier.name == null || this.new_supplier.name == "") {
-      validate = false;
-      this.new_supplier_validate.name = "mb-3 error";
-    }
-    else {
-      this.new_supplier_validate.name = "mb-3";
-    }
-
-    // Product Category
-    if (this.new_supplier.productCategory.length == 0) {
-      validate = false;
-      this.new_supplier_validate.productCategory = true;
-    }
-    else {
-      this.new_supplier_validate.productCategory = false;
-    }
-
-    // contactPerson
-    if (this.new_supplier.contactPerson == null || this.new_supplier.contactPerson == "") {
-      validate = false;
-      this.new_supplier_validate.contactPerson = "mb-3 error";
-    }
-    else {
-      this.new_supplier_validate.contactPerson = "mb-3";
-    }
-
-
-    // email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!this.new_supplier.email || !emailRegex.test(this.new_supplier.email)) {
-      validate = false;
-      this.new_supplier_validate.email = "mb-3 error";
-    } else {
-      this.new_supplier_validate.email = "mb-3";
-    }
-
-
-    // phone
-    const phoneRegex = /^\d{10}$/;
-    if (!this.new_supplier.phone || !phoneRegex.test(this.new_supplier.phone)) {
-      validate = false;
-      this.new_supplier_validate.phone = "mb-3 error";
-    } else {
-      this.new_supplier_validate.phone = "mb-3";
-    }
-
-    // address
-    if (!this.new_supplier.address || this.new_supplier.address == "") {
-      validate = false;
-      this.new_supplier_validate.address = "mb-3 error";
-    } else {
-      this.new_supplier_validate.address = "mb-3";
-    }
-
-    // location
-    if (!this.new_supplier.location || this.new_supplier.location == "") {
-      validate = false;
-      this.new_supplier_validate.location = "mb-3 error";
-    } else {
-      this.new_supplier_validate.location = "mb-3";
-    }
-
-    // businessDescription
-    if (!this.new_supplier.businessDescription || this.new_supplier.businessDescription == "") {
-      validate = false;
-      this.new_supplier_validate.businessDescription = "mb-3 error";
-    } else {
-      this.new_supplier_validate.businessDescription = "mb-3";
-    }
 
 
 
-    return validate;
-  }
 
-  async addSupplier() {
-    console.log("Validating");
+
+  // private validateSupplier(): boolean {
+
+  //   let validate: boolean = true;
+
+  //   // Supplier Name
+  //   if (this.new_supplier.name == null || this.new_supplier.name == "") {
+  //     validate = false;
+  //     this.new_supplier_validate.name = "mb-3 error";
+  //   }
+  //   else {
+  //     this.new_supplier_validate.name = "mb-3";
+  //   }
+
+  //   // Product Category
+  //   if (this.new_supplier.productCategory.length == 0) {
+  //     validate = false;
+  //     this.new_supplier_validate.productCategory = true;
+  //   }
+  //   else {
+  //     this.new_supplier_validate.productCategory = false;
+  //   }
+
+  //   // contactPerson
+  //   if (this.new_supplier.contactPerson == null || this.new_supplier.contactPerson == "") {
+  //     validate = false;
+  //     this.new_supplier_validate.contactPerson = "mb-3 error";
+  //   }
+  //   else {
+  //     this.new_supplier_validate.contactPerson = "mb-3";
+  //   }
+
+
+  //   // email
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!this.new_supplier.email || !emailRegex.test(this.new_supplier.email)) {
+  //     validate = false;
+  //     this.new_supplier_validate.email = "mb-3 error";
+  //   } else {
+  //     this.new_supplier_validate.email = "mb-3";
+  //   }
+
+
+  //   // phone
+  //   const phoneRegex = /^\d{10}$/;
+  //   if (!this.new_supplier.phone || !phoneRegex.test(this.new_supplier.phone)) {
+  //     validate = false;
+  //     this.new_supplier_validate.phone = "mb-3 error";
+  //   } else {
+  //     this.new_supplier_validate.phone = "mb-3";
+  //   }
+
+  //   // address
+  //   if (!this.new_supplier.address || this.new_supplier.address == "") {
+  //     validate = false;
+  //     this.new_supplier_validate.address = "mb-3 error";
+  //   } else {
+  //     this.new_supplier_validate.address = "mb-3";
+  //   }
+
+  //   // location
+  //   if (!this.new_supplier.location || this.new_supplier.location == "") {
+  //     validate = false;
+  //     this.new_supplier_validate.location = "mb-3 error";
+  //   } else {
+  //     this.new_supplier_validate.location = "mb-3";
+  //   }
+
+  //   // businessDescription
+  //   if (!this.new_supplier.businessDescription || this.new_supplier.businessDescription == "") {
+  //     validate = false;
+  //     this.new_supplier_validate.businessDescription = "mb-3 error";
+  //   } else {
+  //     this.new_supplier_validate.businessDescription = "mb-3";
+  //   }
+
+
+
+  //   return validate;
+  // }
+
+  addSupplier() {
     console.log(this.new_supplier);
-    console.log(this.new_supplier_validate);
-
-    if (this.validateSupplier()) {
-      // add Supplier
-      toggle_left_slide_model();
-      this.new_supplier.id = self.crypto.randomUUID();
-      await this.firebaseService.addDocument(this.CollectionName, this.new_supplier);
-
-      // clear New Supplier 
-      this.new_supplier = {
-        id: null,
-        name: null,
-        productCategory: [],
-        contactPerson: null,
-        email: null,
-        phone: null,
-        address: null,
-        location: null,
-        businessDescription: null
-      };
-
-    }
   }
+  // async addSupplier() {
+  //   console.log("Validating");
+  //   console.log(this.new_supplier);
+  //   console.log(this.new_supplier_validate);
 
-  navigateTo(path: string) {
-    // this.router.navigate(['/dashboard']);
-    this.router.navigate([path]);
-  }
+  //   if (this.validateSupplier()) {
+  //     // add Supplier
+  //     toggle_left_slide_model();
+  //     this.new_supplier.id = self.crypto.randomUUID();
+  //     await this.firebaseService.addDocument(this.CollectionName, this.new_supplier);
 
-  ngOnInit() {
-    this.subscribe_supplier = this.firebaseService.subscribeToCollection(this.CollectionName, (snapshot) => {
-      this.supplier_list = [];
-      let p: any = []
-      snapshot.forEach(doc => {
-        console.log(doc);
-        p.push({ docId: doc.id, data: doc.data() });
-      });
-      this.supplier_list = p;
-      console.log(this.supplier_list);
-      this.cdRef.detectChanges()
-    });
-  }
+  //     // clear New Supplier 
+  //     this.new_supplier = {
+  //       id: null,
+  //       name: null,
+  //       productCategory: [],
+  //       contactPerson: null,
+  //       email: null,
+  //       phone: null,
+  //       address: null,
+  //       location: null,
+  //       businessDescription: null
+  //     };
+
+  //   }
+  // }
+
+  // navigateTo(path: string) {
+  //   // this.router.navigate(['/dashboard']);
+  //   this.router.navigate([path]);
+  // }
 
 
-  ngOnDestroy() {
-    if (this.subscribe_supplier) {
-      this.subscribe_supplier();
-    }
-  }
+
+
 }

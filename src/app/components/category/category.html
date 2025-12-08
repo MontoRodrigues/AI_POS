@@ -1,4 +1,189 @@
-<div class="breadcrumb-header">
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
+
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Category Management
+            </h1>
+            <p class="text-gray-500 mt-1">Add Update categories</p>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                Add Category
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <!-- Category Name -->
+                <div class="md:col-span-6">
+                    <div class="form-div">
+                        <div [class]="new_category_validate.name">
+                            <label class="form-label">Category Name</label>
+                            <input type="text" class="form-control app-form-component" placeholder="Category Name"
+                                [(ngModel)]="new_category.name">
+                            <span class="error-message">Please enter Category name</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Category Id -->
+                <div class="md:col-span-6">
+                    <div class="form-div">
+                        <div [class]="new_category_validate.parentId">
+                            <label class="form-label">Parent Product Category</label>
+                            <app-select [inputData]="category_list_ddl" [(value)]=" parent_category_doc_id"
+                                [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                            </app-select>
+                            <span class="error-message">No Parent Category is selected and this entry would be treated
+                                as a root Category.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end"
+                style="align-items: center;     padding-top: 20px;">
+                <!-- Image -->
+                <div class="md:col-span-6">
+                    <div [class]="new_category_validate.imageUrl">
+                        <label class="form-label">Category Image</label>
+                        <app-image-control imageWidth="150" imageHeight="150"
+                            (imageReady)="onImageUpload($event)"></app-image-control>
+                        <span class="error-message">You have not Selected an Image. We will use a default image
+                            instead</span>
+                    </div>
+                </div>
+
+                <!-- Action Button (Full width on mobile, inline on tablet/desktop) -->
+                <div class="md:col-span-6">
+                    <button type="button" (click)="addCategory()"
+                        class="w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 transform hover:scale-[1.01] active:scale-100">
+                        Add Category
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 ">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Line Items</h2>
+            @if(category_list.length >0) {
+            <div class="sm:block shadow-md rounded-xl desktop-only">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                style="width: 118px;"></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category Name</th>
+                            <th
+                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Action</th>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @for(c of category_list; track $index) {
+                        <tr>
+                            <td class="px-6 whitespace-nowrap text-sm font-medium text-gray-900" style="width: 118px;">
+                                <img src="{{c.catImage?.downloadURL}}" style="height: 70px;">
+                            </td>
+                            <td>
+                                @if(c.edit) {
+                                <div>
+                                    <label class="form-label">Category Name</label>
+                                    <input type="text" class="form-control app-form-component"
+                                        placeholder="Category Name" [(ngModel)]="c.name">
+                                </div>
+                                    <!-- @if(c.level!="root"){ -->
+                                    <div>
+                                        <label class="form-label">Parent Product Category</label>
+                                        <app-select [inputData]="getUpdateData(c)" [(value)]="c.parentDocID"
+                                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                                        </app-select>
+                                    </div>
+                                    <!-- } -->
+                                }
+                                @if(!c.edit) {
+                                {{c.path.join("/")}}
+                                }
+
+                            </td>
+                            <td>
+                                @if(!c.edit) {
+                                <button (click)="deleteCategory(c.docId)"
+                                    class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    aria-label="Remove item">
+                                    <!-- Trash Icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+
+                                <button (click)="editCategory(c)"
+                                    class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    aria-label="Remove item">
+                                    <!-- Edit Icon -->
+                                    <svg _ngcontent-ng-c3991276113="" class="svg-inline--fa fa-pen-to-square" role="img"
+                                        viewBox="0 0 512 512">
+                                        <path fill="currentColor"
+                                            d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z">
+                                        </path>
+                                    </svg>
+                                </button>
+                                }
+                                @if(c.edit) {
+
+                                <button (click)="updateCategory(c)"
+                                    class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    aria-label="Remove item">
+                                    <!-- Save -->
+                                    <svg class="svg-inline--fa fa-pen-to-square" viewBox="0 0 32 32" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                            sketch:type="MSPage">
+                                            <g sketch:type="MSLayerGroup"
+                                                transform="translate(-152.000000, -515.000000)" fill="currentColor">
+                                                <path
+                                                    d="M171,525 C171.552,525 172,524.553 172,524 L172,520 C172,519.447 171.552,519 171,519 C170.448,519 170,519.447 170,520 L170,524 C170,524.553 170.448,525 171,525 L171,525 Z M182,543 C182,544.104 181.104,545 180,545 L156,545 C154.896,545 154,544.104 154,543 L154,519 C154,517.896 154.896,517 156,517 L158,517 L158,527 C158,528.104 158.896,529 160,529 L176,529 C177.104,529 178,528.104 178,527 L178,517 L180,517 C181.104,517 182,517.896 182,519 L182,543 L182,543 Z M160,517 L176,517 L176,526 C176,526.553 175.552,527 175,527 L161,527 C160.448,527 160,526.553 160,526 L160,517 L160,517 Z M180,515 L156,515 C153.791,515 152,516.791 152,519 L152,543 C152,545.209 153.791,547 156,547 L180,547 C182.209,547 184,545.209 184,543 L184,519 C184,516.791 182.209,515 180,515 L180,515 Z"
+                                                    sketch:type="MSShapeGroup">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </button>
+
+                                <button (click)="cancelCategory(c)"
+                                    class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    aria-label="Remove item">
+                                    <!-- Cancel -->
+
+                                    <svg class="svg-inline--fa fa-pen-to-square" fill="currentColor" viewBox="0 0 32 32"
+                                        version="1.1">
+                                        <path
+                                            d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z" />
+                                    </svg>
+                                </button>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </section>
+    </div>
+
+</div>
+
+
+
+<!-- <div class="breadcrumb-header">
     <div class="breadcrumb-header-name" (click)="navigateTo('/')">
         <button type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
@@ -10,13 +195,11 @@
     </div>
     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggle_left_slide_model()"> Add
         Category</button>
-</div>
+</div> -->
 
-<div class="banner">
 
-</div>
 
-<div class="card-list">
+<!-- <div class="card-list">
     @for(category of category_list; track $index) {
     <div class="card">
         <img src="{{category.data.catImage.downloadURL}}" class="card-img-top" alt="...">
@@ -27,9 +210,9 @@
     </div>
     }
 
-</div>
+</div> -->
 
-
+<!-- 
 <div class="left-slide-model">
 
     <div class="breadcrumb-header">
@@ -48,34 +231,23 @@
 
         <div [class]="new_category_validate.name">
             <label class="form-label">Category Name</label>
-            <input type="text" class="form-control app-form-component" placeholder="Category Name" [(ngModel)]="new_category.name" >
+            <input type="text" class="form-control app-form-component" placeholder="Category Name"
+                [(ngModel)]="new_category.name">
             <span class="error-message">Please enter Category name</span>
         </div>
 
 
         <div class="mb-3">
-            
-            <label class="form-label">Parent Product Category</label>
-            <!-- <app-select 
-            [selectInputData]="categoryDDLList"
-            [errorMessage]="'Please Select a Parent Category. If This is the root category then don not select any category'"
-            [errorClass]="this.new_category_validate.parentId"
-            [selected]="parent_doc_id"
-            (onSelectChange)="getParentProductCategory($event)">
 
-            </app-select> -->
+            <label class="form-label">Parent Product Category</label>
+
+            <app-select [inputData]="category_list" [(value)]="category_doc_id" [use_col_value]="'docId'"
+                [use_col_text]="'pathString'">
+            </app-select>
+
         </div>
 
-        <!-- <div [class]="new_category_validate.parentId">
-            <label class="form-label">Product Category</label>
-            <select class="form-select" [(ngModel)]="parent_id">
-                <option value="none">None</option>
-                @for(cl of category_list; track cl.docId) {
-                <option value="{{cl.docId}}">{{cl.docId}}</option>
-                }
-            </select>
-            <span class="error-message">You have not Selected a Parent. This will make this category as Level 1</span>
-        </div> -->
+
 
         <div [class]="new_category_validate.imageUrl">
             <label class="form-label">Category Image</label>
@@ -90,5 +262,4 @@
 
     </div>
 
-</div>
-
+</div> -->
