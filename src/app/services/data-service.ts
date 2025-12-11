@@ -83,6 +83,15 @@ export interface dataSupplier {
   location: string | null;
   businessDescription: string | null;
   docId: string;
+  edit?: boolean;
+  edit_productCategory?: string[] | null;
+  edit_name?: string | null;
+  edit_address?: string;
+  edit_phone?: number | null;
+  edit_email?: string | null;
+  edit_contactPerson?: string | null;
+  edit_location?: string | null;
+  edit_businessDescription?: string | null;
 }
 
 export interface dataBrand {
@@ -103,6 +112,10 @@ export interface dataUOM {
   measure: string;
   docId: string;
   showText: string;
+  edit?: boolean;
+  edit_type?: string;
+  edit_abbr?: string;
+  edit_measure?: string;
 }
 
 // purchase 
@@ -160,7 +173,12 @@ export interface dataInventory {
   productDocId: string | null;
   sale: number;
   returns: number;
+  inventoryAdjustment: number;
   currentInventory: number;
+  edit?: boolean;
+  editInventoryAdjustment?: number | null;
+  editSellingPrice?: number | null;
+  editMRP?: number | null;
   MRP?: number | null; // remove optional for production
 }
 
@@ -253,8 +271,13 @@ export class DataService {
     // subscribe to firebase UOM Collection
     this.fb_subscribe_uom = this.firebaseService.subscribeToCollection(defaultConfig.collections.uom.name, (snapshot) => {
       let p = this.getDataFromCollection(snapshot);
-      for (let x = 0, l = p.length; x < l; x++)
+      for (let x = 0, l = p.length; x < l; x++) {
         p[x]["showText"] = p[x].type + ":" + p[x].measure;
+        p[x]["edit"] = false;
+        p[x]["edit_type"] = null;
+        p[x]["edit_abbr"] = null;
+        p[x]["edit_measure"] = null;
+      }
       this._uom.next(p);
     }, [orderBy('type')]);
 
@@ -273,12 +296,32 @@ export class DataService {
     // subscribe to firebase Supplier Collection
     this.fb_subscribe_suppler = this.firebaseService.subscribeToCollection(defaultConfig.collections.suppliers.name, (snapshot) => {
       let p = this.getDataFromCollection(snapshot);
+      for (let x = 0, l = p.length; x < l; x++) {
+        p[x]["edit"] = false;
+        p[x]["edit_productCategory"] = null;
+        p[x]["edit_name"] = null;
+        p[x]["edit_address"] = null;
+        p[x]["edit_phone"] = null;
+        p[x]["edit_email"] = null;
+        p[x]["edit_contactPerson"] = null;
+        p[x]["edit_location"] = null;
+        p[x]["edit_businessDescription"] = null;
+      }
+
       this._suppler.next(p);
     }, [orderBy('name')]);
 
     // subscribe to firebase Products Collection
     this.fb_subscribe_product = this.firebaseService.subscribeToCollection(defaultConfig.collections.products.name, (snapshot) => {
       let p = this.getDataFromCollection(snapshot);
+      for (let x = 0, l = p.length; x < l; x++) {
+        if (p[x]["sale"] != null) {
+          p[x]["sale"].validFrom = p[x]["sale"].validFrom != null ? new Date(p[x]["sale"].validFrom.seconds * 1000 + p[x]["sale"].validFrom.nanoseconds / 1000000) : null;
+          p[x]["sale"].validTill = p[x]["sale"].validTill != null ? new Date(p[x]["sale"].validTill.seconds * 1000 + p[x]["sale"].validTill.nanoseconds / 1000000) : null;
+        }
+      }
+
+
       this._product.next(p);
       this.checkDataReady();
     }, [orderBy('name')]);
@@ -286,7 +329,7 @@ export class DataService {
     // subscribe to firebase category Collection
     this.fb_subscribe_category = this.firebaseService.subscribeToCollection(defaultConfig.collections.category.name, (snapshot) => {
       let p = this.getDataFromCollection(snapshot);
-      for (let x = 0, l = p.length; x < l; x++){
+      for (let x = 0, l = p.length; x < l; x++) {
         p[x]["editName"] = p[x].name;
         p[x]["editParentDocID"] = p[x].parentDocID;
         p[x]["edit"] = false;
@@ -318,7 +361,7 @@ export class DataService {
     if (d.length > 0) {
       for (let i = 0; i < d[0].purchase.length; i++) {
         d[0].purchase[i]["editPurchasePrice"] = null;
-         d[0].purchase[i]["editMRP"] = null;
+        d[0].purchase[i]["editMRP"] = null;
         d[0].purchase[i]["editQuantity"] = null;
         d[0].purchase[i]["edit"] = false;
       }
@@ -336,7 +379,7 @@ export class DataService {
         d[0].purchase[i]["sellingPrice"] = null;
         d[0].purchase[i]["latestInventory"] = null;
         d[0].purchase[i]["editPurchasePrice"] = null;
-         d[0].purchase[i]["editMRP"] = null;
+        d[0].purchase[i]["editMRP"] = null;
         d[0].purchase[i]["editQuantity"] = null;
         d[0].purchase[i]["edit"] = false;
         d[0].purchase[i]["new_prod_value"] = null;
@@ -432,7 +475,7 @@ export class DataService {
       return false;
     });
 
-   console.log("filtered Products", p);
+    console.log("filtered Products", p);
     if (p.length > 0) {
 
       for (let i = 0; i < p.length; i++) {
@@ -445,7 +488,7 @@ export class DataService {
     return p;
   }
 
-  get_products_list(){
+  get_products_list() {
     let p = this._product.value;
     if (p.length > 0) {
 
@@ -458,6 +501,34 @@ export class DataService {
     return p;
   }
 
+  get_product_by_docId(docId: string | null) {
+    let d: any = JSON.parse(JSON.stringify(this._product.value.filter(item => item.docId == docId)));
+
+    if (d.length > 0) {
+      let i = this._inventory.value.filter(item => item.productDocId == d[0].docId);
+      if (i.length > 0) {
+        for (let x = 0; x < i.length; x++) {
+          if(!i[x].hasOwnProperty('inventoryAdjustment'))
+            i[x]['inventoryAdjustment'] = 0;
+          i[x]['edit'] = false;
+          i[x]['editInventoryAdjustment'] = null;
+          i[x]['editSellingPrice'] = null;
+          i[x]['editMRP'] = null;
+        }
+
+        i = i.sort((a: any, b: any) => {
+          return b.inventoryDate - a.inventoryDate;
+        })
+      }
+      d[0]["inventory"] = this._inventory.value.filter(item => item.productDocId == d[0].docId)
+      d[0]["inventory"] = d[0]["inventory"]?.sort((a: any, b: any) => b.inventoryDate - a.inventoryDate);
+
+      return d[0];
+    }
+    else
+      return null;
+
+  }
   ngOnInit() {
   }
 

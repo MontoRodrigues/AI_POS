@@ -137,7 +137,9 @@ export class ProductAdd {
     productDocId: null,
     sale: 0,
     returns: 0,
+    inventoryAdjustment: 0,
     currentInventory: 0,
+  
     MRP: null
   };
 
@@ -504,6 +506,8 @@ export class ProductAdd {
   // add product
   async addNewProduct() {
     console.log("We are here");
+
+    console.log("new sales", this.newProduct_Sale);
     if (this.validateForm()) {
       showLoader();
 
@@ -645,6 +649,7 @@ export class ProductAdd {
         productDocId: null,
         sale: 0,
         returns: 0,
+        inventoryAdjustment: 0,
         currentInventory: 0,
         MRP: 0
       };
@@ -681,5 +686,7 @@ export class ProductAdd {
     }
 
   }
+
+
 
 }

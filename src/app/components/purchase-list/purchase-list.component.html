@@ -90,105 +90,124 @@
     </div> -->
 
         <!-- Purchase List -->
-          <section class="mb-8 ">
+        <section class="mb-8 ">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Purchase List</h2>
 
 
             <div class="sm:block overflow-x-auto shadow-md rounded-xl">
-   
-                   <table class="table table-striped"
-                                        style="width: 100%; font-size:13px; line-height: 13px;">
 
-                                        <colgroup>
-                                            <col class="chk">
-                                            <col class="date">
-                                            <col>
-                                            <!-- <col> -->
-                                            <col>
-                                            <col class="action">
+                <table class="table table-striped" style="width: 100%; font-size:13px; line-height: 13px;">
 
-                                        </colgroup>
+                    <colgroup>
+                        <col class="chk">
+                        <col class="date">
+                        <col>
+                        <!-- <col> -->
+                        <col>
+                        <col class="action">
 
-                                        <thead class="border-top">
-                                            <tr>
-                                                <th>
-                                                    <input class="form-check-input" type="checkbox">
-                                                </th>
-                                                <th>
-                                                    <span class="dt-column-title" role="button">Date</span>
-                                                    <span class="dt-column-order"></span>
-                                                </th>
-                                                <th>
-                                                    <span>Supplier</span>
-                                                    <span class="dt-column-order"></span>
-                                                </th>
-                                                <!-- <th>
+                    </colgroup>
+
+                    <thead class="border-top">
+                        <tr>
+                            <th>
+                                <input class="form-check-input" type="checkbox">
+                            </th>
+                            <th>
+                                <span class="dt-column-title" role="button">Date</span>
+                                <span class="dt-column-order"></span>
+                            </th>
+                            <th>
+                                <span>Supplier</span>
+                                <span class="dt-column-order"></span>
+                            </th>
+                            <!-- <th>
                                                 <span>Created By</span>
                                                 <span class="dt-column-order"></span>
                                             </th> -->
-                                                <th>
-                                                    <span>Status</span>
-                                                    <span class="dt-column-order"></span>
-                                                </th>
+                            <th>
+                                <span>Status</span>
+                                <span class="dt-column-order"></span>
+                            </th>
 
-                                                <th>
-                                                    <span class="dt-column-title">Actions</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for(pur of purchaseList; track $index) {
-                                            <tr>
-                                                <td>
-                                                    <input class="form-check-input" type="checkbox"
-                                                        [(ngModel)]="pur.selected">
-                                                </td>
-                                                <td>
-                                                    {{pur.purchaseDate | date:'dd MMM yy'}}
-                                                </td>
-                                                <td>
-                                                    <span class="sub-value">{{pur.supplier.name}}</span>
-                                                    <span class="small">{{pur.createdBy}}</span>
-                                                </td>
-                                                <!-- <td>
+                            <th>
+                                <span class="dt-column-title">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(pur of purchaseList; track $index) {
+                        <tr>
+                            <td>
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="pur.selected">
+                            </td>
+                            <td>
+                                {{pur.purchaseDate | date:'dd MMM yy'}}
+                            </td>
+                            <td>
+                                <span class="sub-value">{{pur.supplier.name}}</span>
+                                <span class="small">{{pur.createdBy}}</span>
+                            </td>
+                            <!-- <td>
                                                 {{pur.createdBy}}
                                             </td> -->
-                                                <td>
-                                                    {{pur.status}}
-                                                </td>
-                                                <td>
-                                                    @if(pur.status=="new" || pur.status=="reviewed"){
-                                                    <button type="button" class=" text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" title="Delete Purchase"
-                                                        style="padding: 2px; margin-right: 5px;">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </button>
-                                                    }
+                            <td>
+                                {{pur.status}}
+                            </td>
+                            <td>
+                                <div class="flex space-x-2" style="justify-content: flex-end;">
+                                    @if(pur.status=="new"){
 
-                                                    @if(pur.status=="new"){
-                                                    <a class=" text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" style="padding: 2px;" title="Add New Purchase"
-                                                        routerLink="/purchase/add_purchase/{{pur.docId}}">
-                                                        <i class="fa-solid fa-square-plus"></i>
-                                                    </a>
-                                                    }
+                                    <button type="button" style="padding: 10px;" (click)="deletePurchase(pur)"
+                                        class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
 
-                                                    @if(pur.status=="reviewed"){
-                                                    <a class="text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0" style="padding: 2px;"
-                                                        title="Add Purchase to Inventory"
-                                                        routerLink="/purchase/purchase_inventory/{{pur.docId}}">
-                                                       <i class="fa-solid fa-rectangle-list"></i>
-                                                        
-                                                    </a>
-                                                    }
-                                                </td>
-                                            </tr>
-                                            }
+                                    <!-- <button type="button"
+                                    class=" text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    title="Delete Purchase" style="padding: 2px; margin-right: 5px;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button> -->
+                                    }
+
+                                    @if(pur.status=="new"){
+
+                                    <a type="button" style="padding: 10px;" class="btn btn-sm btn-outline-secondary"
+                                        routerLink="/purchase/add_purchase/{{pur.docId}}" title="Add New Purchase">
+                                        <i class="fa-solid fa-square-plus"></i>
+                                    </a>
+
+                                    <!-- <a class=" text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    style="padding: 2px;" title="Add New Purchase"
+                                    routerLink="/purchase/add_purchase/{{pur.docId}}">
+                                    <i class="fa-solid fa-square-plus"></i>
+                                </a> -->
+                                    }
+
+                                    @if(pur.status=="reviewed"){
+
+                                    <a type="button" style="padding: 10px;" class="btn btn-sm btn-outline-secondary"
+                                        routerLink="/purchase/purchase_inventory/{{pur.docId}}"
+                                        title="Add New Purchase">
+                                        <i class="fa-solid fa-rectangle-list"></i>
+                                    </a>
+
+                                    <!-- <a class="text-slate-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
+                                    style="padding: 2px;" title="Add Purchase to Inventory"
+                                    routerLink="/purchase/purchase_inventory/{{pur.docId}}">
+                                    <i class="fa-solid fa-rectangle-list"></i>
+
+                                </a> -->
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        }
 
 
-                                        </tbody>
-                                        <tfoot></tfoot>
-                                    </table>
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
             </div>
-          </section>
+        </section>
 
 
         <!-- <div class="form-card card open">
@@ -298,6 +317,6 @@
             </div>
         </div> -->
 
-        
+
     </div>
 </div>

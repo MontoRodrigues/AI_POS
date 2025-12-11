@@ -56,6 +56,7 @@ export interface Iinventory {
     productDocId: string | null;
     sale: number;
     returns: number;
+    inventoryAdjustment: number;
     currentInventory: number | null;
     MRP:number | null;
 }

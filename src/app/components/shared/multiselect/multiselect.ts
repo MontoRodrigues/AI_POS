@@ -41,6 +41,7 @@ export class Multiselect {
   OnSelectedChange() {
     if (this.value() != null && this.value().length > 0 && this.inputData().length > 0) {
       let opt = this.value();
+      this.selected_values=[];
       for (let i in opt) {
         {
           let optVal = this.inputData().filter((item: any) => item[this.use_col_value()] == opt[i]);

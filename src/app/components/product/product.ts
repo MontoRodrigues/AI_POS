@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { ImageCapture } from '../shared/delete_this/image-capture/image-capture';
 import { Breadcrumb } from "../shared/breadcrumb/breadcrumb";
@@ -14,7 +14,7 @@ declare var showLoader: Function;
 
 @Component({
   selector: 'app-product',
-  imports: [Breadcrumb],
+  imports: [Breadcrumb, RouterLink],
   //imports: [ImageCapture, MatDialogModule, FormsModule, CommonModule, Select, TextDropdown, TextAddTags, TextAddAttr, Breadcrumb],
   templateUrl: './product.html',
   styleUrl: './product.css'
@@ -92,6 +92,7 @@ export class Product {
   }
 
   navigateTo(path: string) {
+    console.log("navigate to ", path);
     this.router.navigate([path]);
   }
 

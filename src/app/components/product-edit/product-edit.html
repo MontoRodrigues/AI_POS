@@ -1,1 +1,442 @@
-<p>product-edit works!</p>
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+    @if(product==null){
+    <h4 class="page-header"><a href="/product">Go back</a></h4>
+    }
+
+
+    @if(product!=null){
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
+
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Edit Product - {{product.name}} ({{product.barcode}})
+            </h1>
+            <p class="text-gray-500 mt-1">Edit Product details</p>
+        </header>
+
+
+        <!-- Product Information -->
+        <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-circle-info"></i>
+                    Product Information </span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+            <div class="form-card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <!-- product name -->
+                            <div [class]="validateNewProduct.name">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" class="form-control app-form-component" placeholder="Product Name"
+                                    [(ngModel)]="product.name">
+                                <div class="form-text">
+                                    Name of the product as mentioned on the packing
+                                </div>
+                                <span class="error-message">Please enter Category name</span>
+                            </div>
+
+                            <!-- product bar code -->
+                            <div [class]="validateNewProduct.barcode">
+                                <label class="form-label">Scan or Type Barcode</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Barcode"
+                                        [(ngModel)]="product.barcode">
+                                    <button class="btn btn-outline-secondary" type="button" (click)="startScanner()">
+                                        <i class="fa-solid fa-qrcode"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    You can enter the bar code manually or scan it by clicking the scan button.
+                                </div>
+                                <span class="error-message">Please enter or scan Bar code</span>
+                            </div>
+
+                            <!-- product Category -->
+                            <div [class]="validateNewProduct.categories">
+                                <label class="form-label">Select Product Category</label>
+
+                                <app-select [inputData]="category_list" [(value)]="category_doc_id"
+                                    [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                                </app-select>
+
+                                <div class="form-text">
+                                    Select the one Lowest level of category
+                                </div>
+                                <span class="error-message">Please Select a Category</span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <!-- SKU -->
+                            <div [class]="validateNewProduct.sku">
+                                <label class="form-label">Product SKU</label>
+                                <input type="text" class="form-control app-form-component" placeholder="Product SKU"
+                                    [(ngModel)]="product.sku">
+                                <div class="form-text">
+                                    SKU is used for stock keeping and is used in the URL for the product
+                                </div>
+                                <span class="error-message">Please enter Category name</span>
+                            </div>
+
+                            <!-- Brand -->
+                            <div [class]="validateNewProduct.brand">
+                                <label class="form-label">Brand Name</label>
+                                <app-text-dropdown [placeholder]="'Add a Brand'" [(value)]="product.brand"
+                                    [use_col]="'name'" [InputData]="brandList"></app-text-dropdown>
+                                <div class="form-text">
+                                    Please select a brand from the list or add a new
+                                </div>
+                                <span class="error-message">Please enter or select Brand Name </span>
+                            </div>
+
+                            <!-- UOM -->
+                            <div [class]="validateNewProduct.uom">
+                                <label class="form-label">Select Product UOM</label>
+
+                                <app-select [inputData]="uomList" [(value)]="product.uom" [use_col_value]="'abbr'"
+                                    [use_col_text]="'showText'">
+                                </app-select>
+
+                                <div class="form-text">
+                                    Select one Unit of Measure for the Product
+                                </div>
+                                <span class="error-message">Please Select a UOM</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Image -->
+        <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-images"></i>
+                    Image </span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- Image -->
+                                    <div class="form-div">
+                                        <label class="form-label">Add Product Image</label>
+
+                                        <div class="image-container">
+                                            <app-image-upload imageWidth="400" imageHeight="400"
+                                                (imageReady)="onImageSelected($event)"></app-image-upload>
+
+                                            @if(imageList.length==0) {
+                                            <div class="image">
+                                                <img src="{{conf.default_images.product.downloadURL}}">
+                                            </div>
+                                            }
+
+                                            @for(img of imageList; track $index) {
+                                            <div class="image">
+                                                <div class="close" (click)="deleteImage($index)">X</div>
+                                                <img src="{{img.imageUrl}}">
+                                            </div>
+                                            }
+
+                                        </div>
+                                        @if(imageList.length==0) {
+                                        <div class="form-text" style="color: #dc3545;"> If No Image is Selected default
+                                            image will be added </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- properties -->
+        <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i
+                        class="fa-solid fa-hexagon-nodes"></i>
+                    Product Properties </span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+
+                                    <!-- Attributes -->
+                                    <div [class]="validateNewProduct.attributes">
+                                        <label class="form-label">Product Attributes</label>
+
+                                        <app-text-add-attr [(attributes)]="product.attributes"
+                                            [attr_master]="attrList"></app-text-add-attr>
+
+
+                                        <span class="error-message">Please add atlest one attribute</span>
+                                    </div>
+
+                                    <!-- search Tags -->
+                                    <div [class]="validateNewProduct.searchTokens">
+                                        <label class="form-label">Product Attributes</label>
+                                        <app-text-add-tags [(tags)]="product.searchTokens"></app-text-add-tags>
+                                        <span class="error-message">Please add ablest one Search Tag</span>
+                                    </div>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Sale -->
+        <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-percent"></i>
+                    Sale Discount </span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+
+            <div class="form-card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <!-- Discount -->
+                            <div [class]="validate_newProduct_Sale.discount">
+                                <label class="form-label">Discount %</label>
+                                <div class="form-text">
+                                    Please Select Discount %
+                                </div>
+                                <div class="input-group flex-nowrap">
+                                    <input type="number" class="form-control app-form-component"
+                                        placeholder="Discount %" [(ngModel)]="newProduct_Sale.discount">
+                                    <span class="input-group-text">%</span>
+                                </div>
+
+
+
+                                <span class="error-message">Please add discount %. for the date range or remove the date
+                                    range</span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+
+
+                            <div [class]="validate_newProduct_Sale.validRange">
+                                <label class="form-label">Discount Validity Date</label>
+                                <div class="form-text">
+                                    Please Date Range MM/DD/YYYY – MM/DD/YYYY
+                                </div>
+                                <mat-form-field>
+                                    <!-- <mat-label>Enter a date range</mat-label> -->
+                                    <mat-date-range-input [rangePicker]="picker">
+                                        <input matStartDate placeholder="Start date"
+                                            [(ngModel)]="newProduct_Sale.validFrom">
+                                        <input matEndDate placeholder="End date"
+                                            [(ngModel)]="newProduct_Sale.validTill">
+                                    </mat-date-range-input>
+                                    <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                </mat-form-field>
+
+
+                                <span class="error-message">Please select valid date range for the Discount % or remove
+                                    the
+                                    discount</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <!-- Tax -->
+        <div class="form-card card open">
+            <div class="form-card-header" onclick="toggle_form_card(this)"><span><i class="fa-solid fa-dollar-sign"></i>
+                    Taxation </span>
+                <i class="fa-solid fa-angle-right animate"></i>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <!-- product TAX -->
+                                    <div class="form-div">
+                                        <label class="form-label">Product Tax Rate %</label>
+
+                                        <div class="input-group flex-nowrap">
+                                            <input type="number" class="form-control app-form-component"
+                                                placeholder="Product Tax Rate %" [(ngModel)]="product.taxRate">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+
+
+
+                                        <div class="form-text">
+                                            Please enter the Tax percentage for the product.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 1rem; display: flex; justify-content: flex-end;">
+            <button class="btn btn-primary" (click)="updateProduct()">Update Product</button>
+        </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10" style="margin-top: 20px;">
+
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Update Inventory for - {{product.name}} ({{product.barcode}})
+            </h1>
+            <p class="text-gray-500 mt-1">Manage Inventory</p>
+        </header>
+
+        <section class="mb-8 ">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Inventory List</h2>
+            <div class="sm:block shadow-md rounded-xl">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                purchasePrice</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                MRP</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                sellingPrice</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Initial Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Sales Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Return Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Inventory Adjustment Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Available Quantity</th>
+                            <th
+                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Action</th>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @for(inv of product.inventory; track $index) {
+                        @if(!inv.edit){
+                        <tr>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.inventoryDate | date}}
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.purchasePrice |
+                                number:'1.2-2'}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 132px;">{{inv.MRP | number:'1.2-2'}}
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 132px;">{{inv.sellingPrice |
+                                number:'1.2-2'}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.quantity}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.sale}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.returns}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 132px;">{{inv.inventoryAdjustment}}
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.currentInventory}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-center">
+                                <div style="display: flex; gap: 5px; justify-content: flex-end;">
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn-sm btn-outline-secondary" (click)="editInventoryClick(inv)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        @if(inv.edit){
+                        <tr>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.inventoryDate | date}}
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.purchasePrice |
+                                number:'1.2-2'}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 90px;">
+                                <input type="number" class="form-control app-form-component" placeholder="MRP" style="min-width: 90px;padding: 6px;"
+                                    [(ngModel)]="inv.MRP">
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 90px;">
+                                <input type="number" class="form-control app-form-component" placeholder="Selling Price" style="min-width: 90px;padding: 6px;"
+                                    [(ngModel)]="inv.sellingPrice">
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.quantity}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.sale}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.returns}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900" style="min-width: 90px;">
+                                <input type="number" class="form-control app-form-component" style="min-width: 90px;padding: 6px;"
+                                    placeholder="Inventory Adjustment" [(ngModel)]="inv.inventoryAdjustment">
+                            </td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900">{{inv.currentInventory}}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-center">
+                                <div style="display: flex; gap: 5px; justify-content: flex-end;">
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn-sm btn-outline-primary" (click)="updateInventory(inv)">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                    </button>
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn-sm btn-outline-danger" (click)="cancelEditInventory(inv)">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+    }
+
+</div>

@@ -155,11 +155,26 @@ export class PurchaseListComponent {
       this.cdRef.detectChanges();
       notify("success", "Purchase List added successfully. Redirecting to Add Purchase.", 15000);
       showLoader(false);
-      this.router.navigate(["/purchase/add_purchase/"+ doc.id]);
+      this.router.navigate(["/purchase/add_purchase/" + doc.id]);
 
 
 
     }
   }
+
+  async deletePurchase(purchase: dataPurchase) {
+    console.log("delete purchase", purchase);
+
+    const confirmDelete = confirm(`Are you sure you want to delete the purchase from supplier "${purchase.supplier.name}"? This action cannot be undone.`);
+    if (confirmDelete) {
+      showLoader(true);
+      await this.firebaseService.deleteDocument(defaultConfig.collections.purchase.name + "/" + purchase.docId);
+      this.cdRef.detectChanges();
+      notify("success", "Purchase deleted successfully");
+      showLoader(false);
+      
+    }
+  }
+
 
 }

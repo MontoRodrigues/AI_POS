@@ -72,7 +72,7 @@
         <section class="mb-8 ">
             <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Line Items</h2>
             @if(category_list.length >0) {
-            <div class="sm:block shadow-md rounded-xl desktop-only">
+            <div class="sm:block shadow-md rounded-xl">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-100">
                         <tr>
@@ -175,6 +175,9 @@
                     </tbody>
                 </table>
             </div>
+            }
+            @else{
+                <div  class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Categories added  yet. </div>
             }
         </section>
     </div>

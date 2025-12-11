@@ -1,116 +1,288 @@
-<div class="breadcrumb-header">
-    <!-- <div class="breadcrumb-header-name" (click)="navigateTo('/')">
-        <button type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
-                <path
-                    d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" />
-            </svg>
-        </button>
-        <span>Suppliers</span>
-    </div> -->
-    <!-- <button type="button" class="btn btn-outline-secondary btn-sm" onclick="toggle_left_slide_model()"> Add
-        Supplier</button> -->
-</div>
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
 
-<div class="banner"></div>
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
 
-<div class="card-list">
-    <!-- @for(supplier of supplier_list; track $index) {
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">{{supplier.data.name}}</h5>
-            <div class="badge-list">
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Suppliers
+                <span class="text-sm text-gray" style="display: block; font-weight: normal; font-size:12px">
+                    Manage your list of suppliers, including their contact information and product
+                    categories.
+                </span>
+            </h1>
+        </header>
 
-                @for(cat of supplier.data.productCategory; track $index) {
-                <span>{{cat}}</span>
-                }
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                Add Supplier
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <!-- Supplier Name -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.name">
+                        <label class="form-label">Supplier Name</label>
+                        <input type="text" class="form-control app-form-component" placeholder="Supplier Name"
+                            [(ngModel)]="new_supplier.name">
+                        <span class="error-message">Please enter Supplier name</span>
+                    </div>
+                </div>
+
+                <!-- Product Category -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.productCategory">
+                        <label class="form-label">Product Category</label>
+                        <app-multiselect [inputData]="category_list" [(value)]="new_supplier.productCategory"
+                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
+
+                        </app-multiselect>
+                        <span class="error-message">Please select product category</span>
+                    </div>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.contactPerson">
+                        <label class="form-label">Contact Person Name</label>
+                        <input type="text" class="form-control app-form-component" placeholder="Contact Person Name"
+                            [(ngModel)]="new_supplier.contactPerson">
+                        <span class="error-message">Please enter contact person name</span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.email">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control app-form-component" placeholder="name@example.com"
+                            [(ngModel)]="new_supplier.email">
+                        <span class="error-message">Please enter Supplier email</span>
+                    </div>
+                </div>
             </div>
-            <p class="card-text">{{supplier.data.address}}</p>
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+
+                <!-- Phone -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.phone">
+                        <label class="form-label">phone</label>
+                        <input type="number" class="form-control app-form-component" placeholder="10 digit phone number"
+                            [(ngModel)]="new_supplier.phone">
+                        <span class="error-message">Please enter Supplier Phone Number. Only use numbers and should be
+                            10
+                            digits</span>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.address">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control app-form-component" rows="3"
+                            [(ngModel)]="new_supplier.address"></textarea>
+                        <span class="error-message">Please enter Supplier address</span>
+                    </div>
+                </div>
+
+                <!-- Google Location Link -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.location">
+                        <label class="form-label">Google Location Link</label>
+                        <input type="text" class="form-control app-form-component" placeholder="google Location link"
+                            [(ngModel)]="new_supplier.location">
+                        <span class="error-message">Please copy location link from google maps</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.businessDescription">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control app-form-component" rows="3"
+                            [(ngModel)]="new_supplier.businessDescription"></textarea>
+                        <span class="error-message">Please enter Supplier description</span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <div class="md:col-span-3">
+                    <button type="submit" class="btn btn-primary mb-3" (click)="addSupplier()">Add Supplier</button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <section class="mb-8 ">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Supplier List</h2>
+            @if(category_list.length >0) {
+            <div class="sm:block shadow-md rounded-xl">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Supplier Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Contact</th>
+                            <th style="width: 100px;" class=" uppercase ">
+                                Action</th>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @for(supplier of supplier_list; track $index) {
+                        @if(!supplier.edit) {
+                        <tr>
+                            <td class="px-6 py-3">
+                                {{supplier.name}}
+                            </td>
+                            <td class="px-6 py-3">
+                                @for(cat of supplier.productCategory; track $index) {
+                                <span class="badge rounded-pill text-bg-secondary text-xs"
+                                    style="margin-right: 2px; margin-bottom: 5px; font-weight: normal;">{{get_categoryName(cat)}}</span>
+                                }
+                            </td>
+                            <td class="px-6 py-3">
+                                <span style="display: block;"
+                                    class="text-gray-900 text-">{{supplier.contactPerson}}</span>
+                                <span style="display: block;" class="text-gray-500 text-sm ">{{supplier.phone}}</span>
+                                <span style="display: block;" class="text-gray-500 text-xs ">{{supplier.email}}</span>
+                                <span style="display: block;" class="text-gray-500 text-xs ">{{supplier.address}}</span>
+                                <a style="display: block;" class=" text-xs " target="_blank"
+                                    href="{{supplier.location}}">{{supplier.location}}</a>
+                            </td>
+
+                            <td class="px-6 py-3" style="width: 100px;">
+                                <div class="flex justify-center space-x-2">
+                                    <button type="button" style="padding: 10px;" class="btn btn-sm btn-outline-secondary" (click)="editSupplierClick(supplier)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button type="button" style="padding: 10px;" class="btn btn-sm btn-outline-danger"
+                                        (click)="delete_supplier(supplier)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        @if(supplier.edit) {
+                            <tr>
+                                <td colspan="4" class="px-6 py-3">
+                                    This is edit mode for {{supplier.name}}. Edit form goes here.
+ <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <!-- Supplier Name -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.name">
+                        <label class="form-label">Supplier Name</label>
+                        <input type="text" class="form-control app-form-component" placeholder="Supplier Name"
+                            [(ngModel)]="supplier.name">
+                        <span class="error-message">Please enter Supplier name</span>
+                    </div>
+                </div>
+
+                <!-- Product Category -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.productCategory">
+                        <label class="form-label">Product Category</label>
+                        <app-multiselect [inputData]="category_list" [(value)]="supplier.productCategory"
+                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
+
+                        </app-multiselect>
+                        <span class="error-message">Please select product category</span>
+                    </div>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.contactPerson">
+                        <label class="form-label">Contact Person Name</label>
+                        <input type="text" class="form-control app-form-component" placeholder="Contact Person Name"
+                            [(ngModel)]="supplier.contactPerson">
+                        <span class="error-message">Please enter contact person name</span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.email">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control app-form-component" placeholder="name@example.com"
+                            [(ngModel)]="supplier.email">
+                        <span class="error-message">Please enter Supplier email</span>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+
+                <!-- Phone -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.phone">
+                        <label class="form-label">phone</label>
+                        <input type="number" class="form-control app-form-component" placeholder="10 digit phone number"
+                            [(ngModel)]="supplier.phone">
+                        <span class="error-message">Please enter Supplier Phone Number. Only use numbers and should be
+                            10
+                            digits</span>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.address">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control app-form-component" rows="3"
+                            [(ngModel)]="supplier.address"></textarea>
+                        <span class="error-message">Please enter Supplier address</span>
+                    </div>
+                </div>
+
+                <!-- Google Location Link -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.location">
+                        <label class="form-label">Google Location Link</label>
+                        <input type="text" class="form-control app-form-component" placeholder="google Location link"
+                            [(ngModel)]="supplier.location">
+                        <span class="error-message">Please copy location link from google maps</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-3">
+                    <div [class]="new_supplier_validate.businessDescription">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control app-form-component" rows="3"
+                            [(ngModel)]="supplier.businessDescription"></textarea>
+                        <span class="error-message">Please enter Supplier description</span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <div class="md:col-span-6">
+                    <button type="submit" class="btn btn-primary mb-3" (click)="updateSupplier(supplier)">Update Supplier</button>
+                
+                    <button type="submit" style="margin-left: 20px;" class="btn btn-danger mb-3" (click)="cancelUpdateSupplier(supplier)">Cancel</button>
+                </div>
+            </div>
+
+                                </td>
+                            </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+            @else{
+                <div class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Suppliers added  yet. </div>
+            }
+        </section>
+
+
     </div>
-    } -->
 
 </div>
 
-<div class="left-slide-model">
 
-    <div class="breadcrumb-header">
-        <div class="breadcrumb-header-name">
-            <button type="button" onclick="toggle_left_slide_model()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColors">
-                    <path
-                        d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" />
-                </svg>
-            </button>
-            <span>Add Suppliers</span>
-        </div>
-    </div>
-
-    <div class="model-body">
-
-        <div [class]="new_supplier_validate.name">
-            <label class="form-label">Supplier Name</label>
-            <input type="text" class="form-control app-form-component" placeholder="Supplier Name"
-                [(ngModel)]="new_supplier.name">
-            <span class="error-message">Please enter Supplier name</span>
-        </div>
-
-
-        <div class="mb-3">
-            <label class="form-label">Product Category</label>
-            <app-multiselect
-                [inputData]="category_list" [(value)]="new_supplier.productCategory" 
-                [use_col_value]="'docId'" [use_col_text]="'pathString'">
-
-            </app-multiselect>
-        </div>
-
-        <div [class]="new_supplier_validate.contactPerson">
-            <label class="form-label">Contact Person Name</label>
-            <input type="text" class="form-control app-form-component" placeholder="Contact Person Name"
-                [(ngModel)]="new_supplier.contactPerson">
-            <span class="error-message">Please enter contact person name</span>
-        </div>
-
-        <div [class]="new_supplier_validate.email">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control app-form-component" placeholder="name@example.com"
-                [(ngModel)]="new_supplier.email">
-            <span class="error-message">Please enter Supplier email</span>
-        </div>
-
-        <div [class]="new_supplier_validate.phone">
-            <label class="form-label">phone</label>
-            <input type="number" class="form-control app-form-component" placeholder="10 digit phone number"
-                [(ngModel)]="new_supplier.phone">
-            <span class="error-message">Please enter Supplier Phone Number. Only use numbers and should be 10
-                digits</span>
-        </div>
-
-        <div [class]="new_supplier_validate.address">
-            <label class="form-label">Address</label>
-            <textarea class="form-control app-form-component" rows="3" [(ngModel)]="new_supplier.address"></textarea>
-            <span class="error-message">Please enter Supplier address</span>
-        </div>
-
-        <div [class]="new_supplier_validate.location">
-            <label class="form-label">Google Location Link</label>
-            <input type="text" class="form-control app-form-component" placeholder="google Location link"
-                [(ngModel)]="new_supplier.location">
-            <span class="error-message">Please copy location link from google maps</span>
-        </div>
-
-        <div [class]="new_supplier_validate.businessDescription">
-            <label class="form-label">Description</label>
-            <textarea class="form-control app-form-component" rows="3"
-                [(ngModel)]="new_supplier.businessDescription"></textarea>
-            <span class="error-message">Please enter Supplier description</span>
-        </div>
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary mb-3" (click)="addSupplier()">Add Supplier</button>
-        </div>
-
-    </div>
-
-</div>

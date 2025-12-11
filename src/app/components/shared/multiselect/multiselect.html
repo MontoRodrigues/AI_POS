@@ -6,7 +6,7 @@
     <!-- <div class="error-message"> {{errorMessage()}}</div> -->
     <div class="selected-options">
          @for(selOpt of selected_values; track $index) {
-            <div class="selected-options-items" (click)="removeSelectOption($index)">{{selOpt.text}} <i class='bx  bx-minus-circle bx-sm'></i> </div>
+            <div class="selected-options-items truncate" (click)="removeSelectOption($index)">{{selOpt.text}} <i class='bx  bx-minus-circle bx-sm'></i> </div>
          }
     </div>
 

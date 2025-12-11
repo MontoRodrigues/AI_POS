@@ -5,7 +5,7 @@
         <!-- Added mb-4 for mobile spacing, hidden on sm and above -->
         <div class="mb-4 sm:mb-0">
             <h1 class="text-3xl font-extrabold text-gray-900">
-                Product Inventory
+                Products
             </h1>
             <p class="text-gray-500 mt-1">Manage product details and stock levels.</p>
         </div>
@@ -46,14 +46,10 @@
 
             <!-- Admin Actions -->
             <div class="flex space-x-3">
-                <button (click)="navigateTo('/products/edit')"
-                    class="w-1/2 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
-                    Edit
-                </button>
-                <button (click)="navigateTo('products/inventory')"
-                    class="w-1/2 py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
-                    Inventory
-                </button>
+                <a routerLink="/products/edit/{{p.docId}}" 
+                    class="btn btn-primary">
+                    View/Edit
+            </a>
                 <button (click)="delete_product(p)"
                     class="w-1/2 py-2 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition duration-150 text-sm transform hover:scale-[1.02] active:scale-100">
                     Delete

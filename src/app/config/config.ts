@@ -37,9 +37,15 @@ export const defaultConfig = {
             ]
         },
         {
-            text: "Suppliers", path: "/supplier"
+            text: "Master", subMenu: [
+                { text: "Suppliers", path: "/supplier" },
+                { text: "Category", path: "/category" },
+                { text: "UOM", path: "/uom" }
+
+            ]
         },
-        { text: "Category", path: "/category" }
+
+
     ],
     collections: {
         "brand": { name: "brand" },
