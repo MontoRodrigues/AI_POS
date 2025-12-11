@@ -26,10 +26,7 @@ export const defaultConfig = {
             text: "Products", subMenu: [
                 { text: "Products", path: "/products" },
                 { text: "Add Product", path: "/products/add_product" },
-                { text: "Inventory", path: "/products/inventory" }
-
-
-            ]
+             ]
         },
         {
             text: "Purchase", subMenu: [
