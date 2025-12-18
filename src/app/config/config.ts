@@ -37,7 +37,8 @@ export const defaultConfig = {
             text: "Master", subMenu: [
                 { text: "Suppliers", path: "/supplier" },
                 { text: "Category", path: "/category" },
-                { text: "UOM", path: "/uom" }
+                { text: "UOM", path: "/uom" },
+                { text: "Brand", path: "/brand" }
 
             ]
         },

@@ -1,0 +1,44 @@
+<div class="nav-top">
+    <div class="menu-toggle" onclick="toggle_side_menu()">
+        <!-- <i class='bx  bxs-menu'></i> -->
+
+        <i class="fa-solid fa-bars"></i>
+    </div>
+    <div class="nav-center">
+        <div class="search-box">
+            <i class='bx  bx-search'></i>
+            <input type="text" class="form-control" placeholder="Search [CTRL + K]">
+        </div>
+    </div>
+    <div class="nav-right">
+        <div class="notification">
+            <i class="fa-solid fa-bell"></i>
+            <span></span>
+        </div>
+
+        <div class="avatar-container">
+            <div class="avatar" onclick="open_user_menu(this)">
+                {{user_initial}}
+            </div>
+            <ul class="user-menu">
+                <li>
+                    <i class="fa-solid fa-user"></i> {{user.displayName}}
+                </li>
+                <li>
+                    <div class="divider"></div>
+                </li>
+                <li><i class="fa-solid fa-gear"></i> Settings</li>
+                <li><i class="fa-solid fa-circle-question"></i>FAQ</li>
+                <li>
+                    <div class="divider"></div>
+                </li>
+                <li><button type="button" class="btn btn-danger btn-sm" (click)="logout()">Logout</button></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div class="pos-container">
+    This is sparta
+</div>

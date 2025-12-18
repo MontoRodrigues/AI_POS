@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <app-breadcrumb></app-breadcrumb>
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-xl p-6 sm:p-10">
+
+        <!-- Header -->
+        <header class="mb-8 border-b">
+            <h1 class="text-2xl font-extrabold text-indigo-700">
+                Brand
+                <span class="text-sm text-gray" style="display: block; font-weight: normal; font-size:12px">
+                    Manage your list of Brands here.
+                </span>
+            </h1>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+                Add Brand
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end" style="align-items: flex-start;">
+                <!-- Supplier Name -->
+                <div class="md:col-span-3">
+                    <div [class]="validate_newBrand">
+                        <label class="form-label">Brand Name</label>
+                       <input type="text" class="form-control app-form-component" placeholder="Add Brand Name"
+                            [(ngModel)]="newBrand">
+                        <span class="error-message">Please enter Brand Name</span>
+                    </div>
+                </div>
+
+              
+
+
+                <div class="md:col-span-3"
+                    style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                    <button type="submit" class="btn btn-primary mb-3" (click)="addBrand()">Add Brand</button>
+                </div>
+
+
+            </div>
+
+        </section>
+
+        <section class="mb-8 ">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Brand List</h2>
+            @if(brandList.length >0) {
+            <div class="sm:block shadow-md rounded-xl">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Brand Name</th>
+                            <th style="width: 100px;" class=" uppercase ">
+                                Action</th>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @for(b of brandList; track $index) {
+                        @if(!b.edit) {
+                        <tr>
+                            <td class="px-6 py-3">
+                                {{b.name}}
+                            </td>
+                          
+
+              
+
+                            <td class="px-6 py-3" style="width: 100px;">
+                                <div class="flex justify-center space-x-2">
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn-sm btn-outline-secondary" (click)="editBrandClick(b)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <button type="button" style="padding: 10px;" class="btn btn-sm btn-outline-danger"
+                                        (click)="deleteBrand(b)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        @if(b.edit) {
+                        <tr>
+
+                            <td class="px-6 py-3">
+                                 <label class="form-label">Brand Name</label>
+                                <input type="text" class="form-control app-form-component" placeholder="Brand Name"
+                                    [(ngModel)]="b.name">
+                            </td>
+                            
+                            <td class="px-6 py-3" style="width: 100px;">
+                                <div class="flex justify-center space-x-2">
+                                    <button type="button" style="padding: 10px;" (click)="updateBrand(b)"
+                                        class="btn btn-sm  btn-outline-success">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn btn-sm btn-outline-danger" (click)="cancelEditBrand(b)"><i
+                                            class="fa-solid fa-xmark"></i></button>
+                                </div>
+                        </tr>
+                        }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+            @else{
+            <div class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No UOMs added yet.
+            </div>
+            }
+        </section>
+
+    </div>
+
+</div>

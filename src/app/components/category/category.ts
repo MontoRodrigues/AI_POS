@@ -15,8 +15,6 @@ import { dataCategory, DataService } from '../../services/data-service';
 const conf = defaultConfig;
 
 
-declare var toggle_left_slide_model: Function;
-declare var toggle_loader: Function;
 
 declare var showLoader: Function;
 declare var notify: Function;

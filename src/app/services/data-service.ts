@@ -97,6 +97,8 @@ export interface dataSupplier {
 export interface dataBrand {
   name: string;
   docId: string;
+  edit?: boolean;
+  edit_name: string | null;
 }
 
 export interface dataAttributes {
@@ -290,6 +292,10 @@ export class DataService {
     // subscribe to firebase Brand Collection
     this.fb_subscribe_brand = this.firebaseService.subscribeToCollection(defaultConfig.collections.brand.name, (snapshot) => {
       let p = this.getDataFromCollection(snapshot);
+      for (let x = 0, l = p.length; x < l; x++) {
+        p[x]["edit"] = false;
+        p[x]["edit_name"] = null;
+      }
       this._brand.next(p);
     }, [orderBy('name')]);
 
@@ -508,7 +514,7 @@ export class DataService {
       let i = this._inventory.value.filter(item => item.productDocId == d[0].docId);
       if (i.length > 0) {
         for (let x = 0; x < i.length; x++) {
-          if(!i[x].hasOwnProperty('inventoryAdjustment'))
+          if (!i[x].hasOwnProperty('inventoryAdjustment'))
             i[x]['inventoryAdjustment'] = 0;
           i[x]['edit'] = false;
           i[x]['editInventoryAdjustment'] = null;

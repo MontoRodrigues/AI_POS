@@ -47,27 +47,19 @@
 <body>
   <app-root></app-root>
 
-<!-- 
-  <script type="module">
-    import { BarcodeDetectorPolyfill } from "https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@0.9.23/dist/main.js";
-    try {
-      window['BarcodeDetector'].getSupportedFormats();
-    } catch {
-      window['BarcodeDetector'] = BarcodeDetectorPolyfill;
-    }
-  </script> -->
+
 
 
   <script>
-    function toggle_left_slide_model() {
-      document.querySelector("body").classList.toggle("show-left-slide-model");
-    }
+    // function toggle_left_slide_model() {
+    //   document.querySelector("body").classList.toggle("show-left-slide-model");
+    // }
 
-    function toggle_loader(custom_text) {
-      if (custom_text)
-        document.querySelector("#loader_text").innerHTML = custom_text;
-      document.querySelector("body").classList.toggle("show-loader");
-    }
+    // function toggle_loader(custom_text) {
+    //   if (custom_text)
+    //     document.querySelector("#loader_text").innerHTML = custom_text;
+    //   document.querySelector("body").classList.toggle("show-loader");
+    // }
 
 
     function showLoader(e) {
@@ -93,6 +85,11 @@
 
     let open_user_menu = (e) => {
       e.parentNode.classList.toggle("open-user-menu");
+    };
+
+    let hideMenu = () => {
+      document.querySelector("body").classList.add("hide-menu");
+      
     };
 
     let notify = (type, msg, t) => {
@@ -154,6 +151,8 @@
       e.parentElement.parentElement.parentElement.parentElement.classList.add(tab_name);
     };
 
+
+
     // //--------- new functions delete above one once done
 
 
@@ -196,12 +195,7 @@
 
   </div>
 
-  <!-- <div class="notify">
-    <i class="fa-solid fa-triangle-exclamation notify-error"></i>
-    <span>
-      An error has occurred! An error has occurred! An error has occurred! An error has occurred! An error has occurred!
-    </span>
-  </div> -->
+
 
 
 </body>

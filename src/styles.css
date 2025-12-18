@@ -565,6 +565,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     padding: 80px 1.5rem;
 }
 
+
+.hide-menu .app-container{
+    padding: 0px 1.5rem;
+}
+
 /* .logout {
     border: none;
     padding: 5px;
@@ -854,6 +859,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
     margin: 1rem 1.5rem;
     top: 0px;
     align-items: center;
+}
+
+.hide-menu .nav-top {
+    display: none;
+}
+
+.hide-menu .hide-when{
+    display: none;
 }
 
 .nav-top .nav-center {

@@ -205,6 +205,7 @@ export class Uom {
       await this.firebaseService.updateDocument(defaultConfig.collections.uom.name + "/" + uom.docId, _new_uom);
 
       uom.edit = false;
+      
       this.cdRef.detectChanges();
       notify("success", `UOM ${uom.measure} updated successfully`);
 
