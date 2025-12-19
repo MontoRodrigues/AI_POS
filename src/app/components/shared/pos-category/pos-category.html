@@ -1,0 +1,44 @@
+<ul class="category_breadcrumb">
+    <li [class]="value()== 'all'?'active':''" (click)="value.set('all')">All</li>
+    @for(selCat of selectedCategoryPath(); track $index){
+    <li (click)="value.set(selCat.docId)" [class]="value()== selCat.docId?'active':''">{{selCat.name}}</li>
+    }
+    <li>:</li>
+</ul>
+
+
+@for(cat of filterCategory(); track $index) {
+<button type="button" (click)="value.set(cat.docId)"
+    [class]="value() === cat.docId ? 'category_btn rounded-full text-sm font-medium shadow-sm border' : 'category_btn rounded-full text-sm font-medium shadow-sm border'">
+    <div>
+        <img src="{{cat.catImage?.downloadURL}}">
+        {{cat.name}}
+    </div>
+</button>
+}
+
+
+<!-- 
+@if(selectedCategory() != null){
+
+    <span style="color: red;">All</span> 
+    @for(pCat of selectedCategoryPath(); track $index){
+    / <span style="color: red;">{{pCat.name}}</span>
+
+    }
+    / <span style="color: red;">{{selectedCategory()?.name}}</span>
+}
+@else {
+    <button type="button" (click)="value.set('all')"
+        [class]="value() === 'all' ? 'px-4 py-2 bg-indigo-500 text-white rounded-full whitespace-nowrap' : 'px-4 py-2 bg-slate-100 text-slate-700 rounded-full whitespace-nowrap'">
+        All
+    </button>
+}
+
+
+@for(cat of filterCategory(); track $index) {
+<button type="button" (click)="value.set(cat.docId)"
+    [class]="value() === cat.docId ? 'px-4 py-2 bg-indigo-500 text-white rounded-full whitespace-nowrap' : 'px-4 py-2 bg-slate-100 text-slate-700 rounded-full whitespace-nowrap'">
+    {{cat.name}}
+</button>
+} -->

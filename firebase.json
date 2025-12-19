@@ -6,6 +6,10 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "hosting": {
+      "site": "ai-pos",
+      "public": "public"
+    },
     "rewrites": [
       {
         "source": "**",

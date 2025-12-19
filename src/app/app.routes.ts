@@ -21,7 +21,7 @@ import { Brand } from './components/brand/brand';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: '', title: 'Home', component: HomeComponent, canActivate: [AuthGuard] },    
+    { path: '', title: 'POS', component: Pos, canActivate: [AuthGuard] },    
     { path: 'supplier', component: SupplierList, canActivate: [AuthGuard] },
     { path: 'category', component: Category, canActivate: [AuthGuard] },
     { path: 'uom', component: Uom, canActivate: [AuthGuard] },
