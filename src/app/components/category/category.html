@@ -97,14 +97,14 @@
                                     <input type="text" class="form-control app-form-component"
                                         placeholder="Category Name" [(ngModel)]="c.name">
                                 </div>
-                                    <!-- @if(c.level!="root"){ -->
-                                    <div>
-                                        <label class="form-label">Parent Product Category</label>
-                                        <app-select [inputData]="getUpdateData(c)" [(value)]="c.parentDocID"
-                                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
-                                        </app-select>
-                                    </div>
-                                    <!-- } -->
+                                <!-- @if(c.level!="root"){ -->
+                                <div>
+                                    <label class="form-label">Parent Product Category</label>
+                                    <app-select [inputData]="getUpdateData(c)" [(value)]="c.parentDocID"
+                                        [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                                    </app-select>
+                                </div>
+                                <!-- } -->
                                 }
                                 @if(!c.edit) {
                                 {{c.path.join("/")}}
@@ -113,10 +113,24 @@
                             </td>
                             <td>
                                 @if(!c.edit) {
-                                <button (click)="deleteCategory(c.docId)"
+
+                                <div class="flex justify-center space-x-2">
+                                    <!-- edit Category -->
+                                    <button type="button" style="padding: 10px;"
+                                        class="btn btn-sm btn-outline-secondary" (click)="editCategory(c)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                    <!-- delete category -->
+                                    <button type="button" style="padding: 10px;" class="btn btn-sm btn-outline-danger"
+                                        (click)="deleteCategory(c.docId)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+
+
+
+                                <!-- <button (click)="deleteCategory(c.docId)"
                                     class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
                                     aria-label="Remove item">
-                                    <!-- Trash Icon -->
+                                    
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                         fill="currentColor">
                                         <path fill-rule="evenodd"
@@ -128,21 +142,30 @@
                                 <button (click)="editCategory(c)"
                                     class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
                                     aria-label="Remove item">
-                                    <!-- Edit Icon -->
+                                    
                                     <svg _ngcontent-ng-c3991276113="" class="svg-inline--fa fa-pen-to-square" role="img"
                                         viewBox="0 0 512 512">
                                         <path fill="currentColor"
                                             d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L368 46.1 465.9 144 490.3 119.6c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L432 177.9 334.1 80 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z">
                                         </path>
                                     </svg>
-                                </button>
+                                </button> -->
                                 }
                                 @if(c.edit) {
 
-                                <button (click)="updateCategory(c)"
+                                <div class="flex justify-center space-x-2">
+                                    <button type="submit" class="btn btn-primary mb-3"
+                                        (click)="updateCategory(c)">Update Category</button>
+
+                                    <button type="submit" style="margin-left: 20px;" class="btn btn-danger mb-3"
+                                        (click)="cancelCategory(c)">Cancel</button>
+                                </div>
+
+
+                                <!-- <button (click)="updateCategory(c)"
                                     class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
                                     aria-label="Remove item">
-                                    <!-- Save -->
+                               
                                     <svg class="svg-inline--fa fa-pen-to-square" viewBox="0 0 32 32" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
                                             sketch:type="MSPage">
@@ -160,14 +183,14 @@
                                 <button (click)="cancelCategory(c)"
                                     class="text-red-600 hover:text-red-900 transition duration-150 p-1 rounded-full hover:bg-red-100 flex-shrink-0"
                                     aria-label="Remove item">
-                                    <!-- Cancel -->
+                                    
 
                                     <svg class="svg-inline--fa fa-pen-to-square" fill="currentColor" viewBox="0 0 32 32"
                                         version="1.1">
                                         <path
                                             d="M10.771 8.518c-1.144 0.215-2.83 2.171-2.086 2.915l4.573 4.571-4.573 4.571c-0.915 0.915 1.829 3.656 2.744 2.742l4.573-4.571 4.573 4.571c0.915 0.915 3.658-1.829 2.744-2.742l-4.573-4.571 4.573-4.571c0.915-0.915-1.829-3.656-2.744-2.742l-4.573 4.571-4.573-4.571c-0.173-0.171-0.394-0.223-0.657-0.173v0zM16 1c-8.285 0-15 6.716-15 15s6.715 15 15 15 15-6.716 15-15-6.715-15-15-15zM16 4.75c6.213 0 11.25 5.037 11.25 11.25s-5.037 11.25-11.25 11.25-11.25-5.037-11.25-11.25c0.001-6.213 5.037-11.25 11.25-11.25z" />
                                     </svg>
-                                </button>
+                                </button> -->
                                 }
                             </td>
                         </tr>
@@ -177,7 +200,8 @@
             </div>
             }
             @else{
-                <div  class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Categories added  yet. </div>
+            <div class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Categories added
+                yet. </div>
             }
         </section>
     </div>

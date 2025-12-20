@@ -17,6 +17,6 @@ export interface Icategory {
     parentDocID: string | null;
     ancestors: CategoryAncestor[];
     level: string | null;
-    path: any[] | null;
+    path: any[];
     catImage?: ImageDetails | null;
 }
