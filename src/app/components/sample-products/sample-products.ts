@@ -1704,12 +1704,18 @@ let product =[
   }
 ]
 
+declare var showLoader: Function;
+
 @Component({
   selector: 'app-sample-products',
-  imports: [Breadcrumb],
+  imports: [],
   templateUrl: './sample-products.html',
   styleUrl: './sample-products.css'
 })
 export class SampleProducts {
   productList:any[]=product;
+
+  constructor (){
+    showLoader(false);
+  }
 }
