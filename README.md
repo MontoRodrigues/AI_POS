@@ -84,3 +84,9 @@ sid nave bg - 2005
 # Shared components
 - Menu -> component/shared/menu
 - breadcrumb -> components/shared/breadcrumb
+
+# Deploy
+- firebase deploy --only hosting:aistoremanager-3c891
+
+# Bug Tracker
+-Issue#1 :  Category: After adding the category, next time category path is null. Fixed by changing the interface for path not to be null and after add adding category it was set as null which was fixed" 
