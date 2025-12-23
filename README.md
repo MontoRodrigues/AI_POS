@@ -85,6 +85,13 @@ sid nave bg - 2005
 - Menu -> component/shared/menu
 - breadcrumb -> components/shared/breadcrumb
 
+
+Deploy to Firebase commands
+- POS : firebase deploy --only hosting:ai-pos
+- MAster : firebase deploy --only hosting:aistoremanager-3c891
+
+##ISSUE
+
 # Deploy
 - firebase deploy --only hosting:aistoremanager-3c891
 

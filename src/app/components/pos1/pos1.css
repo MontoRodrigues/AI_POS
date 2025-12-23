@@ -1,6 +1,5 @@
-.pos-container{
-    width: 100%;
-    height: 100%;
+.pos-container {
+
     background-color: white;
     position: fixed;
     top: 0;
@@ -8,6 +7,81 @@
     z-index: 2000;
 }
 
-.nav-top{
+.nav-top {
     z-index: 2100;
+}
+
+.unavailable {
+    filter: grayscale(1);
+    cursor: default !important;
+}
+
+.unavailable .text-unavailable {
+    color: gray;
+}
+
+
+.category_btn {
+    gap: .5rem !important;
+    cursor: pointer;
+    padding-top: .25rem !important;
+    padding-bottom: .25rem !important;
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    margin-right: 5px;
+    margin-bottom: 5px;
+
+    background-color: rgba(199, 210, 254, 1);
+    color: rgb(67 56 202);
+}
+
+.category_btn span {
+    margin: 0px 5px;
+    text-transform: uppercase;
+    color: black;
+}
+
+.error {
+    display: none;
+    color: red;
+    font-size: 10px;
+}
+
+.error-container .error {
+    display: inherit;
+}
+
+input[type="text"]:disabled {
+    background-color: gray !important;
+}
+
+/* inventory selector */
+
+.inventory-select {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(255, 255, 255, .5);
+    z-index: 2002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.inventory-select .inventory-select-bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(31, 31, 31, 0.5);
+    z-index: 2003;
+}
+
+.inventory-select .inventory-select-conatiner{
+    padding: 1.5rem;
+    background-color: white;    
+    z-index: 2004;
+
 }

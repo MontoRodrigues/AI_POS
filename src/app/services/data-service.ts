@@ -339,8 +339,9 @@ export class DataService {
         p[x]["editName"] = p[x].name;
         p[x]["editParentDocID"] = p[x].parentDocID;
         p[x]["edit"] = false;
-        // if (p[x].path == null)
-        //   p[x]["path"] = [p[x].name]
+        if(p[x].path==null)
+          p[x]["path"] =[p[x].name]
+        
         p[x]["pathString"] = p[x].path.join("/");
       }
       this._category.next(p);

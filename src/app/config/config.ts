@@ -56,6 +56,16 @@ export const defaultConfig = {
         "uom": { name: "uom" },
         "purchase": { name: "purchase" },
         "inventory": { name: "inventory" },
+        "customer": { name: "customers" },
+        "sale": { name: "sale" },
+    },
+    pos: {
+        defaultCustomer: {
+            docId: "JnLEsK8oNVEsNEFHaHJR",
+            name: "walk-in",
+            phoneNumber: "0000"
+        }
+        
     }
 }
 
