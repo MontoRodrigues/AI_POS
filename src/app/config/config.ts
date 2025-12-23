@@ -38,7 +38,10 @@ export const defaultConfig = {
                 { text: "Suppliers", path: "/supplier" },
                 { text: "Category", path: "/category" },
                 { text: "UOM", path: "/uom" },
-                { text: "Brand", path: "/brand" }
+                { text: "Brand", path: "/brand" },
+                { text: "Sample Product", path: "/sample" }
+
+
             ]
         },
 

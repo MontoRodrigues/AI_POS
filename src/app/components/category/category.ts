@@ -95,6 +95,7 @@ export class Category {
     // // Category parentId
 
     if (this.parent_category_doc_id == null) {
+       v = false;
       this.new_category_validate.parentId = "mb-3 error";
     }
     else {
@@ -125,9 +126,9 @@ export class Category {
 
       console.log("parent category id", this.parent_category_doc_id);
       // check if Parent Doc ID is null or root. then set the variables to default root Level
-      if (this.parent_category_doc_id == null || this.parent_category_doc_id == "root") {
+      if (this.parent_category_doc_id != null && this.parent_category_doc_id == "root") {
         this.new_category.level = "root";
-        this.new_category.path?.push(this.new_category.name);
+        this.new_category.path.push(this.new_category.name);
         this.new_category.parentDocID = null;
         this.new_category.ancestors = [];
       }
@@ -169,7 +170,7 @@ export class Category {
 
       //check if uploaded Image is undefined then set the default category image else upload the image 
       if (this.image_blob == undefined) {
-        this.new_category.catImage = conf.default_images.category;
+        this.new_category.catImage = defaultConfig.default_images.category;
       }
       else {
         // Upholding Image and getting the URL
@@ -188,7 +189,7 @@ export class Category {
       console.log(this.new_category);
 
       // // upload doc to firebase
-      await this.firebaseService.addDocument(this.CollectionName, this.new_category);
+      await this.firebaseService.addDocument(defaultConfig.collections.category.name, this.new_category);
 
       // reset form 
       // reset image controller
@@ -202,7 +203,7 @@ export class Category {
         parentDocID: null,
         ancestors: [],
         level: null,
-        path: null,
+        path: [],
         catImage: null
       }
 

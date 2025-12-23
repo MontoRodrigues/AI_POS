@@ -1,0 +1,63 @@
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-100">
+        <tr>
+            <th class=" text-left text-xs font-medium text-gray-500 uppercase">
+
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                style="width: 118px;">name</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                barcode</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                sku</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                brand</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                categories</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                uom</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                searchTokens</th>
+            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                attributes</th>
+
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+        @for(p of productList; track $index) {
+        <tr>
+             <td class="px-6  text-sm font-medium text-gray-900">
+                {{$index +1 }}
+             </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.name}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.barcode}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.sku}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.brand}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.categories.path.join("/")}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                {{p.uom}}
+            </td>
+            <td class="px-6  text-sm font-medium text-gray-900">
+                @for(st of p.searchTokens; track $index){
+                <span style="display: block; margin-right: 2px;padding: 5px;">{{st}}</span>
+                }
+            </td>
+
+            <td class="px-6  text-sm font-medium text-gray-900">
+                @for(att of p.attributes; track $index){
+                <span style="display: block; margin-right: 2px; padding: 5px;">{{att.attribute}}:{{att.value}}</span>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

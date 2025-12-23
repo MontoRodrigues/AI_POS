@@ -284,13 +284,12 @@
                                     <app-text-add-attr [(attributes)]="newProduct.attributes"
                                         [attr_master]="attrList"></app-text-add-attr>
 
-
                                     <span class="error-message">Please add atlest one attribute</span>
                                 </div>
 
                                 <!-- search Tags -->
                                 <div [class]="validateNewProduct.searchTokens">
-                                    <label class="form-label">Product Attributes</label>
+                                    <label class="form-label">Search Tags</label>
                                     <app-text-add-tags [(tags)]="newProduct.searchTokens"></app-text-add-tags>
                                     <span class="error-message">Please add atlest one Search Tag</span>
                                 </div>

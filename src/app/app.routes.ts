@@ -15,17 +15,18 @@ import { Uom } from './components/uom/uom';
 import { Pos } from './components/pos/pos';
 import { Pos1 } from './components/pos1/pos1';
 import { Brand } from './components/brand/brand';
+import { SampleProducts } from './components/sample-products/sample-products';
 
 
 
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-    { path: '', title: 'POS', component: Pos, canActivate: [AuthGuard] },    
+    { path: '', title: 'Home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'supplier', component: SupplierList, canActivate: [AuthGuard] },
     { path: 'category', component: Category, canActivate: [AuthGuard] },
     { path: 'uom', component: Uom, canActivate: [AuthGuard] },
-     { path: 'brand', component: Brand, canActivate: [AuthGuard] },
+    { path: 'brand', component: Brand, canActivate: [AuthGuard] },
     { path: 'products', component: Product, canActivate: [AuthGuard] },
     { path: 'products/add_product', component: ProductAdd, canActivate: [AuthGuard] },
     { path: 'products/edit/:docId', component: ProductEdit, canActivate: [AuthGuard] },
@@ -34,6 +35,8 @@ export const routes: Routes = [
     { path: 'purchase/purchase_inventory/:docId', component: PurchaseToInventory, canActivate: [AuthGuard] },
     { path: 'pos', component: Pos, canActivate: [AuthGuard] },
     { path: 'pos1', component: Pos1, canActivate: [AuthGuard] },
+    { path: 'sample', component: SampleProducts, canActivate: [AuthGuard] },
+
 
 ];
 

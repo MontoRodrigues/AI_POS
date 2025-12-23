@@ -92,3 +92,8 @@ Deploy to Firebase commands
 
 ##ISSUE
 
+# Deploy
+- firebase deploy --only hosting:aistoremanager-3c891
+
+# Bug Tracker
+-Issue#1 :  Category: After adding the category, next time category path is null. Fixed by changing the interface for path not to be null and after add adding category it was set as null which was fixed" 

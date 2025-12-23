@@ -139,7 +139,7 @@ export class ProductAdd {
     returns: 0,
     inventoryAdjustment: 0,
     currentInventory: 0,
-  
+
     MRP: null
   };
 
@@ -338,13 +338,13 @@ export class ProductAdd {
             width: '100%',
             panelClass: 'custom-dialogue'
           });
-          multiSelectDialogRef.afterClosed() .pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
+          multiSelectDialogRef.afterClosed().pipe(filter((result) => !!result)).subscribe((selectedBarcode: any) => {
             console.log("Selected Barcode from multiple select:", selectedBarcode);
             this.newProduct.barcode = selectedBarcode.rawValue;
             this.cdRef.detectChanges();
           });
         }
-        
+
       });
   }
 
@@ -601,6 +601,8 @@ export class ProductAdd {
 
       // -------------reset the form 
 
+
+      this.imageList = [];
       this.newProduct = {
         id: null,
         sku: null,
@@ -672,6 +674,9 @@ export class ProductAdd {
         discount: "form-div",
         validRange: "form-div"
       }
+
+
+      this.category_doc_id = null;
 
       this.cdRef.detectChanges();
       notify("success", "Product added Successfully.", 5000);
