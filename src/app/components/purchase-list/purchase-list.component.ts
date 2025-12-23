@@ -11,7 +11,7 @@ import { Ipurchase, purchaseProduct } from '../../interface/iproduct';
 import { dataPurchase, DataService, dataSupplier } from '../../services/data-service';
 import { Subscription } from 'rxjs';
 import { defaultConfig } from '../../config/config';
-import { c } from "../../../../node_modules/@angular/cdk/a11y-module.d--J1yhM7R";
+
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 

@@ -26,7 +26,7 @@ export const defaultConfig = {
             text: "Products", subMenu: [
                 { text: "Products", path: "/products" },
                 { text: "Add Product", path: "/products/add_product" },
-             ]
+            ]
         },
         {
             text: "Purchase", subMenu: [
@@ -39,7 +39,6 @@ export const defaultConfig = {
                 { text: "Category", path: "/category" },
                 { text: "UOM", path: "/uom" },
                 { text: "Brand", path: "/brand" }
-
             ]
         },
 
@@ -54,6 +53,16 @@ export const defaultConfig = {
         "uom": { name: "uom" },
         "purchase": { name: "purchase" },
         "inventory": { name: "inventory" },
+        "customer": { name: "customers" },
+        "sale": { name: "sale" },
+    },
+    pos: {
+        defaultCustomer: {
+            docId: "JnLEsK8oNVEsNEFHaHJR",
+            name: "walk-in",
+            phoneNumber: "0000"
+        }
+        
     }
 }
 

@@ -9,7 +9,7 @@ import { Pos } from './components/pos/pos';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, Menu ],
+  imports: [RouterOutlet, CommonModule ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

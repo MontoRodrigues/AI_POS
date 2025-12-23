@@ -62,7 +62,7 @@ export class Pos {
   // --- State Signals ---
   products = signal<Product[]>(PRODUCTS);
   categories = CATEGORIES;
-  cart = signal<CartItem[]>([]);
+  cart = signal<CartItem[]>([]); //iCartItem
   
   selectedCategoryId = signal<string>('all');
   

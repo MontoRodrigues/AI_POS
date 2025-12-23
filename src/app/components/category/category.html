@@ -83,6 +83,7 @@
                             <th
                                 class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Action</th>
+                        </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @for(c of category_list; track $index) {
@@ -97,14 +98,14 @@
                                     <input type="text" class="form-control app-form-component"
                                         placeholder="Category Name" [(ngModel)]="c.name">
                                 </div>
-                                    <!-- @if(c.level!="root"){ -->
-                                    <div>
-                                        <label class="form-label">Parent Product Category</label>
-                                        <app-select [inputData]="getUpdateData(c)" [(value)]="c.parentDocID"
-                                            [use_col_value]="'docId'" [use_col_text]="'pathString'">
-                                        </app-select>
-                                    </div>
-                                    <!-- } -->
+                                <!-- @if(c.level!="root"){ -->
+                                <div>
+                                    <label class="form-label">Parent Product Category</label>
+                                    <app-select [inputData]="getUpdateData(c)" [(value)]="c.parentDocID"
+                                        [use_col_value]="'docId'" [use_col_text]="'pathString'">
+                                    </app-select>
+                                </div>
+                                <!-- } -->
                                 }
                                 @if(!c.edit) {
                                 {{c.path.join("/")}}
@@ -177,7 +178,8 @@
             </div>
             }
             @else{
-                <div  class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Categories added  yet. </div>
+            <div class="mt-4 p-4 text-center text-gray-500 italic bg-gray-50 rounded-lg border"> No Categories added
+                yet. </div>
             }
         </section>
     </div>

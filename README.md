@@ -91,21 +91,4 @@ Deploy to Firebase commands
 - MAster : firebase deploy --only hosting:aistoremanager-3c891
 
 ##ISSUE
-- issue with Category add. The category gets added even if the parent Category is not selected 
-<code>
-// subscribe to firebase category Collection
-    this.fb_subscribe_category = this.firebaseService.subscribeToCollection(defaultConfig.collections.category.name, (snapshot) => {
-      let p = this.getDataFromCollection(snapshot);
-      for (let x = 0, l = p.length; x < l; x++) {
-        p[x]["editName"] = p[x].name;
-        p[x]["editParentDocID"] = p[x].parentDocID;
-        p[x]["edit"] = false;
-        // added this 
-         if(p[x].path==null)
-          p[x]["path"] =[p[x].name]
-          //--------
-        p[x]["pathString"] = p[x].path.join("/"); 
-      }
-      this._category.next(p);
-    }, [orderBy('name')]);
-    </code> 
+

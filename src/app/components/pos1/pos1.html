@@ -1,6 +1,5 @@
 <div class="flex h-screen w-full bg-slate-100 overflow-hidden font-sans text-slate-800 pos-container">
 
-
     <!-- LEFT SIDE: Product Catalog -->
     <div class="flex-1 flex flex-col h-full min-w-0">
         <!-- Header / Search -->
@@ -26,7 +25,8 @@
                         <path d="m21 21-4.3-4.3" />
                     </svg>
                 </span>
-                <input type="text" placeholder="Search product or scan barcode..."
+                <input type="text" placeholder="Search product or scan barcode..." [(ngModel)]="searchProduct"
+                    (keyup)="handleSearch()"
                     class="w-full pl-10 pr-4 py-2 bg-slate-100 border-none rounded-full focus:ring-2 focus:ring-indigo-500 outline-none">
             </div>
             <!-- user -->
@@ -54,33 +54,72 @@
         </header>
 
         <!-- Categories -->
+        @if(searchProductSignal()==""){
         <div class="px-2 py-3 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50 border-b border-slate-200"
             style="min-height: 68px; display: flex; align-items: center;">
             <app-pos-category [category]="categoryList()" [(value)]="selectedCategory"></app-pos-category>
         </div>
+        }
+        @if(searchProductSignal()!=""){
+        <div class="px-2 py-3 flex gap-2 overflow-x-auto no-scrollbar bg-slate-50 border-b border-slate-200"
+            style="min-height: 68px; display: flex; align-items: center;">
+            <button type="button" (click)="clearSearch()"
+                class="category_btn rounded-full text-sm font-medium shadow-sm border">
+                Search for Product : <span>{{searchProductSignal()}}</span> <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+
+
+        </div>
+        }
 
 
         <!-- Product Grid -->
         <div class="flex-1 overflow-y-auto p-4">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @for(product of filteredProducts(); track $index) {
-
-                 <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden border border-slate-100 group">
-              <div class="h-32 w-full overflow-hidden relative">
-                <img [src]="product.image[0].downloadURL" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="{{product.name}}">
-                <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-              <div class="p-3">
-                <h3 class="font-semibold text-slate-800 truncate">{{ product.name }}</h3>
-                <div class="flex justify-between items-center mt-2">
-                  <span class="text-indigo-600 font-bold">Rs.20</span>
-                  <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">#{{ product.barcode }}</span>
+                @if(product.inventory==null){
+                <div
+                    class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden border border-slate-100 group unavailable">
+                    <div class="h-32 w-full overflow-hidden relative">
+                        <img [src]="product.image[0].downloadURL"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            alt="{{product.name}}">
+                        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold text-slate-800 truncate text-unavailable">{{ product.name }}</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-indigo-600 font-bold">Rs.--</span>
+                            <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">#{{
+                                product.barcode}}</span>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-        }
+                }
+                @else{
+                <div (click)="addToCartClick(product)"
+                    class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden border border-slate-100 group">
+                    <div class="h-32 w-full overflow-hidden relative">
+                        <img [src]="product.image[0].downloadURL"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            alt="{{product.name}}">
+                        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold text-slate-800 truncate">{{ product.name }}</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-indigo-600 font-bold">Rs. {{product.inventory[0].sellingPrice}}</span>
+                            <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">#{{
+                                product.barcode}}</span>
+                        </div>
+                    </div>
+                </div>
+                }
+                }
 
-            
+
 
                 <!-- Empty State -->
                 @if(filteredProducts().length==0) {
@@ -99,7 +138,274 @@
 
     </div>
 
+    <!-- right side menu -->
     <div class="w-96 bg-white shadow-xl flex flex-col border-l border-slate-200 z-20">
-        RIGHT SIDE: Cart and Checkout
+        <!-- Customer Info -->
+        <div class="p-4 border-b border-slate-100 bg-slate-50">
+            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Customer Details</label>
+            <div class="flex gap-2">
+                <div class="{{customerPhoneError}}">
+                    <div class="relative flex-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                        </span>
+                        <input type="tel" [(ngModel)]="customerPhone" (keyup)="searchCustomer()"
+                            placeholder="Phone Number"
+                            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div class="error"> Please add 10 digit phone number</div>
+                </div>
+                @if(customerPhoneError==""){
+                <div class="{{customerPhoneError}}">
+                    <div class="relative flex-1">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                            </svg>
+                        </span>
+                        @if(selectedCustomer == null){
+                        <input type="text" [(ngModel)]="customerName" placeholder="Customer Name" (blur)="onCustomerNameChange()"
+                            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                        }
+                        @else {
+                        <input type="text" [(ngModel)]="customerName" placeholder="Customer Name" disabled="disabled"
+                            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                        }
+                    </div>
+                    <div class="error"> Please add Customer Name</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Cart Items List -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-3">
+            @if(cart().length === 0){
+            <div class="h-full flex flex-col items-center justify-center text-slate-400 opacity-60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="21" r="1" />
+                    <circle cx="19" cy="21" r="1" />
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                </svg>
+                <p class="mt-4 font-medium">Cart is empty</p>
+            </div>
+            }
+
+            @for(item of cart(); track $index){
+
+            <div class="flex gap-3 bg-white p-2 rounded-lg border border-slate-100 shadow-sm relative group">
+                <img [src]="item.image[0].downloadURL" class="w-16 h-16 rounded-md object-cover bg-slate-100"
+                    alt="prod">
+                <div class="flex-1 flex flex-col justify-between">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-medium text-slate-800 text-sm leading-tight">{{ item.name }}</h4>
+                        <button (click)="removeFromCart(item.docId)"
+                            class="text-slate-300 hover:text-red-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-end mt-1">
+                        <div class="flex items-center gap-2 bg-slate-100 rounded-lg p-1">
+                            <button (click)="updateQuantity(item.docId, -1)"
+                                class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+                                [disabled]="item.quantity <= 1">-</button>
+                            <span class="text-xs font-bold w-4 text-center">{{ item.quantity }}</span>
+                            <button (click)="updateQuantity(item.docId, 1)"
+                                class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-slate-600 hover:bg-slate-50">+</button>
+                        </div>
+                        <div>
+                            @if(getCartItemPrice(item).discountAmount != null){
+                            Rs.<span class="font-bold text-slate-700">{{ getCartItemPrice(item).price}}</span>
+                            (<span class="font-bold text-slate-700" style="text-decoration: line-through;">{{
+                                getCartItemPrice(item).originalPrice}}</span>)
+
+                            }
+                            @else{
+                            Rs.<span class="font-bold text-slate-700">{{ getCartItemPrice(item).price}}</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+
+        <!-- Payment Section -->
+        <div class="bg-white border-t border-slate-200 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+
+            <!-- Summary -->
+            <div class="space-y-2 text-sm">
+                <div class="flex justify-between text-slate-500">
+                    <span>Subtotal</span>
+                    <span>Rs.{{ paymentSummary().subTotal | number:'1.2-2'}}</span>
+                </div>
+
+                <div class="flex justify-between items-center text-slate-500">
+                    <span class="flex items-center gap-1">
+                        Discount
+
+                    </span>
+                    <span class="text-green-600">Rs. -{{ paymentSummary().discountAmount | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="flex justify-between text-slate-500">
+                    <span>Tax</span>
+                    <!-- <span>{{ tax()  }}</span> -->
+                    <span>Rs.{{ paymentSummary().taxAmount | number:'1.2-2' }}</span>
+                </div>
+
+                <div
+                    class="flex justify-between text-lg font-bold text-slate-800 pt-2 border-t border-dashed border-slate-200">
+                    <span>Total</span>
+                    <!-- <span>{{ total()  }}</span> -->
+                    <span>Rs.{{ grandTotal() | number:'1.2-2' }}</span>
+                </div>
+            </div>
+
+
+            <!-- Payment Methods -->
+            @if(cart().length>0){
+            <div>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <button (click)="paymentMethod.set('CASH')" [class.ring-2]="paymentMethod() === 'CASH'"
+                        [class.ring-indigo-600]="paymentMethod() === 'CASH'"
+                        class="flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">
+                        <span class="text-2xl mb-1">💵</span>
+                        <span class="text-xs font-semibold">Cash</span>
+                    </button>
+                    <button (click)="paymentMethod.set('UPI')" [class.ring-2]="paymentMethod() === 'UPI'"
+                        [class.ring-indigo-600]="paymentMethod() === 'UPI'"
+                        class="flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">
+                        <span class="text-2xl mb-1">📱</span>
+                        <span class="text-xs font-semibold">UPI / QR</span>
+                    </button>
+                </div>
+
+                <!-- Cash Input -->
+                @if(paymentMethod() === 'CASH'){
+                <div class="bg-slate-50 rounded-lg border border-slate-200 mb-1 animate-fade-in" style="padding: .25rem 1rem;">
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Cash Received</label>
+                    <div class="flex gap-2">
+                        <input type="number" [(ngModel)]="cashGiven"
+                            class="flex-1 p-2 border border-slate-300 rounded text-right font-mono font-bold"
+                            placeholder="0.00">
+                    </div>
+                    <div class="mt-2 flex justify-between items-center bg-white p-2 rounded border border-slate-100">
+                        <span class="text-xs font-medium text-slate-500">Change Return:</span>
+                        <span class="font-bold text-green-600" [class.text-red-500]="changeGiven() < 0">
+                            {{ changeGiven() | currency }}
+                        </span>
+                    </div>
+                </div>
+                }
+
+                <!-- UPI QR -->
+                @if(paymentMethod() === 'UPI'){
+                <div 
+                    class="flex flex-col items-center justify-center bg-slate-50  rounded-lg border border-slate-200 mb-1 animate-fade-in" style="padding: .25rem 1rem;">
+                    <div class="bg-white p-2 rounded shadow-sm">
+                        <img [src]="qrCodeUrl()" alt="UPI QR Code" class="w-32 h-32 object-contain">
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2 text-center">Scan with any UPI App<br><span
+                            class="font-mono text-[10px]">{{ upiString() }}</span></p>
+                </div>
+
+                }
+
+                <button (click)="processOrder()" [disabled]="(paymentMethod() === 'CASH' && changeGiven() < 0)"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    <span>Complete Order</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            }
+
+
+        </div>
+
+
     </div>
 </div>
+
+
+@if(multipleInventory!=null){
+<div class="inventory-select">
+    <div class="inventory-select-bg">
+
+    </div>
+    <div
+        class="inventory-select-conatiner bg-white rounded-xl shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden border border-slate-100 group">
+
+        <div class="flex gap-3 bg-white p-2 rounded-lg border border-slate-100 shadow-sm relative group"
+            style="align-items: center;">
+            <img [src]="multipleInventory.image[0].downloadURL" class="w-16 h-16 rounded-md object-cover bg-slate-100"
+                alt="prod">
+            <div class="flex-1 flex flex-col justify-between">
+                <div class="justify-between items-start">
+                    <h3 class="font-medium text-slate-800 text-sm leading-tight">{{ multipleInventory.name }}
+                    </h3>
+                    <p style="margin-bottom: 0px;">Please chose an Inventory from which you want to add the product</p>
+                </div>
+            </div>
+        </div>
+
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        style="width: 118px;">Inventory Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Current Quantity</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Selling Price</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Select</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @for(inv of multipleInventory.inventory; track $index){
+                <tr>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{inv.inventoryDate | date:'dd MMM yy'}}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{inv.currentInventory }}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{inv.sellingPrice }}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button type="button" style="padding: 10px;" (click)="selectInventoryToAddToCart($index)"
+                            class="btn btn-sm btn-outline-primary">Select</button>
+                    </td>
+                    }
+            </tbody>
+
+        </table>
+
+
+    </div>
+</div>
+
+}
