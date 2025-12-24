@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PosExternalScaner } from './pos-external-scaner';
+import { PosExternalScanner } from './pos-external-scanner';
 
-describe('PosExternalScaner', () => {
-  let component: PosExternalScaner;
-  let fixture: ComponentFixture<PosExternalScaner>;
+describe('PosExternalScanner', () => {
+  let component: PosExternalScanner;
+  let fixture: ComponentFixture<PosExternalScanner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PosExternalScaner]
+      imports: [PosExternalScanner]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PosExternalScaner);
+    fixture = TestBed.createComponent(PosExternalScanner);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

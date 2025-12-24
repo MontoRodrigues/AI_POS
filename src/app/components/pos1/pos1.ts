@@ -9,10 +9,12 @@ import { PosCategory } from '../shared/pos-category/pos-category';
 import { orderBy, where } from 'firebase/firestore';
 import { FormsModule } from '@angular/forms';
 import { orderByChild } from 'firebase/database';
+import { iBarcodeScanned, iDevice, iDeviceAdd } from '../../interface/iconnector';
+import { Subscription } from 'rxjs';
 
 declare var showLoader: Function;
 declare var notify: Function;
-declare var hideMenu: Function;
+declare var getMachineId: Function;
 
 
 
@@ -27,6 +29,7 @@ export class Pos1 {
 
   user: any = null;
   user_initial: string | undefined = "";
+  private subscribe_user: Subscription | undefined;
 
   // payment method
   paymentMethod = signal<'CASH' | 'UPI'>('CASH');
@@ -168,7 +171,6 @@ export class Pos1 {
 
   }
 
-
   resetOrder() {
     this.cart.set([]);
     this.cashGiven.set(0);
@@ -186,8 +188,16 @@ export class Pos1 {
 
     this.searchProduct = "";
     this.searchProductSignal.set("");
+    this.resetUPIScreen();
   }
 
+  async resetUPIScreen() {
+    let device = this.currentDevice();
+    if (device && device.UPIScreen) {
+      device.UPIScreen.UPIQrCode = null;
+      await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+    }
+  }
 
   // payment Summary
   paymentSummary = computed((): iPaymentSummary => {
@@ -301,11 +311,13 @@ export class Pos1 {
           inventoryIndex: index
         }];
       });
+      this.setPaymentMethod('CASH');
     }
   }
   // remove from cart function
   removeFromCart(docId: string) {
     this.cart.update(items => items.filter(i => i.docId !== docId));
+    this.setPaymentMethod('CASH');
   }
   // update cart quantity
   updateQuantity(docId: string, delta: number) {
@@ -317,6 +329,39 @@ export class Pos1 {
     }));
   }
 
+  async setPaymentMethod(method: 'CASH' | 'UPI') {
+    if (method == 'UPI') {
+      // update the amount and URL for QR Code
+      console.log("Method is UPI");
+      this.paymentMethod.set(method)
+      if (this.currentDevice != null) {
+        let device = this.currentDevice();
+        if (device && device.UPIScreen) {
+          device.UPIScreen.UPIQrCode = {
+            URL: this.qrCodeUrl(),
+            Amount: this.grandTotal(),
+            timestamp: new Date()
+          }
+          console.log("updating QR", device);
+          await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+        }
+      }
+    } else if (this.paymentMethod() == 'UPI' && method == 'CASH') {
+
+      this.paymentMethod.set(method)
+
+      if (this.currentDevice != null) {
+        let device = this.currentDevice();
+        if (device && device.UPIScreen) {
+          device.UPIScreen.UPIQrCode = null;
+          await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+        }
+      }
+    }
+
+
+    this.paymentMethod.set(method)
+  }
 
   //------------ end cart
   // category 
@@ -399,11 +444,7 @@ export class Pos1 {
         };
 
         this.cdRef.detectChanges();
-
       }
-
-
-
     }
 
   }
@@ -515,9 +556,8 @@ export class Pos1 {
   }
 
   constructor(private cdRef: ChangeDetectorRef, private authService: AuthService, private firebaseService: FirebaseService) {
-
     // get auth user
-    this.authService.user$.subscribe(authState => {
+    this.subscribe_user = this.authService.user$.subscribe(authState => {
       if (authState !== null) {
         this.user = authState;
 
@@ -526,10 +566,130 @@ export class Pos1 {
       else {
         this.user = null;
       }
+    });
+  }
+
+  //--------------------current device 
+  private fb_subscribe_devices: any;
+  currentDevice = signal<iDeviceAdd | null>(null);
 
 
+  async createConnectionCode() {
+    let l = false;
+    let code = 0;
+    while (!l) {
+      code = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+      console.log("new Code Generated", code);
+      let snapshot = await this.firebaseService.getCollection(defaultConfig.collections.customer.name, [where('scanner.connectionCode', '==', code)]);
+      let d = this.getDataFromCollection(snapshot);
+      console.log("find the code in device collection", d)
+      if (d.length == 0)
+        l = true;
+    }
+    return code.toString();
+  }
+
+  // connected devices as scanner and UPI QR Code Screen 
+  async setMachineSessionForDevices() {
+    let d = await this.firebaseService.getDocument(defaultConfig.collections.devices.name, getMachineId());
+    console.log("device data", d);
+
+    if (d != null) {
+      // if session for this device exists then update the scan and UPI QUR code values to null 
+      let device: iDevice = d;
+      device.UPIScreen.UPIQrCode = null;
+      device.scanner.current_scan = null;
+      await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+    }
+    else {
+      // if the session docent exists then create a new session
+      let code = await this.createConnectionCode();
+      console.log("connection code", code);
+      let device: iDeviceAdd = {
+        scanner: {
+          connectionCode: code,
+          status: 'WAITING',
+          last_heartbeat: null,
+          current_scan: null
+        },
+        UPIScreen: {
+          connectionCode: code,
+          status: 'WAITING',
+          last_heartbeat: null,
+          UPIQrCode: null
+        }
+      };
+      await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+    }
+
+    //subscribe to device document
+    this.fb_subscribe_devices = this.firebaseService.subscribeToDocument(defaultConfig.collections.devices.name, getMachineId(), (snapshot) => {
+      if (snapshot.exists()) {
+        let data = snapshot.data();
+
+        //Check for new bar codes
+        let barcode: iBarcodeScanned | null = null;
+        if (data["scanner"] != null && data["scanner"]["current_scan"] != null) {
+          data["scanner"]["current_scan"]["timestamp"] = new Date(data["scanner"]["current_scan"]["timestamp"].seconds * 1000 + data["scanner"]["current_scan"]["timestamp"].nanoseconds / 1000000);
+
+          if (this.currentDevice()?.scanner.current_scan?.timestamp) {
+            if (this.currentDevice()?.scanner.current_scan?.timestamp != data["scanner"]["current_scan"]["timestamp"])
+              barcode = data["scanner"]["current_scan"];
+          }
+          else
+            barcode = data["scanner"]["current_scan"];
+
+          if (barcode != null) {
+            // search product and add to cart;
+            let prod = this.productList().filter((p) => p.barcode.toLocaleLowerCase() == barcode?.code);
+            if (prod.length > 0)
+              this.addToCartClick(prod[0]);
+            console.log("scanned Product", prod);
+          }
+
+        }
+
+        this.currentDevice.set(data as iDeviceAdd);
+        // const barcode = this.currentDevice()?.scanner.current_scan;
+        console.log("barcode", barcode);
+        console.log("current device", this.currentDevice());
+      }
     });
 
+  }
+
+  // payOrder: boolean = false;
+  // async updateUPIScreen() {
+  //   if (this.currentDevice != null) {
+  //     let device = this.currentDevice();
+  //     if (device && device.UPIScreen) {
+  //       device.UPIScreen.UPIQrCode = {
+  //         URL: this.qrCodeUrl(),
+  //         Amount: this.grandTotal(),
+  //         timestamp: new Date()
+  //       }
+  //       await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device);
+  //     }
+  //   }
+  // }
+
+  // async payForOrderClick() {
+  //   this.payOrder = true;
+  //   await this.updateUPIScreen();
+  // }
+
+
+
+
+
+  //--------------------------
+
+  logout() {
+    this.authService.signOut();
+
+  }
+
+  ngOnInit() {
     // subscribe to Category collection
     this.fb_subscribe_category = this.firebaseService.subscribeToCollection(defaultConfig.collections.category.name, (snapshot) => {
       this.categoryList.set(this.getCategoryArray(snapshot));
@@ -577,18 +737,34 @@ export class Pos1 {
       console.log("inventory", this.inventory_list());
 
     }, [where('currentInventory', '>', 0), orderBy('inventoryDate', 'desc')]);
-  }
 
+    // subscribe for Device Connections
+    this.setMachineSessionForDevices();
 
-
-
-
-
-  logout() {
-    this.authService.signOut();
-
-  }
-  ngOnInit() {
     showLoader(false);
+
+  }
+
+  ngOnDestroy() {
+    if (this.fb_subscribe_category) {
+      this.fb_subscribe_category();
+    }
+    if (this.fb_subscribe_product) {
+      this.fb_subscribe_product();
+    }
+
+    if (this.fb_subscribe_inventory) {
+      this.fb_subscribe_inventory();
+    }
+
+    if (this.subscribe_user) {
+      this.subscribe_user.unsubscribe()
+    }
+
+    if (this.fb_subscribe_devices) {
+      this.fb_subscribe_devices.unsubscribe()
+    }
+
+
   }
 }

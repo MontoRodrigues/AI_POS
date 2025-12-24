@@ -22,6 +22,10 @@ export const defaultConfig = {
     },
     nav: [
         { text: "Home", path: "/" },
+        { text: "POS", path: "/pos1" },
+        { text: "POS-Scanner", path: "/posScanner" },
+        { text: "POS-UPI-Screen", path: "/posUPICode" },
+
         {
             text: "Products", subMenu: [
                 { text: "Products", path: "/products" },
@@ -58,6 +62,7 @@ export const defaultConfig = {
         "inventory": { name: "inventory" },
         "customer": { name: "customers" },
         "sale": { name: "sale" },
+        "devices": { name: "devices" }
     },
     pos: {
         defaultCustomer: {
@@ -65,7 +70,7 @@ export const defaultConfig = {
             name: "walk-in",
             phoneNumber: "0000"
         }
-        
+
     }
 }
 

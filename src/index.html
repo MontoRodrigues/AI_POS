@@ -24,7 +24,6 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f3f4f6;
-      /* Light gray background */
     }
   </style> 
 
@@ -49,15 +48,7 @@
 <body>
   <app-root></app-root>
   <script>
-    // function toggle_left_slide_model() {
-    //   document.querySelector("body").classList.toggle("show-left-slide-model");
-    // }
 
-    // function toggle_loader(custom_text) {
-    //   if (custom_text)
-    //     document.querySelector("#loader_text").innerHTML = custom_text;
-    //   document.querySelector("body").classList.toggle("show-loader");
-    // }
 
 
     function showLoader(e) {
@@ -150,29 +141,15 @@
     };
 
 
+    let getMachineId = () => {
 
-    // //--------- new functions delete above one once done
-
-
-
-
-    // let open_user_menu = (e) => {
-    //   e.parentNode.classList.toggle("open-user-menu");
-    // };
-
-    // let hideMenu = () => {
-    //   document.querySelector(".menu-controller").style.display = "none";
-    // };
-
-    // let showMenu = () => {
-    //   document.querySelector(".menu-controller").style.display = "inherit";
-    // };
-
-
-
-
-
-
+      let machineId = localStorage.getItem('MachineId');
+      if (!machineId) {
+        machineId = crypto.randomUUID();        
+        localStorage.setItem('MachineId', machineId);
+      }
+      return machineId
+    };
   </script>
 
   <div class="loader-overlay" id="loader">

@@ -1,0 +1,148 @@
+<div class="scanner-container">
+
+    @if(currentDevice()?.UPIScreen?.UPIQrCode?.Amount){
+    <div class="payment-card">
+        <div class="header-accent"></div>
+        <div class="p-8 text-center"
+            style="height: calc(100% - 15px); display: flex; flex-direction: column; justify-content: center;">
+            <!-- Brand Header -->
+            <div class="flex flex-col items-center mb-6">
+                <div class="brand-logo mb-1">
+                    De<span class="text-slate-800">Branded</span>
+                </div>
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Digital Payments</div>
+            </div>
+
+            <!-- Merchant Name -->
+            <!-- <div>
+                <h2 class="text-xl font-bold text-slate-800">Shyam Rodrigues</h2>
+            </div> -->
+
+            <!-- Amount Display Section -->
+            <div class="amount-display mb-6">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Requested Amount</p>
+                <div class="text-3xl font-extrabold text-slate-900">
+                    <span class="text-xl font-bold mr-1">₹</span>{{currentDevice()?.UPIScreen?.UPIQrCode?.Amount}}
+                </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="relative flex justify-center mb-8">
+                <div class="qr-container w-64 h-64 flex items-center justify-center bg-slate-50">
+                    <!-- Corner decorations -->
+                    <div class="corner-border top-left"></div>
+                    <div class="corner-border top-right"></div>
+                    <div class="corner-border bottom-left"></div>
+                    <div class="corner-border bottom-right"></div>
+
+                    <!-- Placeholder for actual QR code -->
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="{{currentDevice()?.UPIScreen?.UPIQrCode?.URL}}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Message -->
+            <div class="space-y-4">
+                <div class="bg-blue-50 py-3 px-4 rounded-xl">
+                    <p class="text-sm font-bold text-blue-700" style="margin-bottom: 0px;">Scan & Pay using any UPI App
+                    </p>
+                </div>
+
+                <div
+                    class="flex justify-center items-center gap-4 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
+                    <span class="text-[12px] font-bold text-slate-400">BHIM</span>
+                    <span class="text-[12px] font-bold text-slate-400">GPay</span>
+                    <span class="text-[12px] font-bold text-slate-400">PhonePe</span>
+                    <span class="text-[12px] font-bold text-slate-400">Paytm</span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    }
+
+    @else {
+        <div class="payment-card">
+        <div class="header-accent"></div>
+        <div class="p-8 text-center"
+            style="height: calc(100% - 15px); display: flex; flex-direction: column; justify-content: center;">
+            <!-- Brand Header -->
+            <div class="flex flex-col items-center mb-6">
+                <div class="brand-logo mb-1">
+                    De<span class="text-slate-800">Branded</span>
+                </div>
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-widest">Digital Payments</div>
+            </div>
+
+            <!-- Merchant Name -->
+            <!-- <div>
+                <h2 class="text-xl font-bold text-slate-800">Shyam Rodrigues</h2>
+            </div> -->
+
+            <!-- Amount Display Section -->
+            <div class="amount-display mb-6">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Waiting for POS to generate the Bill</p>
+            </div>
+
+
+
+            <!-- Footer Message -->
+            <div class="space-y-4">
+                <div
+                    class="flex justify-center items-center gap-4 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
+                    <span class="text-[12px] font-bold text-slate-400">BHIM</span>
+                    <span class="text-[12px] font-bold text-slate-400">GPay</span>
+                    <span class="text-[12px] font-bold text-slate-400">PhonePe</span>
+                    <span class="text-[12px] font-bold text-slate-400">Paytm</span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    }
+    <!-- <div class="scanner">
+        <div class="QR-code-screen">
+            <div class="title"> DeBranded Fashion Store </div>
+        </div>
+
+        
+        <div> Scan & Pay </div>
+        <div>
+            <img src="">
+        </div>
+        <div>
+            Amount:
+        </div>
+
+
+        <div>
+            <span> UPI ID:</span>
+            <div>
+                <span>Icons</span>
+            </div>
+        </div>
+
+    </div> -->
+</div>
+
+
+@if(machineId==null){
+<div class="connection-container">
+    <div class="connection">
+        <div class="connect-to">
+            <h2 class="w-full py-4">Connect to POS/Device</h2>
+            <div class="input-group">
+                <span class="input-group-text">CODE</span>
+                <input type="text" class="form-control" placeholder="CODE" [(ngModel)]="connectionCode">
+            </div>
+            <div class="w-full mb-4" style="text-align: center;"> Enter the 6 digit Code shown on the POS</div>
+            <div class="w-full flex justify-center">
+                <button class="btn btn-primary" (click)="findDeviceByCde()">Connect</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

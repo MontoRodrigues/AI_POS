@@ -1,4 +1,4 @@
-import { Iproduct } from "./iproduct";
+
 
 // Image store for Category
 export interface imageStore {

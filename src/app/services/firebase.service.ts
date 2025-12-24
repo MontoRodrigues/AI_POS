@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc, collectionGroup } from 'firebase/firestore';
+import { collection, getDocs, QuerySnapshot, query, onSnapshot, Unsubscribe, QueryConstraint, setDoc, doc, deleteDoc, DocumentReference, addDoc, SetOptions, updateDoc, collectionGroup, DocumentSnapshot, getDoc } from 'firebase/firestore';
 import { firestore, storage, database } from './firebase';
 import { ref as dbRef, set as dbSet, onValue as dbOnValue, update as dbUpdate, remove as dbRemove, push as dbPush, off as dbOff, DataSnapshot } from 'firebase/database';
 // import { ISupplier } from '../interface/isupplier';
@@ -17,6 +17,18 @@ export class FirebaseService {
     const collectionRef = collection(firestore, collectionName);
     const q = query(collectionRef, ...constraints);
     return await getDocs(q);
+  }
+
+  async getDocument(collectionName: string, docId: string): Promise<any | null> {
+    const collectionRef = doc(firestore, collectionName, docId);
+    const docSnap: DocumentSnapshot = await getDoc(collectionRef);
+
+    if (docSnap.exists()) {
+      console.log("Get Doc", docSnap.data());
+      return docSnap.data();
+    } else {
+      return null;
+    }
   }
 
   async addDocument(path: string, data: any): Promise<DocumentReference> {
@@ -49,6 +61,14 @@ export class FirebaseService {
     const collectionRef = collection(firestore, collectionName);
     const q = query(collectionRef, ...constraints);
     return onSnapshot(q, callback);
+  }
+
+  subscribeToDocument(collectionName: string,docId: string,callback: (snapshot: DocumentSnapshot) => void): Unsubscribe {
+    // Create a reference to the specific document
+    const docRef = doc(firestore, collectionName, docId);
+
+    // Listen for real-time updates on that document
+    return onSnapshot(docRef, callback);
   }
 
 

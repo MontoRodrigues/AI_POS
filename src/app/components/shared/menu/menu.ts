@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { defaultConfig } from '../../../config/config';
 
 declare var toggle_side_menu: Function;
@@ -18,16 +18,17 @@ export class Menu {
   user: any = null;
   current_path: any[] | null = null;
   user_initial: string | undefined = "";
+  private subscribe_user: Subscription | undefined;
   navMenu: any[] = [];
 
   constructor(private router: Router, private authService: AuthService) {
 
     this.getPath(router.url);
     this.get_nav(router.url);
-    this.authService.user$.subscribe(authState => {
+    this.subscribe_user = this.authService.user$.subscribe(authState => {
       if (authState !== null) {
         this.user = authState;
-       
+
         this.user_initial = authState.displayName?.split(" ").map(word => word.charAt(0)).join('');
       }
       else {
@@ -44,7 +45,7 @@ export class Menu {
     // path_array.push({text:"home", path:"/"});
     p.forEach((e) => {
       path = "/" + e;
-      path_array.push({ text: e.replaceAll("_"," "), path: path });
+      path_array.push({ text: e.replaceAll("_", " "), path: path });
     })
     this.current_path = path_array;
 
@@ -52,7 +53,7 @@ export class Menu {
 
   get_nav(url: string) {
 
-    
+
 
     let n: any = [];
     defaultConfig.nav.forEach((d: any) => {
@@ -61,14 +62,14 @@ export class Menu {
         d["active"] = true;
 
       if (d.hasOwnProperty("subMenu")) {
-       
+
         d.subMenu.forEach((s: any) => {
           if (s.path == url) {
             d["active"] = true;
             s["active"] = true;
           }
-          else{
-             s["active"] = false;
+          else {
+            s["active"] = false;
           }
         });
       }
@@ -77,7 +78,7 @@ export class Menu {
     });
 
     this.navMenu = n;
-  
+
   }
 
   ngOnInit() {
@@ -102,5 +103,12 @@ export class Menu {
   logout() {
     this.authService.signOut();
 
+  }
+
+  ngOnDestroy() {
+
+    if (this.subscribe_user) {
+      this.subscribe_user.unsubscribe()
+    }
   }
 }

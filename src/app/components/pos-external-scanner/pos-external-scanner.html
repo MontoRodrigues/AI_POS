@@ -1,0 +1,42 @@
+<div class="scanner-container">
+    <div class="scanner">
+
+        <div class="camera-view" style="position: relative;">
+            <div class="camera-view-container shadow-2xl">
+                <video #videoElement autoplay autoplay playsinline muted
+                    class="absolute w-full h-full object-cover"></video>
+                <canvas #overlay class="absolute inset-0 w-full h-full  object-cover"
+                    style="top: 0px; left: 0px;"></canvas>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="barcode-view">
+                <span>Barcode:</span> <span>{{scannedBarcode}}</span>
+            </div>
+            <div class="flex items-center gap-4 justify-center py-2">
+                <button class="btn btn-primary">Flip camera</button>
+                @if(currentDevice()!=null) {
+                <button class="btn btn-danger" (click)="disconnect()">Disconnect</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(machineId==null){
+<div class="connection-container">
+    <div class="connection">
+        <div class="connect-to">
+            <h2 class="w-full py-4">Connect to POS/Device</h2>
+            <div class="input-group">
+                <span class="input-group-text">CODE</span>
+                <input type="text" class="form-control" placeholder="CODE" [(ngModel)]="connectionCode">
+            </div>
+            <div class="w-full mb-4" style="text-align: center;"> Enter the 6 digit Code shown on the POS</div>
+            <div class="w-full flex justify-center">
+                <button class="btn btn-primary" (click)="findDeviceByCde()">Connect</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

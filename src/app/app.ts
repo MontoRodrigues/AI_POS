@@ -5,11 +5,11 @@ import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { Menu } from './components/shared/menu/menu';
-import { Pos } from './components/pos/pos';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule ],
+  imports: [RouterOutlet, CommonModule,Menu ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
