@@ -120,6 +120,25 @@ export class PosUPIQrCode {
     showLoader(false);
   }
 
+   async disconnect() {
+  
+      if (this.currentDevice() != null) {
+        // if session for this device exists then update the scan and UPI QUR code values to null 
+        showLoader(true);
+        const device = this.currentDevice();
+        if (device) {
+          device.UPIScreen.UPIQrCode = null;
+          device.scanner.status = "WAITING";
+          await this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + this.machineId, device);
+          localStorage.removeItem('connectedMachineId');
+          this.machineId = null;
+          this.currentDevice.set(null);
+          this.connectionCode = "";
+        }
+        showLoader(false);
+      }
+    }
+
 
   ngOnDestroy() {
     alert("Closing");

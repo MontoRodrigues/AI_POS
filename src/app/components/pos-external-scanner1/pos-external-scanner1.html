@@ -1,0 +1,19 @@
+<div class="wrap">
+      <div class="stage">
+        <video #video autoplay playsinline muted></video>
+        <canvas #canvas></canvas>
+      </div>
+
+      <div class="hud">
+        <button (click)="toggleCamera()" class="btn">Flip camera</button>
+        <button (click)="toggleTorch()" class="btn" [disabled]="torchDisabled">Toggle torch</button>
+        <span class="pill">{{ status }}</span>
+        <span class="pill">Formats: {{ supportedFormatsText }}</span>
+      </div>
+
+      <div class="out">{{ logText }}</div>
+      
+      <p style="opacity:.7;margin-top:8px">
+        Tip: Good lighting helps. On phones, the rear camera (“environment”) focuses better for small codes.
+      </p>
+    </div>

@@ -18,6 +18,7 @@ import { Brand } from './components/brand/brand';
 import { SampleProducts } from './components/sample-products/sample-products';
 import { PosExternalScanner } from './components/pos-external-scanner/pos-external-scanner';
 import { PosUPIQrCode } from './components/pos-upi-qr-code/pos-upi-qr-code';
+import { PosExternalScanner1 } from './components/pos-external-scanner1/pos-external-scanner1';
 
 
 
@@ -37,7 +38,7 @@ export const routes: Routes = [
     { path: 'purchase/purchase_inventory/:docId', component: PurchaseToInventory, canActivate: [AuthGuard] },
     { path: 'pos', component: Pos, canActivate: [AuthGuard] },
     { path: 'pos1', component: Pos1, canActivate: [AuthGuard] },
-    { path: 'posScanner', component: PosExternalScanner, canActivate: [AuthGuard] },
+    { path: 'posScanner', component: PosExternalScanner1, canActivate: [AuthGuard] },
     { path: 'posUPICode', component: PosUPIQrCode, canActivate: [AuthGuard] },
     
     { path: 'sample', component: SampleProducts, canActivate: [AuthGuard] },

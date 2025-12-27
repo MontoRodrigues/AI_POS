@@ -11,7 +11,9 @@
         </div>
         <div class="actions">
             <div class="barcode-view">
-                <span>Barcode:</span> <span>{{scannedBarcode}}</span>
+                <span>Barcode:</span> @if(currentDevice() && currentDevice()!.scanner && currentDevice()!.scanner.current_scan){
+                    <span>{{currentDevice()!.scanner.current_scan?.code}}</span>
+                }
             </div>
             <div class="flex items-center gap-4 justify-center py-2">
                 <button class="btn btn-primary">Flip camera</button>

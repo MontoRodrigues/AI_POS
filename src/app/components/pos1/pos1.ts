@@ -642,8 +642,16 @@ export class Pos1 {
           if (barcode != null) {
             // search product and add to cart;
             let prod = this.productList().filter((p) => p.barcode.toLocaleLowerCase() == barcode?.code);
-            if (prod.length > 0)
+            if (prod.length > 0) {
               this.addToCartClick(prod[0]);
+
+              let device = this.currentDevice();
+              if (device && device.scanner) {
+                device.scanner.current_scan = null;
+                this.firebaseService.setDocument(defaultConfig.collections.devices.name + "/" + getMachineId(), device).then();
+              }
+
+            }
             console.log("scanned Product", prod);
           }
 

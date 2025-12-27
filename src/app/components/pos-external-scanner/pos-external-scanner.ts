@@ -10,6 +10,9 @@ import { QuerySnapshot, where } from 'firebase/firestore';
 import "barcode-detector/ponyfill";
 import { BarcodeDetector } from 'barcode-detector/ponyfill';
 
+
+
+
 declare var showLoader: Function;
 
 
@@ -45,7 +48,7 @@ export class PosExternalScanner {
     this.overlay.nativeElement.height = this.overlay.nativeElement.offsetHeight;
 
     this.cdRef.detectChanges();
-    
+
   }
 
   async flipCamera() {
@@ -87,7 +90,7 @@ export class PosExternalScanner {
               const device = this.currentDevice();
               if (device) {
                 device.scanner.current_scan = {
-                  code:"3606000537453", // barcodes[0].rawValue,
+                  code: "3606000537453", // barcodes[0].rawValue,
                   timestamp: new Date(),
                   format: barcodes[0].format
                 };
@@ -111,7 +114,7 @@ export class PosExternalScanner {
     requestAnimationFrame(detectAndRepeat);
   }
 
-   stopScanning(): void {
+  stopScanning(): void {
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach(track => track.stop());
       this.mediaStream = null;
